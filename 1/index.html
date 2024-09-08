@@ -20,6 +20,9 @@
     <p> After experimenting in a notebook to determine what techniques were effective, I created a python script image pipeline to load in Prokudin-Gorskii images from .jpg and .tif files in the /data folder and output alinged RGB images. 
     <br>
     My initial step is to load in the images, coerce datatype to uint8 (for .tif images) in order to save memory when computing and have consistency in datatypes between images, and split the image into RGB channels. 
+    <br>
+    Next, I manually trim the borders of the images before aligning in order to improve the information content of the image channels since the borders largely contain nonsense that is counterproductive to centering. I created a useful function to make this task less labourious: It first displays the image with axes showing overall image size and where features lie in the image; then I can enter the best offsets for each edge of the image--which are then applied to the image. 
+        
     </p>
     
     
