@@ -29,14 +29,26 @@
     </p>
     <h3> Metrics </h3>
     <p> I tried many different metrics to determine the optimal alignment. I intially tried SSD; however, it did not produce good results. I also tried using the mean value of un-normalized pixels of the correlated image channels due to rounding problems with my early NCC implementations. This worked better than expected, but not as well as NCC. I next tried Normalized Cross Correlation (NCC), which I found to work well across all images when coupled with the correct featurization (detailed in bells and whistles). I also tried using a structural similarity score to align images. This worked well, but did not offer any noticable improvement over NCC while being computationally more expensive. Thus, I chose NCC to be the metric to use for alignment. </p>
-    <h6>Interesting note on aligning</h6>
+    <h4>Interesting note on aligning</h4>
     <p>
         Curiously, I found that the technique used to shift the images matters greatly for getting good results. I initially used a complicated slicing pattern to align the channels that produced only the section of each channel that overlapped when the channels are shifted. This led to a lot of difficulty when actually wanting to take the found shift amounts and calculate the overlapping image. This method also did not scale well to my more advanced implementations, where I scan a [-15, 15] pixel range for each channel (G and B) with each channel having its own starting shift to begin searching from due to the results of the last level of the image pyramid. <b>Most importantly, this method produced mediocre image alignment. </b> I think that this is due to the following reason: when finding the NCC of each particular shift in the search range, the resulting image would be of a different size than for other shifts due to some pixels being cut out. Thus, I had to renormalize each shift, which was slow and did not seem to produce good results. 
         <br>
         <b>A much better and simpler method: </b>
         <br>
-        Ultimately, I decided to use np.roll.
+        Ultimately, I decided to use np.roll, since it was reccomended by course staff. I intially doubted that this method would work well since it moved pixels to the other side of the image, where they were effectively non-sense. However, I found that this method provided much better results and was much simpler to implement (especially to implement the shifting once the optimal amount has been found)! 
+
+        Now that the alignment step is finished, I simply roll the images using the optimal shifts found by my algorithm. Since this does result in some borders due to pixels being moved to the opposite side of the image from where their meaning lies, I also do small manual crops at this step as well. I use the same method as described above. 
+        <br>
+        Now, it is time to save our produced image! I also save the amount I shifted each image by and how much I cropped each image by before and after shifting to a pandas dataframe. This makes my images completely reproducible to course staff. I made some nice functionality for this as well. More info will be described elsewhere on this page and in the README.txt file for how to use this to reproduce my images. 
     </p>
+
+    <h2>Enough Text! This class is about images!</h2>
+    <h4>Here is a sampling of some of the images produced by my program. </h4>
+    <figure>
+        src= "media/onion_church_no_sobel.jpg" alt = "Onion Church"
+        <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]</figcaption>
+    </figure>
+    
     
     
 
