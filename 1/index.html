@@ -24,6 +24,14 @@
     Next, I manually trim the borders of the images before aligning in order to improve the information content of the image channels since the borders largely contain nonsense that is counterproductive to centering. I created a useful function to make this task less labourious: It first displays the image with axes showing overall image size and where features lie in the image; then I can enter the best offsets for each edge of the image--which are then applied to the image. 
         <br><br>
         Now, the image is ready for the centering process. As a note, I use my image pyramid for centering all images. Using my chosen scoring metric, I begin alignment with the smallest image in the pyramid, searching a [-15, 15] pixel range in both dimensions to find the best match between the channels. I then use the optimal centering result just found as a starting point to center the next image down in the pyramid. I continue this pattern until the bottom of the pyramid. 
+    
+    
+    </p>
+    <h3> Metrics </h3>
+    <p> I tried many different metrics to determine the optimal alignment. I intially tried SSD; however, it did not produce good results. I next tried Normalized Cross Correlation (NCC), which I found to work well across all images when coupled with the correct featurization (detailed in bells and whistles). I also tried using a structural similarity score to align images. This worked well, but did not offer any noticable improvement over NCC. Thus, I chose NCC to be the metric to use for alignment. </p>
+    <h6>Interesting note on aligning</h6>
+    <p>
+        Curiously, I found that the technique used to shift the images matters greatly for getting good results. I initially used a complicated slicing pattern to align the channels that produced only the section of each channel that overlapped when the channels are shifted. This led to a lot of difficulty when actually wanting to take the found shift amounts and calculate the overlapping image. This method also did not scale well to my more advanced implementations, where I scan a [-15, 15] pixel range for each channel (G and B) with each channel having its own starting shift to begin searching from due to the results of the last level of the image pyramid. 
     </p>
     
     
