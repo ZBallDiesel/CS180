@@ -12,17 +12,18 @@
 <body>
     <h1>Welcome to My CS180 Project 1!</h1>
     <strong> Name: Zach Turner <br> SID: 3036700008 </strong>
-    <h2>Abstract</h2>
+    <h3>Abstract</h3>
     <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Convinced, as early as 1907, that color photography was the wave of the future, he won Tzar's special permission to travel across the vast Russian Empire and take color photographs of everything he saw including the only color portrait of Leo Tolstoy. And he really photographed everything: people, buildings, landscapes, railroads, bridges... thousands of color pictures! His idea was simple: record three exposures of every scene onto a glass plate using a red, a green, and a blue filter. Never mind that there was no way to print color photographs until much later -- he envisioned special projectors to be installed in "multimedia" classrooms all across Russia where the children would be able to learn about their vast country. Alas, his plans never materialized: he left Russia in 1918, right after the revolution, never to return again. Luckily, his RGB glass plate negatives, capturing the last years of the Russian Empire, survived and were purchased in 1948 by the Library of Congress. The LoC has recently digitized the negatives and made them available on-line. 
-        <b> <br> The goal of this assignment is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce a color image with as few 
+        <b> <br><br> The goal of this assignment is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce a color image with as few 
             visual artifacts as possible. </b></p>
-    <h2> Image Pipeline </h2>
+    <h3> Image Pipeline </h3>
     <p> After experimenting in a notebook to determine what techniques were effective, I created a python script image pipeline to load in Prokudin-Gorskii images from .jpg and .tif files in the /data folder and output alinged RGB images. 
-    <br>
+    <br> <br>
     My initial step is to load in the images, coerce datatype to uint8 (for .tif images) in order to save memory when computing and have consistency in datatypes between images, and split the image into RGB channels. 
-    <br>
+    <br> <br>
     Next, I manually trim the borders of the images before aligning in order to improve the information content of the image channels since the borders largely contain nonsense that is counterproductive to centering. I created a useful function to make this task less labourious: It first displays the image with axes showing overall image size and where features lie in the image; then I can enter the best offsets for each edge of the image--which are then applied to the image. 
-        
+        <br><br>
+        Now, the image is ready for the centering process. As a note, I use my image pyramid for centering all images. Using my chosen scoring metric, I begin alignment with the smallest image in the pyramid, searching a [-15, 15] pixel range in both dimensions to find the best match between the channels. I then use the optimal centering result just found as a starting point to center the next image down in the pyramid. I continue this pattern until the bottom of the pyramid. 
     </p>
     
     
