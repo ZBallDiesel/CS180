@@ -28,10 +28,14 @@
     
     </p>
     <h3> Metrics </h3>
-    <p> I tried many different metrics to determine the optimal alignment. I intially tried SSD; however, it did not produce good results. I next tried Normalized Cross Correlation (NCC), which I found to work well across all images when coupled with the correct featurization (detailed in bells and whistles). I also tried using a structural similarity score to align images. This worked well, but did not offer any noticable improvement over NCC. Thus, I chose NCC to be the metric to use for alignment. </p>
+    <p> I tried many different metrics to determine the optimal alignment. I intially tried SSD; however, it did not produce good results. I also tried using the mean value of un-normalized pixels of the correlated image channels due to rounding problems with my early NCC implementations. This worked better than expected, but not as well as NCC. I next tried Normalized Cross Correlation (NCC), which I found to work well across all images when coupled with the correct featurization (detailed in bells and whistles). I also tried using a structural similarity score to align images. This worked well, but did not offer any noticable improvement over NCC while being computationally more expensive. Thus, I chose NCC to be the metric to use for alignment. </p>
     <h6>Interesting note on aligning</h6>
     <p>
-        Curiously, I found that the technique used to shift the images matters greatly for getting good results. I initially used a complicated slicing pattern to align the channels that produced only the section of each channel that overlapped when the channels are shifted. This led to a lot of difficulty when actually wanting to take the found shift amounts and calculate the overlapping image. This method also did not scale well to my more advanced implementations, where I scan a [-15, 15] pixel range for each channel (G and B) with each channel having its own starting shift to begin searching from due to the results of the last level of the image pyramid. 
+        Curiously, I found that the technique used to shift the images matters greatly for getting good results. I initially used a complicated slicing pattern to align the channels that produced only the section of each channel that overlapped when the channels are shifted. This led to a lot of difficulty when actually wanting to take the found shift amounts and calculate the overlapping image. This method also did not scale well to my more advanced implementations, where I scan a [-15, 15] pixel range for each channel (G and B) with each channel having its own starting shift to begin searching from due to the results of the last level of the image pyramid. <b>Most importantly, this method produced mediocre image alignment. </b> I think that this is due to the following reason: when finding the NCC of each particular shift in the search range, the resulting image would be of a different size than for other shifts due to some pixels being cut out. Thus, I had to renormalize each shift, which was slow and did not seem to produce good results. 
+        <br>
+        <b>A much better and simpler method: </b>
+        <br>
+        Ultimately, I decided to use np.roll.
     </p>
     
     
