@@ -92,7 +92,8 @@
             
                     <figure>
                 <img src= "media/lady_no_sobel.jpg" alt = "Lady"  >
-                <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]</figcaption>
+                <figcaption>G Shift: [-57, -10], B Shift: [-108, -36] <br> 
+                Notice that my algorithm does well even with the infamously difficult Lady image. </figcaption>
             </figure>
            
        
@@ -106,7 +107,7 @@
     <div class = "row">
             
                     <figure>
-                <img src= "media/self_potrait__no_sobel.jpg" alt = "Self Portrait!"   >
+                <img src= "media/self_potrait_no_sobel.jpg" alt = "Self Portrait!"   >
                 <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]</figcaption>
             </figure>
          
@@ -127,14 +128,60 @@
             
        
                     <figure>
-                <img src= "media/melons_no_sobel.jpg" alt = "Onion Church"   >
+                <img src= "media/melons_no_sobel.jpg" alt = "Melons"   >
                 <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]</figcaption>
             </figure>
             
     </div>
 
 
+    <h3>Bells and Whistles</h3>
+    <h4>Edge Detection (Better Features)</h4>
+    <p>
+    I tried several forms of edge detection, which noticeably improved image quality for some images. For edge detection, I used both a Sobel filter to detect edges and the image, as well as a Canny filter. A Sobel filter works by combining vertical and horizontal derivatives to find the overall magnitude of the derivative in each pixel of the image. These derivatives calculate how the image is changing at each pixel, allowing edges to be located. These edges provide superior information to match the image channels. I used the Sobel filter function from sk image, and then ran the identical image alignment process using the Sobel filtered image instead of the raw pixels. 
+<br><br>
+        I also tried a Canny filter, which is a refinement of the Sobel filter that isolates the edges with the most change to remove noise. However, I did not find any images where the Canny filter outperformed the Sobel filter. Since the Canny filter is more computationally expensive, I decided to use Sobel filtering for edge detection in my final implementation. 
+        
+    </p>
+    <h4>Below are Images Where Sobel filtering improved alignment:</h4>
 
+    <div class = "row">
+            
+                    <figure>
+                <img src= "media/emir_no_sobel.jpg" alt = "EMIR"   >
+                <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]
+                <br> Without Sobel Filtering</figcaption>
+            </figure>
+            
+       
+                    <figure>
+                <img src= "media/emir_with_sobel.jpg" alt = "EMIR"   >
+                <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]
+                <br> With Sobel Filtering</figcaption>
+            </figure>
+
+        
+            
+    </div>
+
+    <div class = "row">
+            
+                    <figure>
+                <img src= "media/tobolsk_no_sobel.jpg" alt = "Tobolsk"   >
+                <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]
+                <br> Without Sobel Filtering</figcaption>
+            </figure>
+            
+       
+                    <figure>
+                <img src= "media/tobolsk_with_sobel.jpg" alt = "Tobolsk"   >
+                <figcaption>G Shift: [-57, -10], B Shift: [-108, -36]
+                <br> With Sobel Filtering</figcaption>
+            </figure>
+
+        
+            
+    </div>
     
     
     
