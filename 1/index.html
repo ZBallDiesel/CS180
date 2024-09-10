@@ -39,8 +39,8 @@
 </head>
 <body>
     <h1>Welcome to My CS180 Project 1!</h1>
-    <a href = "../index.html"> Home Page </a>
-    <strong> Name: Zach Turner <br> SID: 3036700008 </strong>
+    <a href = "../index.html"> My CS180 Personal Project Home Page </a>
+    <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Abstract</h3>
     <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Convinced, as early as 1907, that color photography was the wave of the future, he won Tzar's special permission to travel across the vast Russian Empire and take color photographs of everything he saw including the only color portrait of Leo Tolstoy. And he really photographed everything: people, buildings, landscapes, railroads, bridges... thousands of color pictures! His idea was simple: record three exposures of every scene onto a glass plate using a red, a green, and a blue filter. Never mind that there was no way to print color photographs until much later -- he envisioned special projectors to be installed in "multimedia" classrooms all across Russia where the children would be able to learn about their vast country. Alas, his plans never materialized: he left Russia in 1918, right after the revolution, never to return again. Luckily, his RGB glass plate negatives, capturing the last years of the Russian Empire, survived and were purchased in 1948 by the Library of Congress. The LoC has recently digitized the negatives and made them available on-line. 
         <b> <br><br> The goal of this assignment is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce a color image with as few 
@@ -157,7 +157,7 @@
     </div>
            
 
-    <h3>Bells and Whistles</h3>
+    <h2>Bells and Whistles</h2>
     <h4>Edge Detection (Better Features)</h4>
     <p>
     I tried several forms of edge detection, which noticeably improved image quality for some images. For edge detection, I used both a Sobel filter to detect edges and the image, as well as a Canny filter. A Sobel filter works by combining vertical and horizontal derivatives to find the overall magnitude of the derivative in each pixel of the image. These derivatives calculate how the image is changing at each pixel, allowing edges to be located. These edges provide superior information to match the image channels. I used the Sobel filter function from sk image, and then ran the identical image alignment process using the Sobel filtered image instead of the raw pixels. 
@@ -210,8 +210,27 @@
         We can see the biggest improvement from Sobel Filtering in the Emir image. We can see that the Non-Sobel filtered image makes some 
     unreasonably large moves on one channel. This results in a blue Emir existing on the right hand side of the image, which is terribly mis-aligned. On the Sobel-filtered version, Emir is aligned nicely and the image looks <b>VERY NICE!</b>
         <br><br>
-        The tobolsk image also benefitted from the Sobel Filtering, albeit in a less extreme manner than Emir: In the non Sobel version, notice the green noise on the building on the center right of the image, as well as some color noise around the edges of the logs. This is evidence that the alignment is not quite perfert. Notice that these imperfection are absent on the Sobel filtered version, yielding a case where Sobel filtering supplied superior alignment and image quality. 
+        The tobolsk image also benefitted from the Sobel Filtering, albeit in a less extreme manner than Emir: In the non Sobel version, notice the green and red noise on the building on the center right of the image, as well as some color noise around the edges of the logs. This is evidence that the alignment is not quite perfert. Notice that these imperfection are absent on the Sobel filtered version, yielding a case where Sobel filtering supplied superior alignment and image quality. Since these differences are hard to notice on the small image, I have included below another side-by-side of the two images were the alignment imperfections are circled. 
     </p>
+
+    <div class = "row">
+            
+                    <figure>
+                <img src= "media/tobolsk_no_sobel_markedup.jpg" alt = "Tobolsk"  width = 200% >
+                <figcaption>G Shift: [-4, -1], B Shift: [-6, -3]
+                <br> Without Sobel Filtering</figcaption>
+            </figure>
+            
+       
+                    <figure>
+                <img src= "media/tobolsk_with_sobel.jpg" alt = "Tobolsk" width = 200%  >
+                <figcaption>G Shift: [-4, 0], B Shift: [-6, -3]
+                <br> With Sobel Filtering</figcaption>
+            </figure>
+
+        
+            
+    </div>
     
 <h4> Odd Image </h4>
     <figure>
@@ -223,6 +242,25 @@
         As you can see, this image has some odd artifacts; however, my algorithm worked well on the image and I believe that the artifacts are from the raw image itself. As we can see, the colors are aligned well on all channels and all edges looked matched. Thus, it appears that my aligning image has worked well. However, I feel the need to address why this image in particular looks poor since it is--to be frank--rather disturbing. Notice how the children in the middle are glowing and rather translucent. The worst case of this phenomenom appears around the child near the middle with the green blob surrounding the child's head. I believe that this is due to blurriness in the data itself, likely resulting from the image process of the day. As discussed in lecture, cameras in this era required long exposure times to capture images. I speculate that the children were unable to stay still during the image taking process, likely moving by small amounts. This caused their images to be blurred throughout the areas where they were moving, creating this transparent ghost-like effect. The bright white shirts people in that area of the image are wearing likely also saturated the image and lead to quality issues. 
     </p>
 
+
+    <h3> How to Recreate Results </h3>
+    <p>
+        This is the same information that is in my README.txt file included here. 
+        <br><br>
+        Instructions to recreate images:
+
+I put in special effort to make it easy for readers to recreate my images by creating a clean python script to run and a pickled Pandas DF "metadata.pkl" containing the results my program used to align my images. 
+<br><br>
+Backstory:
+<br><br>
+I worked in the main.ipynb to develop my algorithms and find what was effective. Understandably, this became messy with all of my experimentation. Thus, I created the Python script generate_images.py with just the algorithm components I decided to use to generate the images for the website. I also collected the channel shifts I used to align the images, as well as the amount of cropping I used to create the images on the website. Thus, the images on my website should be fully reproducible. 
+<br><br>
+How to Use:
+<br><br>
+Place the generate_images.py file in a location such that the raw images are in a sub folder called "data" (eg such that to access the onion church, use "data/onion_church.tif") and a subfolder called "proc_images" for the program to save the processed images to. 
+<br><br>
+TO recreate my images, run the generate_images.py script. With the metadata.pkl file in the directory, the script will load in the pandas df that contains the data of how much I cropped each image and the program will automatically crop each image according to how much I did so when making the images. The program will ask you if you want it to recalculate how much to shift each image channel (in case you want to verify how the algorithm works) or if you want to use the same shift values I did that are included in the pickle (in case you want to save time). When recalculating the shift amounts, it takes about 50 seconds per image for the large images on my machine. Enter 1 to have my program recalculate the image shifts. 
+    </p>
     
     <h4>Credits: </h4>
     <p>
