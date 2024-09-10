@@ -39,6 +39,7 @@
 </head>
 <body>
     <h1>Welcome to My CS180 Project 1!</h1>
+    <a href = "../index.html"> Home Page </a>
     <strong> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Abstract</h3>
     <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Convinced, as early as 1907, that color photography was the wave of the future, he won Tzar's special permission to travel across the vast Russian Empire and take color photographs of everything he saw including the only color portrait of Leo Tolstoy. And he really photographed everything: people, buildings, landscapes, railroads, bridges... thousands of color pictures! His idea was simple: record three exposures of every scene onto a glass plate using a red, a green, and a blue filter. Never mind that there was no way to print color photographs until much later -- he envisioned special projectors to be installed in "multimedia" classrooms all across Russia where the children would be able to learn about their vast country. Alas, his plans never materialized: he left Russia in 1918, right after the revolution, never to return again. Luckily, his RGB glass plate negatives, capturing the last years of the Russian Empire, survived and were purchased in 1948 by the Library of Congress. The LoC has recently digitized the negatives and made them available on-line. 
@@ -134,6 +135,10 @@
             
     </div>
 
+    <figure>
+        <img src = "media/sculpture_no_sobel.jpg" alt = "sculpture">
+            <figcaption> G Shift: [-107, 16], B Shift: [-139, 26] </figcaption>
+    </figure>
 
     <h4>Smaller Images</h4>
     <div class = "row">
@@ -208,6 +213,16 @@
         The tobolsk image also benefitted from the Sobel Filtering, albeit in a less extreme manner than Emir: In the non Sobel version, notice the green noise on the building on the center right of the image, as well as some color noise around the edges of the logs. This is evidence that the alignment is not quite perfert. Notice that these imperfection are absent on the Sobel filtered version, yielding a case where Sobel filtering supplied superior alignment and image quality. 
     </p>
     
+<h4> Odd Image </h4>
+    <figure>
+        <img src = "media/harvesters_no_sobel.jpg" alt = "harvesters">
+        <figcaption>G Shift = [-65, 3], B Shift = [-153, -17] </figcaption>
+    </figure>
+    
+    <p>
+        As you can see, this image has some odd artifacts; however, my algorithm worked well on the image and I believe that the artifacts are from the raw image itself. As we can see, the colors are aligned well on all channels and all edges looked matched. Thus, it appears that my aligning image has worked well. However, I feel the need to address why this image in particular looks poor since it is--to be frank--rather disturbing. Notice how the children in the middle are glowing and rather translucent. The worst case of this phenomenom appears around the child near the middle with the green blob surrounding the child's head. I believe that this is due to blurriness in the data itself, likely resulting from the image process of the day. As discussed in lecture, cameras in this era required long exposure times to capture images. I speculate that the children were unable to stay still during the image taking process, likely moving by small amounts. This caused their images to be blurred throughout the areas where they were moving, creating this transparent ghost-like effect. The bright white shirts people in that area of the image are wearing likely also saturated the image and lead to quality issues. 
+    </p>
+
     
     <h4>Credits: </h4>
     <p>
