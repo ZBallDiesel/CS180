@@ -41,8 +41,8 @@
     <h1>Welcome to My CS180 Project 1!</h1>
     <a href = "../index.html"> My CS180 Personal Project Home Page </a>
     <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
-    <h3>Abstract</h3>
-    <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Convinced, as early as 1907, that color photography was the wave of the future, he won Tzar's special permission to travel across the vast Russian Empire and take color photographs of everything he saw including the only color portrait of Leo Tolstoy. And he really photographed everything: people, buildings, landscapes, railroads, bridges... thousands of color pictures! His idea was simple: record three exposures of every scene onto a glass plate using a red, a green, and a blue filter. Never mind that there was no way to print color photographs until much later -- he envisioned special projectors to be installed in "multimedia" classrooms all across Russia where the children would be able to learn about their vast country. Alas, his plans never materialized: he left Russia in 1918, right after the revolution, never to return again. Luckily, his RGB glass plate negatives, capturing the last years of the Russian Empire, survived and were purchased in 1948 by the Library of Congress. The LoC has recently digitized the negatives and made them available on-line. 
+    <h3>Introduction</h3>
+    <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Starting in 1907, Prokudin-Gorskii embarked on a great journey throughout the Russian Empire, taking many photos of almost anything he came accross. As a true visionary, he predicted color photography as the upcomning technological advancement; while has made some correct predictions that color images would be represented using red, green, and blue channels in the future, his way of capturing them differs from how we do today. He took three single color images or a target with red, blue, and green filters in front of the camera. These images provide a fantastic medium to glimpse into the colorized past of Russia ... if they can be seen. Most of his images--now digitized by the Library of Congress--suffer from poor alignment across the color channels and other imperfections.   Thus, this project aims to restore the images and fix such alignment issues to create beautiful images from the Prokudin-Gorskii color negatives. 
         <b> <br><br> The goal of this assignment is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce a color image with as few 
             visual artifacts as possible. </b></p>
     <h3> Image Pipeline </h3>
@@ -189,14 +189,14 @@
     <div class = "row">
             
                     <figure>
-                <img src= "media/tobolsk_no_sobel.jpg" alt = "Tobolsk"  width = 200% >
+                <img src= "media/tobolsk_no_sobel.jpg" alt = "Tobolsk"   >
                 <figcaption>G Shift: [-4, -1], B Shift: [-6, -3]
                 <br> Without Sobel Filtering</figcaption>
             </figure>
             
        
                     <figure>
-                <img src= "media/tobolsk_with_sobel.jpg" alt = "Tobolsk" width = 200%  >
+                <img src= "media/tobolsk_with_sobel.jpg" alt = "Tobolsk"  >
                 <figcaption>G Shift: [-4, 0], B Shift: [-6, -3]
                 <br> With Sobel Filtering</figcaption>
             </figure>
@@ -207,30 +207,30 @@
     <h4>Commentary</h4>
     <p>
 
-        We can see the biggest improvement from Sobel Filtering in the Emir image. We can see that the Non-Sobel filtered image makes some 
-    unreasonably large moves on one channel. This results in a blue Emir existing on the right hand side of the image, which is terribly mis-aligned. On the Sobel-filtered version, Emir is aligned nicely and the image looks <b>VERY NICE!</b>
+        We can see the biggest improvement from Sobel Filtering in the Emir image. We can see that the algorithm makes an 
+    unreasonably large shift on the blue channel of the Non Sobel image. This results in a blue Emir existing on the right hand side of the image, which is terribly mis-aligned. On the Sobel-filtered version, Emir is aligned nicely and the image looks <b>VERY NICE!</b>
         <br><br>
-        The tobolsk image also benefitted from the Sobel Filtering, albeit in a less extreme manner than Emir: In the non Sobel version, notice the green and red noise on the building on the center right of the image, as well as some color noise around the edges of the logs. This is evidence that the alignment is not quite perfert. Notice that these imperfection are absent on the Sobel filtered version, yielding a case where Sobel filtering supplied superior alignment and image quality. Since these differences are hard to notice on the small image, I have included below another side-by-side of the two images were the alignment imperfections are circled. 
+        The tobolsk image also benefitted from the Sobel Filtering, albeit in a less extreme manner than Emir: In the non Sobel version, notice the green and red noise on the building on the center right of the image, as well as some color noise around the edges of the logs. This is evidence that the alignment is not quite perfert. Notice that these imperfection are absent on the Sobel filtered version, yielding a case where Sobel filtering supplied superior alignment and image quality. Since these differences are hard to notice on the small image, I have included below the images in a larger format where the alignment imperfections are circled. 
     </p>
 
-    <div class = "row">
+   
             
                     <figure>
-                <img src= "media/tobolsk_no_sobel_markedup.jpg" alt = "Tobolsk"  width = 200% >
+                <img src= "media/tobolsk_no_sobel_markedup.jpg" alt = "Tobolsk"   >
                 <figcaption>G Shift: [-4, -1], B Shift: [-6, -3]
                 <br> Without Sobel Filtering</figcaption>
             </figure>
             
        
                     <figure>
-                <img src= "media/tobolsk_with_sobel.jpg" alt = "Tobolsk" width = 200%  >
+                <img src= "media/tobolsk_with_sobel.jpg" alt = "Tobolsk"  >
                 <figcaption>G Shift: [-4, 0], B Shift: [-6, -3]
                 <br> With Sobel Filtering</figcaption>
             </figure>
 
         
             
-    </div>
+   
     
 <h4> Odd Image </h4>
     <figure>
@@ -264,7 +264,9 @@ TO recreate my images, run the generate_images.py script. With the metadata.pkl 
     
     <h4>Credits: </h4>
     <p>
-        I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. <br>
+        I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
+        The first and last lines of the introduction paragraph are taken from the CS180 course website.
+        <br>
         <b>I would like to emphasize that all of the code for image processing is of my own creation.</b>
     </p>
 
