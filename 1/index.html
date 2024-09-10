@@ -42,17 +42,17 @@
     <a href = "../index.html"> My CS180 Personal Project Home Page </a>
     <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Introduction</h3>
-    <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Starting in 1907, Prokudin-Gorskii embarked on a great journey throughout the Russian Empire, taking many photos of almost anything he came accross. As a true visionary, he predicted color photography as the upcomning technological advancement; while has made some correct predictions that color images would be represented using red, green, and blue channels in the future, his way of capturing them differs from how we do today. He took three single color images or a target with red, blue, and green filters in front of the camera. These images provide a fantastic medium to glimpse into the colorized past of Russia ... if they can be seen. Most of his images--now digitized by the Library of Congress--suffer from poor alignment across the color channels and other imperfections.   Thus, this project aims to restore the images and fix such alignment issues to create beautiful images from the Prokudin-Gorskii color negatives. 
+    <p> Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Starting in 1907, Prokudin-Gorskii embarked on a great journey throughout the Russian Empire, taking many photos of almost anything he came accross. As a true visionary, he predicted color photography as the upcoming technological advancement; while he made a correct prediction that color images would be represented using red, green, and blue channels in the future, his way of capturing them differs from how we do today. He took three single color images or a target with red, blue, and green filters in front of the camera. These images provide a fantastic glimpse into the colorized past of Russia ... if they can be seen. Most of his images--now digitized by the Library of Congress--suffer from poor alignment across the color channels and other imperfections.   Thus, this project aims to restore the images and fix such alignment issues to create beautiful images from the Prokudin-Gorskii color negatives. 
         <b> <br><br> The goal of this assignment is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce a color image with as few 
             visual artifacts as possible. </b></p>
     <h3> Image Pipeline </h3>
-    <p> After experimenting in a notebook to determine what techniques were effective, I created a python script image pipeline to load in Prokudin-Gorskii images from .jpg and .tif files in the /data folder and output alinged RGB images. 
+    <p> After experimenting in a notebook to determine what techniques were effective, I created a python script image pipeline to load in the Prokudin-Gorskii images from .jpg and .tif files in the /data folder and output alinged RGB images. 
     <br> <br>
-    My initial step is to load in the images, coerce datatype to uint8 (for .tif images) in order to save memory when computing and have consistency in datatypes between images, and split the image into RGB channels. 
+    My initial step is to load in the images, coerce the datatype to uint8 (for .tif images) (in order to save memory when computing and have consistency in datatypes between images), and split the image into RGB channels. 
     <br> <br>
     Next, I manually trim the borders of the images before aligning in order to improve the information content of the image channels since the borders largely contain nonsense that is counterproductive to centering. I created a useful function to make this task less labourious: It first displays the image with axes showing overall image size and where features lie in the image; then I can enter the best offsets for each edge of the image--which are then applied to the image. 
         <br><br>
-        Now, the image is ready for the centering process. As a note, I use my image pyramid for centering all images. Using my chosen scoring metric, I begin alignment with the smallest image in the pyramid, searching a [-15, 15] pixel range in both dimensions to find the best match between the channels. I then use the optimal centering result just found as a starting point to center the next image down in the pyramid. I continue this pattern until the bottom of the pyramid. 
+        Now, the image is ready for the centering process. As a note, I use my image pyramid for centering all images. To create the each level in the image pyramid, I apply a Guassian blur to the preceding image in the level below of the pyramid and reduce the length of each axis by 0.5 by selecting every other row and column. Using my chosen scoring metric, I begin alignment with the smallest image in the pyramid, searching a [-15, 15] pixel range in both dimensions to find the best match between the channels. I then use the optimal centering result just found as a starting point to center the next image down in the pyramid. I continue this pattern until the bottom of the pyramid. 
     
     
     </p>
@@ -160,7 +160,7 @@
     <h2>Bells and Whistles</h2>
     <h4>Edge Detection (Better Features)</h4>
     <p>
-    I tried several forms of edge detection, which noticeably improved image quality for some images. For edge detection, I used both a Sobel filter to detect edges and the image, as well as a Canny filter. A Sobel filter works by combining vertical and horizontal derivatives to find the overall magnitude of the derivative in each pixel of the image. These derivatives calculate how the image is changing at each pixel, allowing edges to be located. These edges provide superior information to match the image channels. I used the Sobel filter function from sk image, and then ran the identical image alignment process using the Sobel filtered image instead of the raw pixels. 
+    I tried several forms of edge detection, which noticeably improved image quality for some images. For edge detection, I used both a Sobel filter and a Canny filter to detect edges. A Sobel filter works by combining vertical and horizontal derivatives to find the overall magnitude of the derivative in each pixel of the image. These derivatives calculate how the image intensity values are changing at each pixel, allowing edges to be located. These edges provide superior information to match the image channels. I used the Sobel filter function from sk image, and then ran the identical image alignment process using the Sobel filtered image instead of the raw pixels. 
 <br><br>
         I also tried a Canny filter, which is a refinement of the Sobel filter that isolates the edges with the most change to remove noise. However, I did not find any images where the Canny filter outperformed the Sobel filter. Since the Canny filter is more computationally expensive, I decided to use Sobel filtering for edge detection in my final implementation. 
         
@@ -248,8 +248,8 @@
         This is the same information that is in my README.txt file included here. 
         <br><br>
         Instructions to recreate images:
-
-I put in special effort to make it easy for readers to recreate my images by creating a clean python script to run and a pickled Pandas DF "metadata.pkl" containing the results my program used to align my images. 
+<br><br>
+I put in special effort to make it easy for readers to recreate my images by creating a clean python script to run and a pickled Pandas DF "metadata.pkl" containing the results of my program from when I aligned the images. 
 <br><br>
 Backstory:
 <br><br>
@@ -259,12 +259,13 @@ How to Use:
 <br><br>
 Place the generate_images.py file in a location such that the raw images are in a sub folder called "data" (eg such that to access the onion church, use "data/onion_church.tif") and a subfolder called "proc_images" for the program to save the processed images to. 
 <br><br>
-TO recreate my images, run the generate_images.py script. With the metadata.pkl file in the directory, the script will load in the pandas df that contains the data of how much I cropped each image and the program will automatically crop each image according to how much I did so when making the images. The program will ask you if you want it to recalculate how much to shift each image channel (in case you want to verify how the algorithm works) or if you want to use the same shift values I did that are included in the pickle (in case you want to save time). When recalculating the shift amounts, it takes about 50 seconds per image for the large images on my machine. Enter 1 to have my program recalculate the image shifts. 
+<b>To recreate my images </b>, run the generate_images.py script. With the metadata.pkl file in the directory, the script will load in the pandas df that contains the data of how much I cropped each image and the program will automatically crop each image according to how much I did so when making the images. The program will ask you if you want it to recalculate how much to shift each image channel (in case you want to verify how the algorithm works) or if you want to use the same shift values I did that are included in the pickle (in case you want to save time). When recalculating the shift amounts, it takes about 50 seconds per image for the large images on my machine. Enter 1 to have my program recalculate the image shifts. 
     </p>
     
     <h4>Credits: </h4>
     <p>
         I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
+        <br>
         The first and last lines of the introduction paragraph are taken from the CS180 course website.
         <br>
         <b>I would like to emphasize that all of the code for image processing is of my own creation.</b>
