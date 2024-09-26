@@ -50,8 +50,58 @@
   <h4>Part 1.1</h4>
   <p>
   Here we are applyying the finite difference operator to simulate taking (partial) derivatives of an image. When convolved with an image, the finite difference operator works by finding the difference in neighbouring pixel values in the relevant direction (ie either x or y direction depending on whether the D_x or D_y filter is being used), which is an approximation to the derivative. Approximating--rather than precisely calculating--the derivative is necessary when working with digitized images, since digitzed images (when viewed as a function Z^2 -> R) are only defined on integer values ( as Z^2 is the domain) while the typical notion of taking derivatives requires the function to be defined a more continuous domain such as R or C. Thus, we can not perform the typical limiting process as we can not compare function values arbitrarily close to each other to approximate the slope. Since the closest values we can compare are neighbouring pixels, the finite difference operator will be one of the best approximations we can get to the derivative. 
+
+      <br><br>
+
+      Let's look at the partial derivatives of the famous cameraman image using the finite difference operator. On the right is the derivative magnitude image, which shows the mathematical magnitude of both partials together at each pixel. To be precise, the derivative magnitude is the L2-norm squared of the gradient vector [dx, dy] at each pixel, where dx is the partial derivative with respect to x and dy is the partial derivative with respect to y.
   </p>
 
+    <div class = "row">
+        <figure>
+            <img src = "media/cameramanPartialX.jpg" alt = "Cameraman Partial in X">
+            <figcaption>Cameraman Partial Derivative in X (Convolution with D_x)</figcaption>
+        </figure>
+
+        <figure>
+            <img src = "media/cameramanPartialY.jpg" alt = "Cameraman Partial in Y">
+            <figcaption>Cameraman Partial Derivative in Y (Convolution with D_y)</figcaption>
+        </figure>
+
+        <figure>
+            <img src = "media/cameraman_grad_mag.jpg" alt = "Cameraman Gradient Magnitude">
+            <figcaption>Cameraman Gradient Magnitude</figcaption>
+        </figure>
+    </div>
+
+    
+    
+    <p>Derivatives can be useful in finding edges, a technique I used in project 1. In images, edges are correlated with gradient magnitude, so pixels with larger gradient magnitude are more likely to contain an edge in the image. To determine what is an edge, the images below are the result of defining a certain cutoff that a gradient magnitude must exceed in order to be an "edge". Finding the appropriate cutoff is rather subjective and can be found via trial and error. I tried many different cutoffs to see which one captured the edges in this image. Below are a few of the interesting cutoffs. </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/cameraman_cutoff_35.jpg" alt = "Cameraman Cutoff 35">
+            <figcaption>Cameraman Edges with Gradient magnitude cuttoff of 35. </figcaption>
+        </figure>
+
+        <figure>
+           <img src = "media/cameraman_cutoff_50.jpg" alt = "Cameraman Cutoff 50">
+            <figcaption>Cameraman Edges with Gradient magnitude cuttoff of 50.  </figcaption>
+        </figure>
+
+        <figure>
+           <img src = "media/cameraman_cutoff_70.jpg" alt = "Cameraman Cutoff 70">
+            <figcaption>Cameraman Edges with Gradient magnitude cuttoff of 70. </figcaption>
+        </figure>
+
+        <img src = "media/cameraman_cutoff_100.jpg" alt = "Cameraman Cutoff 100">
+            <figcaption>Cameraman Edges with Gradient magnitude cuttoff of 100. </figcaption>
+    </div>
+
+    <h5>Interpretation</h5>
+    <p> 
+        Finding the appropriate gradient magnitude cutoff is a balancing act of trying to minimize the amount of noise that is picked up as an "edge" while still classifying true edges as "edges". Higher cutoff values will allow less noise to be classified as an edge; however, too high off a cutoff value will eliminate too many true edges. In my opinion, the cutoff of 35 allows too much noise to pass through as an edge, while the cutoff of 100 eliminates too many true edges despite doing a good job of reducing noise. Thus, I think that the cutoff values of 50 and 70 are reasonable and do a good job of balancing both of our objectives. I would choose the cutoff value of 50 as my favorite, since it retains edge information on the camera itself, some of which is lost in the cutoff of 70 image. 
+    </p>
+    
 
 </body>
 </html>
