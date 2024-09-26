@@ -156,6 +156,87 @@
     <p>
         To me, the DoG cameraman images look extremely similar to the derivative of blurred cameraman images above. 
     </p>
+
+    <h3>Part 2 - Fun with Frequencies</h3>
+    <h4> Part 2.1</h4>
+
+    <p>
+        In this section, we are sharpening images using unsharp mask filtering. As described in the project intro, low-pass filtering (such as by convolving with a Gaussian filter) removes the high frequencies from the images. Thus, subtracting the low-pass filtered image from the original image will yield the high frequency component of the image. To sharpen the image, we want to add more high frequencies back to the image. Thus, we should add the high frequency component found above to the original image to sharpen it. Using properties of convolution, we can acheive this by convolving the original image by the filter (1 + a)*delta - a * Gaussian, where a is a sharpening parameter that controls how sharp to make the image, delta is the kronecker delta function, and Gaussian is an appropriately sized and scaled Gaussian filter. For the same reasons as above, I use a sigma value approximately equal to the size of the Gaussian / 6. 
+        For my sharpening filter, I used a filer of size 21x21 with a sigma of 3.3. 
+        <br><br>
+        Shown below is the result of applying the sharpening filter to the Taj image with various a values.
+    </p>
+
+    <div class="row">
+        <figure>
+            <img src = "media/taj.jpg">
+            <figcaption>Original Image (a = 0)</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/taj_sharp_a1.jpg">
+            <figcaption>a = 1</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/taj_sharp_a2.jpg">
+            <figcaption>a = 2</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/taj_sharp_a3.jpg">
+            <figcaption>a = 3</figcaption>
+        </figure>
+    </div>
+
+    <p>
+        Below are the results of applying my sharpening filter to various images that I have sourced. As a test, I will blur various images and apply my sharpening filter to see how much the images can be resharped. The following images are featured: <br>
+        1. An image I took at North Arm Farm in Pemberton, BC this summer. I show both a sharpened version of the original image, a blurred image, and a sharpened version of the blurred image. 
+        <br>
+        2. A plate of bbq food from my camera roll. I show the original image, a blurred image, and a sharpened version of the blurred image. 
+        <br>
+        3. A professional capture of one of my mother's painting. I show the original image, a blurred image, and a sharpened version of the blurred image. 
+    </p>
+
+    <div class = "row">
+            <figure>
+                <img src = "media/northArmFarm.jpg">
+                <figcaption> Original Image</figcaption>
+            </figure>
+        <figure>
+            <img src = "media/NAFsharp2.jpg">
+            <figcaption>Sharpened Image (a = 2)</figcaption>
+        </figure>
+    </div>
+    <div class = "row">
+            <figure>
+                <img src = "media/NAF_blur.jpg">
+                <figcaption> Blurred Image</figcaption>
+            </figure>
+        <figure>
+            <img src = "media/NAF->blur->sharp1.jpg">
+            <figcaption>Sharpened Version of Blurred Image (a = 1)</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/NAF->bs3.jpg">
+            <figcaption>Sharpened Version of Blurred Image (a = 3)</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+            <figure>
+                <img src = "media/bbq.jpg">
+                <figcaption> Original Image</figcaption>
+            </figure>
+        <figure>
+            <img src = "media/bbq_blur.jpg">
+            <figcaption>Blurred Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/bbq->bs.jpg">
+                <figcaption>Sharpened Version of Blurred Image (a = 2)</figcaption>
+             
+        </figure>
+    </div>
+    
+    
     
 </body>
 </html>
