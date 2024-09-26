@@ -267,8 +267,88 @@
     <h4>Part 2.2 : Hybrid Images</h4>
     <p>
         Hybrid images are an oppurtunity to apply our sharpening filter to generate some cool images. Hybrid images refers to overlay of two different images at different frequencies so that the image appears to be of different objects at different viewing distances. To start this process, we start with two images would like to overlay, typically converted to grayscale. We first manually align the features of the image, using the align_images code provided by course staff. Next, we apply the 1 - Gaussian filter to one image and low filter another using a Gaussian filter. Thus, we are left with the high frequencies of one image and the low frequencies of another image. When overlaying the two images together, the resulting image has a high frequencies of one image and the low frequencies of another. Since humans primarily percept high frequencies at close distances and low frequencies at far distances, we see one image when viewing close and a different image from looking far away.
-<br> Below are some examples of images produced.
+<br> Below are some examples of images produced along with the corresponding input images. 
     </p>
+<h5>Successful Hybridizations</h5>
+    <h5>Motorcycles: Harley Davdison Street Bike in HF, GasGas Motocross Bike in LF</h5>
+    <div class = "row">
+        <figure>
+            <img src = "harley.jpg">
+            <figcaption>Input Image 1 (High Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas.jpg">
+            <figcaption>Input Image 2 (Low Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "harleygasgas.jpg">
+            <figcaption>Hybird Image (Grayscale)</figcaption>
+        </figure>
+    </div>
+    <h5>Guitars: Heritage Les Paul style guitar in HF, Xotic Telecaster style guitar in LF</h5>
+  <div class = "row">
+        <figure>
+            <img src = "heritage.jpg">
+            <figcaption>Input Image 1 (High Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "xotic.jpg">
+            <figcaption>Input Image 2 (Low Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "xoticHeritage.jpg">
+            <figcaption>Hybird Image (Color)</figcaption>
+        </figure>
+    </div>
+    <p><b>Notice the flame maple pattern shows up very well in the high frequency guitar.</b></p>
+    <h5>Selected Favorite Image: Mountain Bike in HF, GasGas Motocross Bike in LF</h5>
+       <div class = "row">
+        <figure>
+            <img src = "yeti.jpg">
+            <figcaption>Input Image 1 (High Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas.jpg">
+            <figcaption>Input Image 2 (Low Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "bike_bw.jpg">
+            <figcaption>Hybird Image (Grayscale)</figcaption>
+        </figure>
+    </div>
+    <h5>Fourier Transforms of Above Hybrid Image</h5>
+       <div class = "row">
+        <figure>
+            <img src = "yeti_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Input MTB</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Input Moto</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src = "HP_yeti_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of High Pass Filtered MTB</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Low Pass Filtered Moto</figcaption>
+        </figure>
+    </div>
+        
+        
+           <figure>
+            <img src = "bike_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Hybird Image</figcaption>
+        </figure>
+ 
+
+    
+
+    
     
 </body>
 </html>
