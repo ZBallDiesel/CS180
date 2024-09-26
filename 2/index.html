@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 2</title>
+    <style>
+        body {
+            font-family: Times New Roman, Arial, sans-serif;
+            margin: 20px;
+        }
+
+        <!-- Following code for CSS style is adapted from W3 Schools. https://www.w3schools.com/howto/howto_css_images_side_by_side.asp
+        and Stack Overflow
+        https://stackoverflow.com/questions/61637178/how-to-center-multiple-figure-elements-in-one-row-->
+        * {
+      box-sizing: border-box;
+    }
+    
+    .column {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+    
+    
+    .row {
+      padding-bottom: 50px;
+      display: flex;
+        text-align: center;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    img {
+        width: 100%;
+        height: auto
+        
+    }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My CS180 Project 2!</h1>
+    <a href = "../index.html"> My CS180 Personal Project Home Page </a>
+    <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
+    <h3>Introduction</h3>
+  <p>
+    The project aims to build familiarity and intutiution for working with convolutions and it applications such as deriviatives and frequency filters. We will apply these techniques to make many different interesting outcomes based around techniques such as hybrid images and image blending. 
+  </p>
+
+  <h3>Part 1</h3>
+  <h4>Part 1.1</h4>
+  <p>
+  Here we are applyying the finite difference operator to simulate taking (partial) derivatives of an image. When convolved with an image, the finite difference operator works by finding the difference in neighbouring pixel values in the relevant direction (ie either x or y direction depending on whether the D_x or D_y filter is being used), which is an approximation to the derivative. Approximating--rather than precisely calculating--the derivative is necessary when working with digitized images, since digitzed images (when viewed as a function Z^2 -> R) are only defined on integer values ( as Z^2 is the domain) while the typical notion of taking derivatives requires the function to be defined a more continuous domain such as R or C. Thus, we can not perform the typical limiting process as we can not compare function values arbitrarily close to each other to approximate the slope. Since the closest values we can compare are neighbouring pixels, the finite difference operator will be one of the best approximations we can get to the derivative. 
+  </p>
+
+
+</body>
+</html>
