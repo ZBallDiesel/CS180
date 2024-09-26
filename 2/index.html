@@ -123,12 +123,39 @@
         <figcaption>Partial of Blurred Cameraman with respect to Y</figcaption>
     </figure>
      <figure>
-        <img src = "media/cameraman_blur_deriv.jpg" >
+        <img src = "media/camerman_blur_deriv.jpg" >
         <figcaption>Gradient Magnitude of Blurred Cameraman </figcaption>
     </figure>
 </div>
-    
-    
 
+    <h5>Interpretation</h5>
+    <p>
+        Unsurprisingly, the derivatives of the blurred camerman look blurred. This results in thicker edges, deeper appearing edges, and reduced noise. In partituclar, I can see that some of the lesser edges in the lower right quadrant are much more noticable in the derivative of the blurred cameraman. I hypothesize that this is due to the edges being very thin in the unblurred image. Despite being thin, these edges are not filtered out in the blurred image since they are relatively long. The blurring makes these edges wider, and thus wider in the derivative. Overall, these factors lead to the derivative of the blurred image being much more asthetically pleasing than the derivative of the raw image. 
+    </p>
+    <h5>Derivative of Gaussian</h5>
+    <p>
+        Notice that our implentation of both blurring and derivation are both using convolution. In particular, we are doing image --convolve with Gaussian filter--> blurred image --convolve with finite difference filter--> derivative of blurred image. <br>
+        One lovely property of convolution is that it is associative. As a result, we can reduce our workflow's complexity from doing two convolutions to doing a single convolution with a filter that is the Gaussian filter convolved with the finite difference filter (known as Derivative of Gaussian filter or DoG). Let's put this to the test! Below are the results of convolving the cameraman image with the DoG filter. They should be identical to the derivatives of blurred cameraman images above. 
+    </p>
+
+    <div class = "row">
+    <figure>
+        <img src = "media/cameraman_GdX.jpg" >
+        <figcaption>DoG of Cameraman with respect to X</figcaption>
+    </figure>
+    <figure>
+        <img src = "media/cameraman_GdY.jpg" >
+        <figcaption>DoG of Blurred Cameraman with respect to Y</figcaption>
+    </figure>
+     <figure>
+        <img src = "media/cameraman_deriv_of_Gauss.jpg" >
+        <figcaption>Gradient Magnitude of DoG Cameraman </figcaption>
+    </figure>
+</div>
+    <h5>Interpretation</h5>
+    <p>
+        To me, the DoG cameraman images look extremely similar to the derivative of blurred cameraman images above. 
+    </p>
+    
 </body>
 </html>
