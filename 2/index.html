@@ -362,9 +362,74 @@
     </div>
 
     <p>I had a difficult time trying to hybridize these two images. I thought it would be intertaining to do a play on names with the extremely famous UC Berkeley Statistics and CS Prof Michael Jordan and a lesser known Michael Jordan who happens to be a basketball player. I attempt to hybridize the image with the professor in the high frequencies and the athlete in the low frequencies, which is the more successful configuration. Despite this, I was still unable to be completely satisfied with my hybrid image. I adjusted many parameters such as cutoff frequency for both images independently and mixture ratios; however, it seems that, in all cases, one of the two images dominated.  </p>
-    
 
-    
+    <h4>Part 2.3 - Stacks</h4>
+    <p>
+        The goal of this section is to create a Gaussian and Laplacian stack. A Gaussian stack is a collection of images (which I store in a 4D tensor for color images) containing the original image on top and progressively more blurred images as we go down the stack. To create each progressively more blurred image, I convolve the previous level's image with a Gaussian filter that grows in size and sigma as we go down the stack. As before, I keep it so that sigma = filter size / 6. 
+        <br><br>
+        A Laplacian stack is one containing the mid-band frequencies at progressively lower frequencies as we go to lower levels of the stack. Level t in the Laplacian stack is created by taking the difference between the Gaussian filter at level t and the Gaussian stack at level t + 1. This works since the Gaussian stack contains low-passed images, so  the difference between the Gaussian filter at level t and the Gaussian stack at level t + 1 contains the frequencies that are high enough to be blurred from Gaussian level t + 1 but not high enough to be blurred from Gaussian level t. Thus, we get a band pass filter. To be precise, the Laplace stack at level 0 contains a high-pass image. Finally, the remaining low-pass image is added to the lowest level of the Laplace stack. This ensures the nice property that the sum of the Laplacian stack is the original image. 
+    </p>
+    <h5>The Oraple</h5>
+    <p>As we will see in the next part, we can use these stacks to create blended images. Here is a recreation of the Oraple image from the 80s. </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/oraple.jpg">
+            <figcaption>The Oraple!</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/OrapleProgPlot.png">
+            <figcaption>
+                Progression of the Oraple Creation. The first three rows show the high, medium, and low-frequency parts of the Laplacian pyramid (taken from levels 0, 2, and 4). The left and middle columns show the original apple and orange images weighted by the smooth interpolation functions, while the right column shows
+the averaged contributions. 
+            </figcaption>
+        </figure>
+    </div>
+
+    <h4>Part 2.4 - Blending</h4>
+    <p>As forshadowed in part 2.3, we can use the stacks to blend two images together without seams. To do this, we need to create a mask. The mask will be a step function that transitions where we want the images to transition. Then we will use the Gaussian and Laplacian stacks we know how to create from the last section. For the two images to be blended, calculate their Laplacian stacks. Calculate the Gaussian stack for the mask. For each layer in the stack, find the convex combination of that level in the Laplacian stack of each image with the weighting of the mask of that layer in its Gaussian stack. This combines the high frequency components of the images with a sharper boundary and the lower frequencies of the image with progressively smoother boundaries. Let's look at some results. </p>
+
+    <h5>The Oraple</h5>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/oraple.jpg">
+            <figcaption>The Oraple!</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/OrapleProgPlot.png">
+            <figcaption>
+                Progression of the Oraple Creation. The first three rows show the high, medium, and low-frequency parts of the Laplacian pyramid (taken from levels 0, 2, and 4). The left and middle columns show the original apple and orange images weighted by the smooth interpolation functions, while the right column shows
+the averaged contributions. 
+            </figcaption>
+        </figure>
+    </div>
+<h5>Ocean Mountain Range</h5>
+<div class = "row">
+    <figure>
+        <img src = "media/tetons.jpg">
+        <figcaption>The Tetons Mountain Range</figcaption>
+    </figure>
+    <figure>
+        <img src = "media/ocean.jpg">
+        <figcaption>The Great Big Ocean</figcaption>
+    </figure>
+</div>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/seamtns.jpg">
+            <figcaption>The Sea Mountains!</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/seamtns_progress.png">
+            <figcaption>
+                Progression of the Sea Mountains Creation. The first three rows show the high, medium, and low-frequency parts of the Laplacian pyramid (taken from levels 0, 2, and 4). The left and middle columns show the original apple and orange images weighted by the smooth interpolation functions, while the right column shows
+the averaged contributions. 
+            </figcaption>
+        </figure>
+    </div>
+
     
 </body>
 </html>
