@@ -43,7 +43,7 @@
     <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Introduction</h3>
   <p>
-    The project aims to build familiarity and intutiution for working with convolutions and it applications such as deriviatives and frequency filters. We will apply these techniques to make many different interesting outcomes based around techniques such as hybrid images and image blending. 
+    The project aims to build familiarity and intutiution for working with convolutions and its applications such as derivatives and frequency filters. We will apply these techniques to make many different interesting outcomes based around techniques such as hybrid images and image blending. 
   </p>
 
   <h3>Part 1</h3>
@@ -75,7 +75,7 @@
 
     
     
-    <p>Derivatives can be useful in finding edges, a technique I used in project 1. In images, edges are correlated with gradient magnitude, so pixels with larger gradient magnitude are more likely to contain an edge in the image. To determine what is an edge, the images below are the result of defining a certain cutoff that a gradient magnitude must exceed in order to be an "edge". Finding the appropriate cutoff is rather subjective and can be found via trial and error. I tried many different cutoffs to see which one captured the edges in this image. Below are a few of the interesting cutoffs. </p>
+    <p>Derivatives can be useful in finding edges, a technique I used in project 1. In images, edges are correlated with gradient magnitude, so pixels with larger gradient magnitude are more likely to contain an edge in the image. To determine what is an edge, the images below are the result of defining a certain cutoff that a gradient magnitude must exceed in order to be an "edge". Finding the appropriate cutoff is rather subjective and can be found via trial and error. I tried many different cutoffs to see which one best captured the edges in this image. Below are a few of the interesting cutoffs. </p>
 
     <div class = "row">
         <figure>
@@ -100,12 +100,12 @@
 
     <h5>Interpretation</h5>
     <p> 
-        Finding the appropriate gradient magnitude cutoff is a balancing act of trying to minimize the amount of noise that is picked up as an "edge" while still classifying true edges as "edges". Higher cutoff values will allow less noise to be classified as an edge; however, too high off a cutoff value will eliminate too many true edges. In my opinion, the cutoff of 35 allows too much noise to pass through as an edge, while the cutoff of 100 eliminates too many true edges despite doing a good job of reducing noise. Thus, I think that the cutoff values of 50 and 70 are reasonable and do a good job of balancing both of our objectives. I would choose the cutoff value of 50 as my favorite, since it retains edge information on the camera itself, some of which is lost in the cutoff of 70 image. 
+        Finding the appropriate gradient magnitude cutoff is a balancing act of trying to minimize the amount of noise that is picked up as an "edge" while still classifying true edges as "edges". Higher cutoff values will allow less noise to be classified as an edge; however, too high of a cutoff value will eliminate too many true edges. In my opinion, the cutoff of 35 allows too much noise to pass through as an edge, while the cutoff of 100 eliminates too many true edges despite doing a good job of reducing noise. Thus, I think that the cutoff values of 50 and 70 are reasonable and do a good job of balancing both of our objectives. I would choose the cutoff value of 50 as my favorite, since it retains edge information on the camera itself, some of which is lost in the cutoff of 70 image. 
     </p>
 
     <h4>Part 1.2</h4>
     <p>
-        As I noted above, the derivative images above are quite susceptible to noise. This is because noise presents itself as a fast change in a few pixels, which will be picked up by our small original D_x and D_y filters. Thus, we turn to our old friend: the Gaussian filter. The Gaussian filter removes the high frequency components of our images. Since noise is a fast change over a small spatial area, it is a high frequency signal. Thus, the Gaussian filter will remove noise from our photos. This also makes sense when you consider that what is Gaussian filter is doing spatially is to take a weighted average of the surrounding pixels. Thus, any noise that is in just a small number of pixels will be insignificant and will not contribute much to the average that determines the smoothed pixel value. 
+        As I noted above, the derivative images above are quite susceptible to noise. This is because noise presents itself as a fast change in a few pixels, which will be picked up by our small original D_x and D_y filters. Thus, we turn to our old friend: the Gaussian filter. The Gaussian filter removes the high frequency components of our images. Since noise is a fast change over a small spatial area, it is a high frequency signal. Thus, the Gaussian filter will remove noise from our photos. This also makes sense when you consider what a Gaussian filter is doing spatially: it is taking a weighted average of the surrounding pixels. Thus, any noise that is in just a small number of pixels will be insignificant and will not contribute much to the average that determines the smoothed pixel value. 
         <br><br>
         That being said, let's try applying the Gaussian filter to our image before the derivate it in order to remove noise from our edge detectors. Here I am using a 20x20 Gaussian kernel with a sigma value of 3.3. I chose this sigma value to be such that 6*sigma roughly equals 20. Since almost all of the measure of a Gaussian kernel lies within -3 standard deviations to 3 standard deviations, this ensures that the vast majority of the Gaussians measure is being captured in the kernel and that there are few values in the kernel that are essentially 0. These traits help us with the objectives of smooth filtering and computational efficiency respectively. 
         <br> <br>
@@ -128,13 +128,24 @@
     </figure>
 </div>
 
+    <div class = "row">
+    <figure>
+        <img src = "media/cameraman_blur_deriv_50.jpg" >
+        <figcaption>Binarized Gradient Magnitude of Derivative of Blurred Image with cutoff 50</figcaption>
+    </figure>
+    <figure>
+        <img src = "media/cameraman_blur_deriv_70.jpg" >
+        <figcaption>Binarized Gradient Magnitude of Derivative of Blurred Image with cutoff 70</figcaption>
+    </figure>
+</div>
+
     <h5>Interpretation</h5>
     <p>
         Unsurprisingly, the derivatives of the blurred camerman look blurred. This results in thicker edges, deeper appearing edges, and reduced noise. In partituclar, I can see that some of the lesser edges in the lower right quadrant are much more noticable in the derivative of the blurred cameraman. I hypothesize that this is due to the edges being very thin in the unblurred image. Despite being thin, these edges are not filtered out in the blurred image since they are relatively long. The blurring makes these edges wider, and thus wider in the derivative. Overall, these factors lead to the derivative of the blurred image being much more asthetically pleasing than the derivative of the raw image. 
     </p>
     <h5>Derivative of Gaussian</h5>
     <p>
-        Notice that our implentation of both blurring and derivation are both using convolution. In particular, we are doing image --convolve with Gaussian filter--> blurred image --convolve with finite difference filter--> derivative of blurred image. <br>
+        Notice that our implentation of blurring and derivation are both using convolution. In particular, we are doing image --convolve with Gaussian filter--> blurred image --convolve with finite difference filter--> derivative of blurred image. <br>
         One lovely property of convolution is that it is associative. As a result, we can reduce our workflow's complexity from doing two convolutions to doing a single convolution with a filter that is the Gaussian filter convolved with the finite difference filter (known as Derivative of Gaussian filter or DoG). Let's put this to the test! Below are the results of convolving the cameraman image with the DoG filter. They should be identical to the derivatives of blurred cameraman images above. 
     </p>
 
@@ -152,6 +163,17 @@
         <figcaption>Gradient Magnitude of DoG Cameraman </figcaption>
     </figure>
 </div>
+
+     <div class = "row">
+    <figure>
+        <img src = "media/cameraman_Gdx_50.jpg" >
+        <figcaption>Binarized Gradient Magnitude of DoG Image with cutoff 50</figcaption>
+    </figure>
+    <figure>
+        <img src = "media/cameraman_Gdy_70.jpg" >
+        <figcaption>Binarized Gradient Magnitude of DoG Image with cutoff 70</figcaption>
+    </figure>
+    
     <h5>Interpretation</h5>
     <p>
         To me, the DoG cameraman images look extremely similar to the derivative of blurred cameraman images above. 
@@ -161,7 +183,7 @@
     <h4> Part 2.1</h4>
 
     <p>
-        In this section, we are sharpening images using unsharp mask filtering. As described in the project intro, low-pass filtering (such as by convolving with a Gaussian filter) removes the high frequencies from the images. Thus, subtracting the low-pass filtered image from the original image will yield the high frequency component of the image. To sharpen the image, we want to add more high frequencies back to the image. Thus, we should add the high frequency component found above to the original image to sharpen it. Using properties of convolution, we can acheive this by convolving the original image by the filter (1 + a)*delta - a * Gaussian, where a is a sharpening parameter that controls how sharp to make the image, delta is the kronecker delta function, and Gaussian is an appropriately sized and scaled Gaussian filter. For the same reasons as above, I use a sigma value approximately equal to the size of the Gaussian / 6. 
+        In this section, we are sharpening images using unsharp mask filtering. As described in the project intro, low-pass filtering (such as by convolving with a Gaussian filter) removes the high frequencies from images. Thus, subtracting the low-pass filtered image from the original image will yield the high frequency component of the image. To sharpen the image, we want to add more high frequencies back to the image. Thus, we should add the high frequency component found above to the original image to sharpen it. Using properties of convolution, we can acheive this by convolving the original image by the filter (1 + a)*delta - a * Gaussian, where a is a sharpening parameter that controls how sharp to make the image, delta is the kronecker delta function, and Gaussian is an appropriately sized and scaled Gaussian filter. For the same reasons as above, I use a sigma value approximately equal to the size of the Gaussian / 6. 
         For my sharpening filter, I used a filer of size 21x21 with a sigma of 3.3. 
         <br><br>
         Shown below is the result of applying the sharpening filter to the Taj image with various a values.
@@ -187,7 +209,7 @@
     </div>
 
     <p>
-        Below are the results of applying my sharpening filter to various images that I have sourced. As a test, I will blur various images and apply my sharpening filter to see how much the images can be resharped. The following images are featured: <br>
+        Below are the results of applying my sharpening filter to various images that I have sourced. As a test, I will blur various images and apply my sharpening filter to see how much the images can be resharpened. The following images are featured: <br>
         1. An image I took at North Arm Farm in Pemberton, BC this summer. I show both a sharpened version of the original image, a blurred image, and a sharpened version of the blurred image. 
         <br>
         2. A plate of bbq food from my camera roll. I show the original image, a blurred image, and a sharpened version of the blurred image. 
@@ -261,12 +283,12 @@
         <br><br>
         <b>BBQ Brisket: </b> Here, the resharpened image does show improvement over the blurred image in being closer to the original image. In particular, the resharpened image regains detail on the grain of the brisket and on the pine nuts in the salad. 
         <br><br>
-        <b>Point Pinos Lighthouse: </b> The changes over the variations are lesser in this image than in the other images. We can see that that the sharpened images does a very good job of recapturing detail around the red roof of the lightouse. I expect that this is because the image never contained much high frequency content due to originally being a painting rather than a real world image. Thus, filtering and accenuating high frequencies does not that much since the image originally contained not that many high frequencies. 
+        <b>Point Pinos Lighthouse: </b> The changes over the variations are lesser in this image than in the other images. We can see that that the sharpened images does a very good job of recapturing detail around the red roof of the lightouse. I expect that this is because the image never contained much high frequency content due to originally being a painting rather than a real world image. Thus, filtering and accenuating high frequencies does not do that much since the image did not originally contain that many high frequencies. 
     </p>
 
     <h4>Part 2.2 : Hybrid Images</h4>
     <p>
-        Hybrid images are an oppurtunity to apply our sharpening filter to generate some cool images. Hybrid images refers to overlay of two different images at different frequencies so that the image appears to be of different objects at different viewing distances. To start this process, we start with two images would like to overlay, typically converted to grayscale. We first manually align the features of the image, using the align_images code provided by course staff. Next, we apply the 1 - Gaussian filter to one image and low filter another using a Gaussian filter. Thus, we are left with the high frequencies of one image and the low frequencies of another image. When overlaying the two images together, the resulting image has a high frequencies of one image and the low frequencies of another. Since humans primarily percept high frequencies at close distances and low frequencies at far distances, we see one image when viewing close and a different image from looking far away.
+        Hybrid images are an oppurtunity to apply what we have learned to generate some cool images. Hybrid images refers to overlay of two different images at different frequencies so that the image appears to be of different objects when viewed at different distances. To start this process, we start with two images would like to overlay, typically converted to grayscale. We first manually align the features of the image, using the align_images code provided by course staff. Next, we apply the 1 - Gaussian filter to one image and low filter another using a Gaussian filter. Thus, we are left with the high frequencies of one image and the low frequencies of another image. When overlaying the two images together, the resulting image has a high frequencies of one image and the low frequencies of another. Since humans primarily percept high frequencies at close distances and low frequencies at far distances, we see one image when viewing close and a different image from looking far away.
 <br> Below are some examples of images produced along with the corresponding input images. 
     </p>
 <h5>Successful Hybridizations</h5>
@@ -361,7 +383,7 @@
         </figure>
     </div>
 
-    <p>I had a difficult time trying to hybridize these two images. I thought it would be intertaining to do a play on names with the extremely famous UC Berkeley Statistics and CS Prof Michael Jordan and a lesser known Michael Jordan who happens to be a basketball player. I attempt to hybridize the image with the professor in the high frequencies and the athlete in the low frequencies, which is the more successful configuration. Despite this, I was still unable to be completely satisfied with my hybrid image. I adjusted many parameters such as cutoff frequency for both images independently and mixture ratios; however, it seems that, in all cases, one of the two images dominated.  </p>
+    <p>I had a difficult time trying to hybridize these two images. I thought it would be entertaining to do a play on names with the extremely famous UC Berkeley Statistics and CS Prof Michael Jordan and a lesser known Michael Jordan who happens to be a basketball player. I attempt to hybridize the images with the professor in the high frequencies and the athlete in the low frequencies, which is the more successful configuration. Despite this, I was still unable to be completely satisfied with my hybrid image. I adjusted many parameters such as cutoff frequency for both images independently and mixture ratios; however, it seems that, in all cases, one of the two images would dominate the image close and far.  </p>
 
     <h4>Part 2.3 - Stacks</h4>
     <p>
@@ -372,11 +394,13 @@
     <h5>The Oraple</h5>
     <p>As we will see in the next part, we can use these stacks to create blended images. Here is a recreation of the Oraple image from the 80s. </p>
 
- 
+ <div class = "row">
         <figure>
             <img src = "media/oraple.jpg">
             <figcaption>The Oraple!</figcaption>
         </figure>
+ </div>
+         <div class = "row">
         <figure>
             <img src = "media/OrapleProgPlot.png">
             <figcaption>
@@ -384,18 +408,21 @@
 the averaged contributions. 
             </figcaption>
         </figure>
+         </div>
   
 
     <h4>Part 2.4 - Blending</h4>
-    <p>As forshadowed in part 2.3, we can use the stacks to blend two images together without seams. To do this, we need to create a mask. The mask will be a step function that transitions where we want the images to transition. Then we will use the Gaussian and Laplacian stacks we know how to create from the last section. For the two images to be blended, calculate their Laplacian stacks. Calculate the Gaussian stack for the mask. For each layer in the stack, find the convex combination of that level in the Laplacian stack of each image with the weighting of the mask of that layer in its Gaussian stack. This combines the high frequency components of the images with a sharper boundary and the lower frequencies of the image with progressively smoother boundaries. Let's look at some results. </p>
+    <p>As forshadowed in part 2.3, we can use the stacks to blend two images together without seams. To do this, we need to create a mask. The mask will be a step function that transitions where we want the images to transition. Then we will use the Gaussian and Laplacian stacks that we know how to create from the last section. For the two images to be blended, calculate their Laplacian stacks. Calculate the Gaussian stack for the mask. For each layer in the stack, find the convex combination of that level in the Laplacian stack of each image with the weighting given by the mask of that layer in its Gaussian stack. This combines the high frequency components of the images with a sharper boundary and the lower frequencies of the image with progressively smoother boundaries. Let's look at some results. </p>
 
     <h5>The Oraple</h5>
 
-   
+   <div class = "row">
         <figure>
             <img src = "media/oraple.jpg">
             <figcaption>The Oraple!</figcaption>
         </figure>
+   </div>
+         <div class = "row">
         <figure>
             <img src = "media/OrapleProgPlot.png">
             <figcaption>
@@ -403,6 +430,7 @@ the averaged contributions.
 the averaged contributions. 
             </figcaption>
         </figure>
+         </div>
 
 <h5>Ocean Mountain Range</h5>
 <div class = "row">
@@ -416,11 +444,13 @@ the averaged contributions.
     </figure>
 </div>
 
-    
+    <div class = "row">
         <figure>
             <img src = "media/seamtns.jpg">
             <figcaption>The Sea Mountains!</figcaption>
         </figure>
+    </div>
+         <div class = "row">
         <figure>
             <img src = "media/seamtns_progess.png">
             <figcaption>
@@ -428,6 +458,7 @@ the averaged contributions.
 the averaged contributions. 
             </figcaption>
         </figure>
+         </div>
 
     <h5> Probability Professor's Dream Classroom</h5>
     <div class = "row">
@@ -442,16 +473,18 @@ the averaged contributions.
         </figure>
 
         <figure>
-            <img src = "media/rouletteMask.jpg">
+            <img src = "media/rouletteMask.jpg" border = "1">
             <figcaption>The mask</figcaption>
         </figure>
     </div>
+         <div class = "row">
     <figure>
             <img src = "media/gamblingStudents.jpg">
             <figcaption>Students learning about probability in real life</figcaption>
         </figure>
+         </div>
 
-    <p>I find this Gambling Students picture I created particularly entertaining. I hope it makes you laugh as much as it does me. </p>
+    <p>I find the Gambling Students picture I created to be particularly entertaining. I hope it makes you laugh as much as it does me. </p>
     <h5>One Entertaining Poor Image Blend </h5>
     <p>
         I'll include this following blended image with a custom mask even though it did not turn out too well. For context, the original image is of me mountain biking down an easy rock roll, while the other input image is of a very difficult rock roll. I thought it would be a good use of effort to make a blended photo of myself riding the more difficult rock roll. However, the blended image did not turn out too well, as you'll see. I'll hypothesize why this happened below.
@@ -468,7 +501,7 @@ the averaged contributions.
         </figure>
 
         <figure>
-            <img src = "media/meMtbMask.jpg">
+            <img src = "media/meMtbMask.jpg" border = "1">
             <figcaption>The mask</figcaption>
         </figure>
 
@@ -490,6 +523,8 @@ the averaged contributions.
     <h4>Credits: </h4>
     <p>
         I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
+        <br>
+        The description of the blended image progressions in the caption underneath those images is taken from the paper by Szelski.
         <br>
         <b>I would like to emphasize that all of the code for image processing is of my own creation.</b>
     </p>
