@@ -194,7 +194,7 @@
         <br>
         3. A professional capture of one of my mother's painting. I show the original image, a blurred image, and a sharpened version of the blurred image. 
     </p>
-
+    <h5>North Arm Farm</h5>
     <div class = "row">
             <figure>
                 <img src = "media/northArmFarm.jpg">
@@ -219,7 +219,7 @@
             <figcaption>Sharpened Version of Blurred Image (a = 3)</figcaption>
         </figure>
     </div>
-
+<h5>BBQ Brisket</h5>
     <div class = "row">
             <figure>
                 <img src = "media/bbq.jpg">
@@ -235,8 +235,201 @@
              
         </figure>
     </div>
-    
-    
+    <h5>Point Pinos Lighthouse</h5>
+    <div class = "row">
+            <figure>
+                <img src = "media/PointPinosLighthouse.jpg">
+                <figcaption> Original Image</figcaption>
+            </figure>
+        <figure>
+            <img src = "media/pinos_blur.jpg">
+            <figcaption>Blurred Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/pinos->blur->sharp.jpg">
+                <figcaption>Sharpened Version of Blurred Image (a = 2)</figcaption>
+             
+        </figure>
+    </div>
+
+    <h5>Observations</h5>
+    <p>
+    <b>Taj: </b> When the Taj image is sharpened, we can see that high frequency features such as the grid like pattern on the left of the Taj Mahal are much stronger. Likewise, we can see a much clearer definition around the outside edge of the Taj Mahal, creating an almost radiance like effect on stronger sharpening settings. 
+        <br><br>
+        <b>North Arm Farm: </b> Sharpening the North Arm Farm image strengthens high frequency information around the ridgeline, in the clouds, on the right hand weeping willow tree, and on the water stream from the irragation sprinkler. 
+        When resharpening the blurred image, we can not fully recover the detail of the original image. However, the re-sharpened image is much more realistic and detailed than the original image, especially on the image with sharpening parameter a = 3. Thus, I would call the re-sharpening successful on this image. 
+        <br><br>
+        <b>BBQ Brisket: </b> Here, the resharpened image does show improvement over the blurred image in being closer to the original image. In particular, the resharpened image regains detail on the grain of the brisket and on the pine nuts in the salad. 
+        <br><br>
+        <b>Point Pinos Lighthouse: </b> I see little change in this image over all three variations. I expect that this is because the image never contained much high frequency content due to originally being a painting rather than a real world image. Thus, filtering and accenuating high frequencies does little since the image originally contained few high frequencies. 
+    </p>
+
+    <h4>Part 2.2 : Hybrid Images</h4>
+    <p>
+        Hybrid images are an oppurtunity to apply our sharpening filter to generate some cool images. Hybrid images refers to overlay of two different images at different frequencies so that the image appears to be of different objects at different viewing distances. To start this process, we start with two images would like to overlay, typically converted to grayscale. We first manually align the features of the image, using the align_images code provided by course staff. Next, we apply the 1 - Gaussian filter to one image and low filter another using a Gaussian filter. Thus, we are left with the high frequencies of one image and the low frequencies of another image. When overlaying the two images together, the resulting image has a high frequencies of one image and the low frequencies of another. Since humans primarily percept high frequencies at close distances and low frequencies at far distances, we see one image when viewing close and a different image from looking far away.
+<br> Below are some examples of images produced along with the corresponding input images. 
+    </p>
+<h5>Successful Hybridizations</h5>
+    <h5>Motorcycles: Harley Davdison Street Bike in HF, GasGas Motocross Bike in LF</h5>
+    <div class = "row">
+        <figure>
+            <img src = "harley.jpg">
+            <figcaption>Input Image 1 (High Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas.jpg">
+            <figcaption>Input Image 2 (Low Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "harleygasgas.jpg">
+            <figcaption>Hybird Image (Grayscale)</figcaption>
+        </figure>
+    </div>
+    <h5>Guitars: Heritage Les Paul style guitar in HF, Xotic Telecaster style guitar in LF</h5>
+  <div class = "row">
+        <figure>
+            <img src = "heritage.jpg">
+            <figcaption>Input Image 1 (High Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "xotic.jpg">
+            <figcaption>Input Image 2 (Low Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "xoticHeritage.jpg">
+            <figcaption>Hybird Image (Color)</figcaption>
+        </figure>
+    </div>
+    <p><b>Notice the flame maple pattern shows up very well in the high frequency guitar.</b></p>
+    <h5>Selected Favorite Image: Mountain Bike in HF, GasGas Motocross Bike in LF</h5>
+       <div class = "row">
+        <figure>
+            <img src = "yeti.jpg">
+            <figcaption>Input Image 1 (High Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas.jpg">
+            <figcaption>Input Image 2 (Low Freq)</figcaption>
+        </figure>
+           <figure>
+            <img src = "bike_bw.jpg">
+            <figcaption>Hybird Image (Grayscale)</figcaption>
+        </figure>
+    </div>
+    <h5>Fourier Transforms of Above Hybrid Image</h5>
+       <div class = "row">
+        <figure>
+            <img src = "yeti_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Input MTB</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Input Moto</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src = "HP_yeti_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of High Pass Filtered MTB</figcaption>
+        </figure>
+           <figure>
+            <img src = "gasgas_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Low Pass Filtered Moto</figcaption>
+        </figure>
+    </div>
+        
+        
+           <figure>
+            <img src = "bike_4ier.jpg">
+            <figcaption>Log Magnitude of Fourier Transform of Hybird Image</figcaption>
+        </figure>
+ 
+<h5>Image Hybridization Failure</h5>
+        <div class = "row">
+        <figure>
+            <img src = "mj_ucb.jpg">
+            <figcaption>Input Image 1</figcaption>
+        </figure>
+           <figure>
+            <img src = "mj_bb.jpg">
+            <figcaption>Input Image 2</figcaption>
+        </figure>
+            <figure>
+            <img src = "mj_bw.jpg">
+            <figcaption>Hybrid Image (grayscale)</figcaption>
+        </figure>
+    </div>
+
+    <p>I had a difficult time trying to hybridize these two images. I thought it would be intertaining to do a play on names with the extremely famous UC Berkeley Statistics and CS Prof Michael Jordan and a lesser known Michael Jordan who happens to be a basketball player. I attempt to hybridize the image with the professor in the high frequencies and the athlete in the low frequencies, which is the more successful configuration. Despite this, I was still unable to be completely satisfied with my hybrid image. I adjusted many parameters such as cutoff frequency for both images independently and mixture ratios; however, it seems that, in all cases, one of the two images dominated.  </p>
+
+    <h4>Part 2.3 - Stacks</h4>
+    <p>
+        The goal of this section is to create a Gaussian and Laplacian stack. A Gaussian stack is a collection of images (which I store in a 4D tensor for color images) containing the original image on top and progressively more blurred images as we go down the stack. To create each progressively more blurred image, I convolve the previous level's image with a Gaussian filter that grows in size and sigma as we go down the stack. As before, I keep it so that sigma = filter size / 6. 
+        <br><br>
+        A Laplacian stack is one containing the mid-band frequencies at progressively lower frequencies as we go to lower levels of the stack. Level t in the Laplacian stack is created by taking the difference between the Gaussian filter at level t and the Gaussian stack at level t + 1. This works since the Gaussian stack contains low-passed images, so  the difference between the Gaussian filter at level t and the Gaussian stack at level t + 1 contains the frequencies that are high enough to be blurred from Gaussian level t + 1 but not high enough to be blurred from Gaussian level t. Thus, we get a band pass filter. To be precise, the Laplace stack at level 0 contains a high-pass image. Finally, the remaining low-pass image is added to the lowest level of the Laplace stack. This ensures the nice property that the sum of the Laplacian stack is the original image. 
+    </p>
+    <h5>The Oraple</h5>
+    <p>As we will see in the next part, we can use these stacks to create blended images. Here is a recreation of the Oraple image from the 80s. </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/oraple.jpg">
+            <figcaption>The Oraple!</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/OrapleProgPlot.png">
+            <figcaption>
+                Progression of the Oraple Creation. The first three rows show the high, medium, and low-frequency parts of the Laplacian pyramid (taken from levels 0, 2, and 4). The left and middle columns show the original apple and orange images weighted by the smooth interpolation functions, while the right column shows
+the averaged contributions. 
+            </figcaption>
+        </figure>
+    </div>
+
+    <h4>Part 2.4 - Blending</h4>
+    <p>As forshadowed in part 2.3, we can use the stacks to blend two images together without seams. To do this, we need to create a mask. The mask will be a step function that transitions where we want the images to transition. Then we will use the Gaussian and Laplacian stacks we know how to create from the last section. For the two images to be blended, calculate their Laplacian stacks. Calculate the Gaussian stack for the mask. For each layer in the stack, find the convex combination of that level in the Laplacian stack of each image with the weighting of the mask of that layer in its Gaussian stack. This combines the high frequency components of the images with a sharper boundary and the lower frequencies of the image with progressively smoother boundaries. Let's look at some results. </p>
+
+    <h5>The Oraple</h5>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/oraple.jpg">
+            <figcaption>The Oraple!</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/OrapleProgPlot.png">
+            <figcaption>
+                Progression of the Oraple Creation. The first three rows show the high, medium, and low-frequency parts of the Laplacian pyramid (taken from levels 0, 2, and 4). The left and middle columns show the original apple and orange images weighted by the smooth interpolation functions, while the right column shows
+the averaged contributions. 
+            </figcaption>
+        </figure>
+    </div>
+<h5>Ocean Mountain Range</h5>
+<div class = "row">
+    <figure>
+        <img src = "media/tetons.jpg">
+        <figcaption>The Tetons Mountain Range</figcaption>
+    </figure>
+    <figure>
+        <img src = "media/ocean.jpg">
+        <figcaption>The Great Big Ocean</figcaption>
+    </figure>
+</div>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/seamtns.jpg">
+            <figcaption>The Sea Mountains!</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/seamtns_progress.png">
+            <figcaption>
+                Progression of the Sea Mountains Creation. The first three rows show the high, medium, and low-frequency parts of the Laplacian pyramid (taken from levels 0, 2, and 4). The left and middle columns show the original apple and orange images weighted by the smooth interpolation functions, while the right column shows
+the averaged contributions. 
+            </figcaption>
+        </figure>
+    </div>
+
     
 </body>
 </html>
