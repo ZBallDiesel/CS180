@@ -86,5 +86,11 @@
       </figure>
   </div>
 
+<h3>Part 2 - Mid-way Image</h3>
+    <p>
+        In this section, I am computing the "mid-way" image of myself and George Clooney. This first involves computing the average shape of our two faces, which we define as the average location of each correspondance point. Then I will map each face into that shape, and average the colors from each of our faces. 
+        <br><br>
+        The most difficult part of the whole project is to figure out how to morph two images into a common shape. My approach maps each face to the mid-way face independently for each triangle in the triangulation. Our theory is that for triangle, the midway image is some affine transformation of the original image. Thus, we need to determine the affine transformation of the original image triangle's location that finds the location of the corresponding triangle in the midway image. Given the degrees of freedom of an affine transformation, the three points that define the triangle's location in the original and midway image suffice to find the transformation. This gives us a linear system, that we need to solve to determine the coeffcients of the transformation. This is what my computeAffine function does
+    </p>
 </body>
 </html>
