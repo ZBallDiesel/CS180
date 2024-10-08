@@ -116,10 +116,23 @@
         <img src = "./media/midGeorgeMe.jpg">
           <figcaption>Midway Image of George Clooney and Myself</figcaption>
       </figure>
+      </div>
       <h5>Interpretation</h5>
       <p>
           The shape of the midway face seems to be a good midway shape of the two of us. In particular, I like how the hair is a middle hieght between the hair height of George Clooney and myself. I am surprised however that the coloring of the face seems to be closer to George's than mine. Perhaps this has to due with how RGB pixel values map to certain skin tones. Here, it appears that lighter skin tones must require much higher pixel values. The average of George's darker skin and my lighter skin seem to still be darker in tone, implying that generally darker skin values span a wider range of RGB values. 
       </p>
-  </div>
+      
+      <h3>Part 3  - Morph</h3>
+
+    <p>
+        In part 3, we are essentially performing a more flexible version of the process we did in part 2. The underlying logic is quite similar; however, the morph function will allow independent control over the resulting face shape and color, allowing each to be some specified affine combination of both the images. In this section, I will produce the video (in the form of a GIF) that shows the result of morphing both images together using interpolation. This is achieved by making a video from 46 still images, where the warp_frac and dissolve_frac parameters are simultaneously linearly sweeped from 0 to 1. 
+    </p>
+
+    <figure>
+        <img src = "./media/morphGIF.gif">
+        <figcaption>Morphing From Me to George Clooney</figcaption>
+    </figure>
+      
+  
 </body>
 </html>
