@@ -399,7 +399,36 @@
         For faces that exist in the dataset, we can see that it takes more eigenfaces to get a good representation in eigenspace. This is likely because, when working with pre-warped images, only the first few are significant due to images already being in the correct shape as all faces. Thus, we need more faces with the unwarped data to get it to represent the non-warped faces, since we need to find the right combination of face shapes. Also notice that my personal face represents very nicely in the pre-warped space (with my face also pre warped). It looks a lot like my face, and I would say actually looks better than when I warped my face into average FEI shape in standard pixel basis. This is likely due the fact that some of the small details got funny in the standard basis face when warping, which are not there when we are in PCA basis (since it only combines faces natuarally in the shape). We can see that my face (un-warped) in the PCA basis space of unwarped FEI faces does present as nicely. It is likely because its shape is not in the dataset that was used to form the basis. 
     </p>
     <h5>Caricatures in PCA Basis</h5>
-    
+    <div class = "row">
+        <figure>
+            <img src = "./media/carcEigenU.jpg">
+            <figcaption>Caricature of Me in PCA Basis (un-morphed)</figcaption>
+        </figure>
+    </div>
+    <p>
+        The caricatures of me in PCA basis were not as crazy as the caricatures in normal basis. This is likely due to the fact that the EigenFaces are all fairly normal face shapes. Since any caricature in PCA basis is just a linear combination of these EigenFaces, we always get rather normal face shapes. Thus, PCA space is not effective for making caricatures. 
+    </p>
+
+    <h5>Videos</h5>
+    <div class = "row">
+        <figure>
+            <img src = "./media/eigUMeto74.jpg">
+            <figcaption>Morphing Face 74 to Myself</figcaption>
+        </figure>
+
+        <figure>
+            <img src = "./media/eigUMetoAvg.jpg">
+            <figcaption>Morphing Average FEI Face to Myself</figcaption>
+        </figure>
+    </div>
+    <p>
+        The videos are smooth and pleasant to watch; however, they are not as interesting as the morph videos made in standard basis. Since the video content is constrained by the range of the eigenfaces, the transformation is more gradual than in standard basis. Of course, they are also constrained that I can not be represented that well in PCA basis space. Also, more and more noise is introduced as it is morphed towards me, which is not ideal. Overall, I would also say that morphing works better in standard pixel basis space.
+        
+    </p>
+    <h5>PCA Pros</h5>
+    <p>
+        Since each image is represented by only 75 numbers in PCA basis space, all image processing tasks (such as morphing) were <b>extremely</b> fast in PCA basis! For example, Jupyter says that those morph GIFs only took 0.0 seconds to calculate!
+    </p>
     
 </body>
 </html>
