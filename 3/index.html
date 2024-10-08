@@ -127,12 +127,12 @@
     <p>
         In part 3, we are essentially performing a more flexible version of the process we did in part 2. The underlying logic is quite similar; however, the morph function will allow independent control over the resulting face shape and color, allowing each to be some specified affine combination of both the images. In this section, I will produce the video (in the form of a GIF) that shows the result of morphing both images together using interpolation. This is achieved by making a video from 46 still images, where the warp_frac and dissolve_frac parameters are simultaneously linearly sweeped from 0 to 1. 
     </p>
-
+<div class = "row">
     <figure>
         <img src = "./media/morphGIF.gif">
         <figcaption>Morphing From Me to George Clooney</figcaption>
     </figure>
-
+</div>
     <a href = "https://youtube.com/shorts/s0-px6vAMEs?feature=share"> Backup Link to YouTube </a>
 
     <h3>Part 4 - Mean Faces</h3>
@@ -231,6 +231,23 @@
         
     </div>
 
+    <h3>Part 5 - Extrapolation</h3>
+    <p>
+        Previously, I have done interpolation on images, which generally creates something reasonable. However, now I will extrapolate, which accenutes the features or coloring of one face compared to another. This can lead to ridiculous results amplifying features of someone's face, so extrapolation can be useful for creating caricatures of someone (in this case, myself!). The image below shows a caricature of myself versus the average FEI face calcuated using a alpha paramter = 1.5. The resulting face is approximately 1.5 * myFace - 0.5 * averageBrazFace in both shape and color. I tried larger alpha values, but the resulting caricatures were too extreme. 
+    </p>
+    <div class = "row">
+        <figure>
+            <img src = "./media/caricature.jpg">
+            <figcaption>Caricature of myself compared to FEI Faces</figcaption>
+        </figure>
+    </div>
+
+    <h5>Interpretation</h5>
+    <p>
+        Throughout this process, I have noticed that my face is much narrower and longer than the FEI faces with a larger forehead. As a result, the caricature shows my face as being very narrow, especially around the eyes, and long with a large forehead to a silly extent. For face coloring, we have the additional consideration that my face is a color image while the others are grayscale. As a result, the FEI average image is constant across the RGB channels when made into a RGB image. Thus, the FEI face affects the color of the caricature by making the regions where the FEI is light uniformly darker in the caricature. The differences across color channels will be wholly controlled by the image of me. Overall, my image mostly seems to control the color of the caricature; however, some regions in the caricature seem to accenuate redness in my face. The FEI average image seems to have lots of effect over the face shape in the caricature. 
+    </p>
+
+    <h3>Bells and Whistles</h3>
     
 </body>
 </html>
