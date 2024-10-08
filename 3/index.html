@@ -56,7 +56,33 @@
 
   <div class = "row">
       <figure>
-        <img src = "./media/
+        <img src = "./media/me.jpg">
+          <figcaption>Myself</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/george.jpg">
+          <figcaption>George Clooney</figcaption>
+      </figure>
+  </div>
+
+    <p>
+        I defined a correspondance for these two images using the tool provided by course staff. <a href = "https://cal-cs180.github.io/fa23/hw/proj3/tool.html"> tool </a>
+        For these two images, I selected 80 points of correspondance. I later added a point of correspondance for each corner to improve morphing, bringing the total number of correspondances to 84. 
+        <br><br>
+        One challenge I found later on when using these correspondances is that the tool gives the points of correspondance with x, y values flipped compared to how numpy stores images. Thus, I flip the x, y coordinates of correspondance points after I load them in. This is a result of that many applications in the image sphere track image locations in opposite manner to how images are stored. Finding this took a lot of debugging and was something that required constant attention throughout the project. For example, I would have to flip the x, y coordinates of points back when plotting them on images, since that is how plotting software expects them. 
+
+        <br><br>
+        Given these points of correspondance, we compute a Delaunay triangulation, which provides the optimal triangulation to allow me to morph each area of the image together independently. Since we are using the triangulation to morph images into an average shape, we calculate it using the average location of each correspondance so that the triangulation is stable in the position we are going to use it in. Below are both of the images showing the points of correspondance and Delaunay triangulation.
+    </p>
+
+    <div class = "row">
+      <figure>
+        <img src = "./media/meTri.png">
+          <figcaption>Myself With My Correspondance Points and Triangulation</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/georgeTri.png">
+          <figcaption>George Clooney With His Correspondance Points and Triangulation</figcaption>
       </figure>
   </div>
 
