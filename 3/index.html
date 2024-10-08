@@ -248,6 +248,192 @@
     </p>
 
     <h3>Bells and Whistles</h3>
+    <h3>PCA Basis (Eigenfaces)</h3>
+    <p>
+        For this bells and whistles, I am using PCA to create a new basis system to represent face images, with the basis vectors being known as Eigenfaces. I am doing PCA using the same happy FEI dataset as above. To accomplish this, one should flatten each image into a vector, compute the PCA, then reshape each eigenvector back into an image to get an eigenface. This works suprisingly well consdiering that we are destorying the information as to what pixels are neighbouring when we flatten. I tried this is several different flavors with different options. 
+        <br><br>
+        First, I tried doing PCA using the FEI dataset that I had already morphed into the same shape. Since most images were now so similar, only a few faces represnted most of the variance. In this situation, each eigenface seemed to more represent a pixel intensity than a shape. The pro of this is that faces in the dataset could be represented extremely well. However, using premorphed images made morphing not very interesting since all faces are already the same shape. Below we can see how well premorphed faces can be represented using 75 and 20 Eigenfaces.
+    </p>
+    <div class = "row">
+      <figure>
+        <img src = "./media/eigen1d20.jpg">
+          <figcaption>Face 1 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/1.jpg">
+          <figcaption>Image 1 warped</figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigen1d75.jpg">
+            <figcaption>Face 1 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+      <div class = "row">
+      <figure>
+        <img src = "./media/eigen2d20.jpg">
+          <figcaption>Face 2 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/2.jpg">
+          <figcaption>Image 2 warped</figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigen2d75.jpg">
+            <figcaption>Face 2 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+
+ 
+      
+
+        <div class = "row">
+      <figure>
+        <img src = "./media/eigen74d20.jpg">
+          <figcaption>Face 74 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/74.jpg">
+          <figcaption>Image 74 warped</figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigen74d75.jpg">
+            <figcaption>Face 74 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+
+     <div class = "row">
+      <figure>
+        <img src = "./media/eigen75d20.jpg">
+          <figcaption>Face 75 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/75.jpg">
+          <figcaption>Image 75 warped</figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigen75d75.jpg">
+            <figcaption>Face 75 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+
+    
+
+    <p>
+        However, I ultimately found it more interesting to work with PCA when the input faces had not already been warped into the average shape. In this scenario, each Eigenface is more aligned with representing a face shape. 
+    </p>
+
+       <div class = "row">
+      <figure>
+        <img src = "./media/eigenU1d20.jpg">
+          <figcaption>Face 1 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/1b.jpg">
+          <figcaption>Image 1 </figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigenU1d75.jpg">
+            <figcaption>Face 1 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+      <div class = "row">
+      <figure>
+        <img src = "./media/eigenU2d20.jpg">
+          <figcaption>Face 2 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/2b.jpg">
+          <figcaption>Image 2 </figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigenU2d75.jpg">
+            <figcaption>Face 2 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+
+ 
+      
+
+        <div class = "row">
+      <figure>
+        <img src = "./media/eigenU74d20.jpg">
+          <figcaption>Face 74 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/74b.jpg">
+          <figcaption>Image 74 </figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigenU74d75.jpg">
+            <figcaption>Face 74 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+
+     <div class = "row">
+      <figure>
+        <img src = "./media/eigenU75d20.jpg">
+          <figcaption>Face 75 in 20 dimension Eigenface Space</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/75b.jpg">
+          <figcaption>Image 75 </figcaption>
+      </figure>
+        <figure>
+            <img src = "./media/eigenU75d75.jpg">
+            <figcaption>Face 75 in 75 dimension Eigenface Space</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src  ="./media/meCentEigen75.jpg">
+            <figcaption>Me with PCA using Warped Images and 75 Basis Components</figcaption>
+        </figure>
+        <figure>
+            <img src  ="./media/meEigU.jpg">
+            <figcaption>Me with PCA using Non-Warped Images and 30 Basis Components</figcaption>
+        </figure>
+    </div>
+    <h5>Analysis</h5>
+    <p>
+        For faces that exist in the dataset, we can see that it takes more eigenfaces to get a good representation in eigenspace. This is likely because, when working with pre-warped images, only the first few are significant due to images already being in the correct shape as all faces. Thus, we need more faces with the unwarped data to get it to represent the non-warped faces, since we need to find the right combination of face shapes. Also notice that my personal face represents very nicely in the pre-warped space (with my face also pre warped). It looks a lot like my face, and I would say actually looks better than when I warped my face into average FEI shape in standard pixel basis. This is likely due the fact that some of the small details got funny in the standard basis face when warping, which are not there when we are in PCA basis (since it only combines faces natuarally in the shape). We can see that my face (un-warped) in the PCA basis space of unwarped FEI faces does present as nicely. It is likely because its shape is not in the dataset that was used to form the basis. 
+    </p>
+    <h5>Caricatures in PCA Basis</h5>
+    <div class = "row">
+        <figure>
+            <img src = "./media/carcEigenU.jpg">
+            <figcaption>Caricature of Me in PCA Basis (un-morphed)</figcaption>
+        </figure>
+    </div>
+    <p>
+        The caricatures of me in PCA basis were not as crazy as the caricatures in normal basis. This is likely due to the fact that the EigenFaces are all fairly normal face shapes. Since any caricature in PCA basis is just a linear combination of these EigenFaces, we always get rather normal face shapes. Thus, PCA space is not effective for making caricatures. 
+    </p>
+
+    <h5>Videos</h5>
+    <div class = "row">
+        <figure>
+            <img src = "./media/eigUMeto74.gif">
+            <figcaption>Morphing Face 74 to Myself</figcaption>
+        </figure>
+
+        <figure>
+            <img src = "./media/eigUMetoAvg.gif">
+            <figcaption>Morphing Average FEI Face to Myself</figcaption>
+        </figure>
+
+        <figure>
+            <img src = "./media/eigUAvgto74.gif">
+            <figcaption>Morphing Face 74 to Average FEI Face</figcaption>
+        </figure>
+    </div>
+    <p>
+        The videos are smooth and pleasant to watch; however, they are not as interesting as the morph videos made in standard basis. Since the video content is constrained by the range of the eigenfaces, the transformation is more gradual than in standard basis. Of course, they are also constrained that I can not be represented that well in PCA basis space. Also, more and more noise is introduced as it is morphed towards me, which is not ideal. Overall, I would also say that morphing works better in standard pixel basis space.
+        
+    </p>
+    <h5>PCA Pros</h5>
+    <p>
+        Since each image is represented by only 75 numbers in PCA basis space, all image processing tasks (such as morphing) were <b>extremely</b> fast in PCA basis! For example, Jupyter says that those morph GIFs only took 0.3 seconds to calculate!
+    </p>
     
 </body>
 </html>
