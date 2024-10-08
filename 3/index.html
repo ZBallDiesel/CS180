@@ -56,9 +56,198 @@
 
   <div class = "row">
       <figure>
-        <img src = "./media/
+        <img src = "./media/me.jpg">
+          <figcaption>Myself</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/george.jpg">
+          <figcaption>George Clooney</figcaption>
       </figure>
   </div>
 
+    <p>
+        I defined a correspondance for these two images using the tool provided by course staff. <a href = "https://cal-cs180.github.io/fa23/hw/proj3/tool.html"> tool </a>
+        For these two images, I selected 80 points of correspondance. I later added a point of correspondance for each corner to improve morphing, bringing the total number of correspondances to 84. 
+        <br><br>
+        One challenge I found later on when using these correspondances is that the tool gives the points of correspondance with x, y values flipped compared to how numpy stores images. Thus, I flip the x, y coordinates of correspondance points after I load them in. This is a result of that many applications in the image sphere track image locations in opposite manner to how images are stored. Finding this took a lot of debugging and was something that required constant attention throughout the project. For example, I would have to flip the x, y coordinates of points back when plotting them on images, since that is how plotting software expects them. 
+
+        <br><br>
+        Given these points of correspondance, we compute a Delaunay triangulation, which provides the optimal triangulation to allow me to morph each area of the image together independently. Since we are using the triangulation to morph images into an average shape, we calculate it using the average location of each correspondance so that the triangulation is stable in the position we are going to use it in. Below are both of the images showing the points of correspondance and Delaunay triangulation.
+    </p>
+
+    <div class = "row">
+      <figure>
+        <img src = "./media/meTri.png">
+          <figcaption>Myself With My Correspondance Points and Triangulation</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/georgeTri.png">
+          <figcaption>George Clooney With His Correspondance Points and Triangulation</figcaption>
+      </figure>
+  </div>
+
+<h3>Part 2 - Mid-way Image</h3>
+    <p>
+        In this section, I am computing the "mid-way" image of myself and George Clooney. This first involves computing the average shape of our two faces, which we define as the average location of each correspondance point. Then I will map each face into that shape, and average the colors from each of our faces. 
+        <br><br>
+        The most difficult part of the whole project is to figure out how to morph two images into a common shape. My approach maps each face to the mid-way face independently for each triangle in the triangulation. Our theory is that for triangle, the midway image is some affine transformation of the original image. Thus, we need to determine the affine transformation of the original image triangle's location that finds the location of the corresponding triangle in the midway image. Given the degrees of freedom of an affine transformation, the three points that define the triangle's location in the original and midway image suffice to find the transformation. This gives us a linear system, that we need to solve to determine the coeffcients of the transformation. This is what my computeAffine function does. 
+        <br><br>
+        Next, I use my ability to find affine transforms to inverse warp the colors from the original image to the midway image. For each triangle, I do the follwing routine: <br> First, I calculate the affine transformation that maps the triangle between the images. 
+        <br>
+        Next, I find the polygon that contains the index of all points within the triangle in each image. 
+        <br>
+        Then, I perform Einstein Summations to warp each pixel to its new location. 
+        <br>
+        Then I use griddata to interpolate the pixel values in the midway image based on the would be new locations of the pixels coming from the old image. Due to the workings of griddata, this does in fact implement an inverse warp. This is because griddata looks for each pixel location in the midway image triangle and interpolates the pixel values based on the pixel values that would transform near it in the original image.
+        <br><br>
+        We do this image for both images and get the resulting mid-way image. Below are the results for George Clooney and myself. 
+    </p>
+    
+  <div class = "row">
+      <figure>
+        <img src = "./media/me.jpg">
+          <figcaption>Myself</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/george.jpg">
+          <figcaption>George Clooney</figcaption>
+      </figure>
+       <figure>
+        <img src = "./media/midGeorgeMe.jpg">
+          <figcaption>Midway Image of George Clooney and Myself</figcaption>
+      </figure>
+      </div>
+      <h5>Interpretation</h5>
+      <p>
+          The shape of the midway face seems to be a good midway shape of the two of us. In particular, I like how the hair is a middle hieght between the hair height of George Clooney and myself. I am surprised however that the coloring of the face seems to be closer to George's than mine. Perhaps this has to due with how RGB pixel values map to certain skin tones. Here, it appears that lighter skin tones must require much higher pixel values. The average of George's darker skin and my lighter skin seem to still be darker in tone, implying that generally darker skin values span a wider range of RGB values. 
+      </p>
+      
+      <h3>Part 3  - Morph</h3>
+
+    <p>
+        In part 3, we are essentially performing a more flexible version of the process we did in part 2. The underlying logic is quite similar; however, the morph function will allow independent control over the resulting face shape and color, allowing each to be some specified affine combination of both the images. In this section, I will produce the video (in the form of a GIF) that shows the result of morphing both images together using interpolation. This is achieved by making a video from 46 still images, where the warp_frac and dissolve_frac parameters are simultaneously linearly sweeped from 0 to 1. 
+    </p>
+<div class = "row">
+    <figure>
+        <img src = "./media/morphGIF.gif">
+        <figcaption>Morphing From Me to George Clooney</figcaption>
+    </figure>
+</div>
+    <a href = "https://youtube.com/shorts/s0-px6vAMEs?feature=share"> Backup Link to YouTube </a>
+
+    <h3>Part 4 - Mean Faces</h3>
+    <p>
+        Now, I will apply the tools and knowledge I have built to a different set of images. Here I am using the image dataset from FEI university in Brazil using the spatially normalized images with the provided correspondance points. To be exact, I using the happy image photos from the first half of the dataset (100 images). <br>
+        <br>
+        The first task is to compute the average face correspondance points for the dataset. Once again, I did this by averaging the location of each correspondance point. I then found the Delaunay triangulation. 
+
+        <br><br>
+        Next, I morphed each image in the dataset into the average shape of the dataset. Below are some examples showing each image before and after warping into the average shape.
+    </p>
+
+    <div class = "row">
+      <figure>
+        <img src = "./media/1b.jpg">
+          <figcaption>Image 1 pre-warp</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/1.jpg">
+          <figcaption>Image 1 post-warp</figcaption>
+      </figure>
+       <figure>
+        <img src = "./media/2b.jpg">
+          <figcaption>Image 2 pre-warp</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/2.jpg">
+          <figcaption>Image 2 post-warp</figcaption>
+      </figure>
+      </div>
+
+      <div class = "row">
+      <figure>
+        <img src = "./media/3b.jpg">
+          <figcaption>Image 3 pre-warp</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/3.jpg">
+          <figcaption>Image 3 post-warp</figcaption>
+      </figure>
+       <figure>
+        <img src = "./media/86b.jpg">
+          <figcaption>Image 86 pre-warp</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/86.jpg">
+          <figcaption>Image 86 post-warp</figcaption>
+      </figure>
+      </div>
+
+      <div class = "row">
+      <figure>
+        <img src = "./media/74b.jpg">
+          <figcaption>Image 74 pre-warp</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/74.jpg">
+          <figcaption>Image 74 post-warp</figcaption>
+      </figure>
+       <figure>
+        <img src = "./media/75b.jpg">
+          <figcaption>Image 75 pre-warp</figcaption>
+      </figure>
+      <figure>
+        <img src = "./media/75.jpg">
+          <figcaption>Image 75 post-warp</figcaption>
+      </figure>
+      </div>
+
+    <h5>Part 4.3</h5>
+    <p>
+        As the third question in part 4, I am tasked to find the average face of the dataset. Since I have already calculated each face in the dataset warped into the average shape, I can simply average the colors of those already warped images together to get the average face. The resulting average FEI researcher happy face is below. 
+    </p>
+    <div class = "row">
+        <figure>
+            <img src = "./media/avgBrazFace.jpg">
+            <figcaption>Average Brazilian Happy Face</figcaption>
+        </figure>
+    </div>
+<h5>Working with the Average Brazilian Face and Mine</h5>
+    <p>
+        In this subsection, I will work with combining my face and the average FEI happy face in several ways. First, I will warp my face into the average geometry of FEI faces, and secondly, I will warp the average FEI face into my geometry. Note that since the supplied FEI faces are grayscale, the average FEI face warped into my geometry is also grayscale. 
+    </p>
+
+    <div clas = "row">
+        <figure>
+
+            <img src = "./media/meFaceBrazGeo.jpg">
+            <figcaption>My Face Warped Into Average FEI Geometry</figcaption>
+        </figure>
+           <figure>
+
+            <img src = "./media/BrazFaceMyGeo.jpg">
+            <figcaption>Average FEI Face Warped Into My Geometry</figcaption>
+        </figure>
+        
+    </div>
+
+    <h3>Part 5 - Extrapolation</h3>
+    <p>
+        Previously, I have done interpolation on images, which generally creates something reasonable. However, now I will extrapolate, which accenutes the features or coloring of one face compared to another. This can lead to ridiculous results amplifying features of someone's face, so extrapolation can be useful for creating caricatures of someone (in this case, myself!). The image below shows a caricature of myself versus the average FEI face calcuated using a alpha paramter = 1.5. The resulting face is approximately 1.5 * myFace - 0.5 * averageBrazFace in both shape and color. I tried larger alpha values, but the resulting caricatures were too extreme. 
+    </p>
+    <div class = "row">
+        <figure>
+            <img src = "./media/caricature.jpg">
+            <figcaption>Caricature of myself compared to FEI Faces</figcaption>
+        </figure>
+    </div>
+
+    <h5>Interpretation</h5>
+    <p>
+        Throughout this process, I have noticed that my face is much narrower and longer than the FEI faces with a larger forehead. As a result, the caricature shows my face as being very narrow, especially around the eyes, and long with a large forehead to a silly extent. For face coloring, we have the additional consideration that my face is a color image while the others are grayscale. As a result, the FEI average image is constant across the RGB channels when made into a RGB image. Thus, the FEI face affects the color of the caricature by making the regions where the FEI is light uniformly darker in the caricature. The differences across color channels will be wholly controlled by the image of me. Overall, my image mostly seems to control the color of the caricature; however, some regions in the caricature seem to accenuate redness in my face. The FEI average image seems to have lots of effect over the face shape in the caricature. 
+    </p>
+
+    <h3>Bells and Whistles</h3>
+    
 </body>
 </html>
