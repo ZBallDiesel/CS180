@@ -98,6 +98,37 @@
         To warp images, I find all coordinates in the to be warped image, then warp them to their new location using the method in the paragraph above. Then, I interpolate the values at each of the new coordinates using griddata. This is all accomplished with 0 for loops. Since I use 'nearest' interpolation for performance reasons, outside of the convex polygon where the warped images lies are non-sense values filled in by griddata. Thus, I also find the convex polygon that contains the warped image, and I set all pixels outside of the warped image to 0 to eliminate artifacts from griddata. Given on the parameter values passed to warpImage, I will also find the polygon that would contain the overlap of the warped image and the neighbouring unwarped image, which is useful when making image mosaics. 
     </p>
 
+    <h3>Image Rectifications</h3>
+
+    <p>
+        To test our homography capabilties, I will perform image rectification on various images. To do Image Rectification, we start with an image that contains some object that is truly a rectangle but the pixels containing the object in the image are not a rectangle due to the perspective the image is taken from. Then, we warp this image using a homography such that the rectangular object is now also a rectangle in the photo. To do this, I identified the corners of the rectangular image and warp it into a rectangle of a custom size I specify. There is some experimentation with the resulting size of the rectangle to ensure that the aspect ratio is reasonable. Below are some examples of image rectification. In my warp image function, I  have a special mode for rectification that allows me to control the output size and domain range of the image. This allows me to isolate just the rectified part of the image. This ability is used below. 
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/psg.jpg">
+            <figcaption>Original Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/psgWarpTop.jpg">
+            <figcaption>Rectified with Top of Pedal Steel Guitar</figcaption>
+        </figure>
+
+        <figure>
+            <img src = "./media/psgWarpSide.jpg">
+            <figcaption>Rectified with Side of Pedal Steel Guitar</figcaption>
+        </figure>
+    
+    
+    </div>
+    <p>
+        The above image is of an instrument called a Pedal Steel Guitar. Each face on the instrument is truly a rectangle but are not rectangles in the image due to the perspective of the original image. The middle photo shows the image rectified such that the top of the pedal steel guitar is now truly a rectangle. This simulates looking down on the image. 
+        <br>
+        The right photo is rectified such that the front face of the pedal steel guitar (on its side) has been rectified to an rectangle. 
+        <br><br>
+        <b>Rectification worked quite nicely in these images. </b>
+    </p>
+
 
 </body>
 </html>
