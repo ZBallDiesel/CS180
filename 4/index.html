@@ -79,6 +79,17 @@
     <h3>Recovering Homographies</h3>
     <p>
         When we will later warp images into mosaics, we need a homography to align the images. A homography is a perspective transformation that tells how to map the domain of one image such that the image will now align with another image taken from the same center of projection. Mathematically, a homography can be represented as a 3x3 matrix the maps coordinates [x, y, 1] in one image to [wx', wy', w] in another image, where x', y' are the coordinates in the warped image. To accomplish this, we can define coorespondances between the images that we will use to solve for the homography matrix. To do so, I used this tool provided by course staff: <a href = "https://cal-cs180.github.io/fa23/hw/proj3/tool.html"> Click Here to Find the Tool. </a>
+        <br><br>
+        Once we know the corresponding images, we can solve for the homography matrix shown below (my calculations are on paper)!
+    </p>
+
+    <img src = "./media/PXL_20241020_004707780.MP.jpg">
+
+    <p>
+        Note that the homography matrix has 8 degrees of freedom. Thus, we need 4 correspondances to solve the system since each correspondance provides 2 equations. However, since points are selected by humans(ie myself), there may be a few pixels of error in each correspondance. Thus, our data is noisy so it is better to use more correspondance points to constrain our solution and make it more robust to noise. Parallels can be made here to Statistical Learning Theory. Thus, I would generally select around 10 correspondance points for each pair of images. Thus, we want to solve the equation Ax = b where A has dimensions (~20, 8) is the matrix of equations I found above on paper, x is the coefficients a, b, ... , h with 8 dimensions, and b is the correspondance points in the other image (around 20 dimenisonal). Thus, the system will be overconstrained. Thus, I use least squares to find the least squares solution for a, ... , h.
+        Now, we have our homography matrix. 
+        <br><br>
+        Equipped with our homography matrix, we can now transform each point in the domain of one image to the corresponding place in the other image such that the images align through the equation H @ [x, y, 1] = [wx', wy', w], where H is the homography matrix. 
     </p>
 
 
