@@ -141,17 +141,39 @@
        
     
     </div>
+
+    
+
+    
     <p>
         Here, I rectify an image of a rectangular table such that the table is now rectangular. I included some space around the table for reference. Picking out the corners of the table was rather challenging due to its 3d nature. 
     </p>
 
+<p>
+    Below, I convert the painting into a rectified image.
+</p>
+    <div class = "row">
+        <figure>
+            <img src = "./media/painting.jpg">
+            <figcaption>Original Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/rect_painting.jpg">
+            <figcaption>Rectified Painting</figcaption>
+        </figure>
+
+       
+    
+    </div>
+    
+    
     <h3>Image Mosaics</h3>
     <p>
         Now for prime time. I am now using the machinery I have built up to manufacture image mosaics. Currently, all of my mosiacs use 2 images. I warp the left image to the perspective of the right image, and leave the right image unchanged. I use where the corners of the left image are mapped to calculate the overall shape of the output image. My image mosaic code calls my image warping code. Likewise, I also adjust the transformed coordinates such that all of the warped image's coordinates are non-negative, thus allowing it to fit into the resulting image. 
         <br><br>
         The most difficult part of image mosiacs and of project 4a is to determine how to blend the images together to eliminate edge artifacts. I tried many methods, such as plain overwriting (for a benchmark), alpha channel blending using the distance from the center of the image, and blending with Laplacian stacks with various parameters and masks. I found Laplacian blending to be the most effective. I found two different masks that were effective, often with one of the masks being superiour for certain mosaics. Thus, I would choose the mask with the superior performance on a particular mosaic. Ultimately, here are my two different systems for blending:
         <br><br>
-        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 30 pixels from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 levels of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask.
+        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 10 to 30 pixels (depending on the image) from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 levels of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask. Generally, this method was more succesful. 
         <br><br>
         <b>2. </b>  Set the mask to be 1 in the area inside of the warped left image. I would use the corners of the warped image to find the polygon containing the image. To avoid black lines, I would set the right hand corners of the polygon (where the intersection with the other image is) to be [30, 30] pixels inside the warped image from the actual corner. With this method, I used 3 levels of Laplacian Stack for the two images to blend and 4 levels of Gaussian Stack for the mask. When blending, I will use the mask in 1 layer further down in the mask Gaussian stack in order to get smoother blending. 
         <br><br>
@@ -170,9 +192,11 @@
     <div class = "row">
       <figure>
             <img src = "./media/photoseq1/0.jpg">
+          <figcaption>Left Image</figcaption>
         </figure>
         <figure>
             <img src = "./media/photoseq1/1.jpg">
+            <figcaption>Right Image</figcaption>
         </figure>
         <figure>
             <img src = "./media/mosaic1LapB.jpg">
@@ -183,22 +207,40 @@
     <div class = "row">
       <figure>
             <img src = "./media/photoseq2/0.jpg">
+          <figcaption>Left Image</figcaption>
         </figure>
         <figure>
             <img src = "./media/photoseq2/1.jpg">
+            <figcaption>Right Image</figcaption>
         </figure>
         <figure>
             <img src = "./media/mosiac2c.jpg">
             <figcaption>Mosaic Created with Blending Method 2</figcaption>
         </figure>
     </div>
+    <div class = "row">
+      <figure>
+            <img src = "./media/photoseq2/0.jpg">
+          <figcaption>Left Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/photoseq2/1.jpg">
+            <figcaption>Right Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/mosiac2d.jpg">
+            <figcaption>Mosaic Created with Blending Method 1</figcaption>
+        </figure>
+    </div>
 
     <div class = "row">
       <figure>
             <img src = "./media/photoseq3/0.jpg">
+          <figcaption>Left Image</figcaption>
         </figure>
         <figure>
             <img src = "./media/photoseq3/1.jpg">
+            <figcaption>Right Image</figcaption>
         </figure>
         <figure>
             <img src = "./media/mosaic3b.jpg">
