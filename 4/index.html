@@ -78,22 +78,22 @@
 
     <h3>Recovering Homographies</h3>
     <p>
-        When we will later warp images into mosaics, we need a homography to align the images. A homography is a perspective transformation that tells how to map the domain of one image such that the image will now align with another image taken from the same center of projection. Mathematically, a homography can be represented as a 3x3 matrix the maps coordinates [x, y, 1] in one image to [wx', wy', w] in another image, where x', y' are the coordinates in the warped image. To accomplish this, we can define coorespondances between the images that we will use to solve for the homography matrix. To do so, I used this tool provided by course staff: <a href = "https://cal-cs180.github.io/fa23/hw/proj3/tool.html"> Click Here to Find the Tool. </a>
+        When we will later warp images into mosaics, we need a homography to align the images. A homography is a perspective transformation that tells us how to map the domain of one image such that the image will now align with another image taken from the same center of projection. Mathematically, a homography can be represented as a 3x3 matrix the maps coordinates [x, y, 1] in one image to [wx', wy', w] in another image, where x', y' are the coordinates in the warped image. To accomplish this, we can define coorespondances between the images that we will use to solve for the homography matrix. To do so, I used this tool provided by course staff: <a href = "https://cal-cs180.github.io/fa23/hw/proj3/tool.html"> Click Here to Find the Tool. </a>
         <br><br>
-        Once we know the corresponding images, we can solve for the homography matrix shown below (my calculations are on paper)!
+        Once we know the corresponding points in the images, we can solve for the homography matrix shown below (my calculations are on paper)!
     </p>
 
     <img src = "./media/PXL_20241020_004707780.MP.jpg">
 
     <p>
-        Note that the homography matrix has 8 degrees of freedom. Thus, we need 4 correspondances to solve the system since each correspondance provides 2 equations. However, since points are selected by humans(ie myself), there may be a few pixels of error in each correspondance. Thus, our data is noisy so it is better to use more correspondance points to constrain our solution and make it more robust to noise. Parallels can be made here to Statistical Learning Theory. Thus, I would generally select around 10 correspondance points for each pair of images. Thus, we want to solve the equation Ax = b where A has dimensions (~20, 8) is the matrix of equations I found above on paper, x is the coefficients a, b, ... , h with 8 dimensions, and b is the correspondance points in the other image (around 20 dimenisonal). Thus, the system will be overconstrained. Thus, I use least squares to find the least squares solution for a, ... , h.
+        Note that the homography matrix has 8 degrees of freedom. Thus, we need 4 correspondances to solve the system since each correspondance provides 2 equations. However, since points are selected by humans(ie myself), there may be a few pixels of error in each correspondance. Thus, our data is noisy so it is better to use more correspondance points to constrain our solution and make it more robust to noise. Parallels can be made here to Statistical Learning Theory. Thus, I would generally select around 10 correspondance points for each pair of images. Thus, we want to solve the equation Ax = b where A has dimensions (~20, 8) is the matrix of equations I found above on paper, x is the coefficients a, b, ... , h with 8 dimensions, and b is the correspondance points in the other image (around 20 dimenisonal). Thus, the system will be overconstrained. Hence, I use least squares to find the least squares solution for a, ... , h. This can be accomplished using np.linalg.lstsq. 
         Now, we have our homography matrix. 
         <br><br>
     </p>
     <h3>Warping Images</h3>
     <p>
-        Equipped with our homography matrix, we can now transform each point in the domain of one image to the corresponding place in the other image such that the images align through the equation H @ [x, y, 1] = [wx', wy', w], where H is the homography matrix. 
-        Since we ultimately want x', y', we divide by w to find x',y'. It is often the case that some of x', y' will be negative. Thus, I add the minimum value over i of xi', yi' to each point, ensuring that all xi', yi' >= 0. Thus, now all x', y' define positions within an image. Thus, I find the size of the resulting image and interpolate the values at each x', y' to get the original image from the perspective of another image, which will be useful when we make the mosaics.
+        Equipped with our homography matrix, we can now transform each point in the domain of one image to the corresponding place in the other image--which makes the images align--through the equation H @ [x, y, 1] = [wx', wy', w], where H is the homography matrix. 
+        Since we ultimately want x', y', we divide by w to find x',y'. It is often the case that some of x', y' will be negative. Thus, I subtract the minimum value over i of xi' from each xi, and I subtract the minimum value over i of yi' from each yi. This ensures that all xi', yi' >= 0. Thus, now all x', y' define positions within an image. Thus, I find the size of the resulting image and interpolate the values at each x', y' to get the original image from the perspective of another image, which will be useful when we make the mosaics.
         <br><br>
         To warp images, I find all coordinates in the to be warped image, then warp them to their new location using the method in the paragraph above. Then, I interpolate the values at each of the new coordinates using griddata. This is all accomplished with 0 for loops. Since I use 'nearest' interpolation for performance reasons, outside of the convex polygon where the warped images lies are non-sense values filled in by griddata. Thus, I also find the convex polygon that contains the warped image, and I set all pixels outside of the warped image to 0 to eliminate artifacts from griddata. Given on the parameter values passed to warpImage, I will also find the polygon that would contain the overlap of the warped image and the neighbouring unwarped image, which is useful when making image mosaics. 
     </p>
@@ -122,11 +122,11 @@
     
     </div>
     <p>
-        The above image is of an instrument called a Pedal Steel Guitar. Each face on the instrument is truly a rectangle but are not rectangles in the image due to the perspective of the original image. The middle photo shows the image rectified such that the top of the pedal steel guitar is now truly a rectangle. This simulates looking down on the image. 
+        The above image is of an instrument called a Pedal Steel Guitar. Each face on the instrument is truly a rectangle but are not rectangles in the image due to the perspective of the original image. For example, the pixels corresponding to the top of the pedal steel guitar actually form a parallelogram on the 2d image plane while the top of the instrument is actually a rectangle in real life. The middle photo shows the image rectified such that the top of the pedal steel guitar is now truly a rectangle. This simulates looking down on the image. 
         <br>
         The right photo is rectified such that the front face of the pedal steel guitar (on its side) has been rectified to an rectangle. 
         <br><br>
-        <b>Rectification worked quite nicely in these images. </b>
+        <b>Rectification worked quite nicely in the above images. </b>
     </p>
     <div class = "row">
         <figure>
@@ -135,7 +135,7 @@
         </figure>
         <figure>
             <img src = "./media/rect_table.jpg">
-            <figcaption>Rectified with Top of Pedal Steel Guitar</figcaption>
+            <figcaption>Rectified with Top of Table</figcaption>
         </figure>
 
        
@@ -147,11 +147,11 @@
 
     <h3>Image Mosaics</h3>
     <p>
-        Now for prime time. I am now using the machinery I have built up to manufacture image mosaics. Currently, all of my mosiacs use 2 images. I warp the left image to the perspective of the right image, and leave the right image unchanged. I use where the corners of the left image are mapped to calculate the overall shape of the output image. My image mosaic codes call my image warping code. Likewise, I also adjust the transformed coordinates such that all of the warped image's coordinates are non-negative, thus allowing it to fit into the resulting image. 
+        Now for prime time. I am now using the machinery I have built up to manufacture image mosaics. Currently, all of my mosiacs use 2 images. I warp the left image to the perspective of the right image, and leave the right image unchanged. I use where the corners of the left image are mapped to calculate the overall shape of the output image. My image mosaic code calls my image warping code. Likewise, I also adjust the transformed coordinates such that all of the warped image's coordinates are non-negative, thus allowing it to fit into the resulting image. 
         <br><br>
         The most difficult part of image mosiacs and of project 4a is to determine how to blend the images together to eliminate edge artifacts. I tried many methods, such as plain overwriting (for a benchmark), alpha channel blending using the distance from the center of the image, and blending with Laplacian stacks with various parameters and masks. I found Laplacian blending to be the most effective. I found two different masks that were effective, often with one of the masks being superiour for certain mosaics. Thus, I would choose the mask with the superior performance on a particular mosaic. Ultimately, here are my two different systems for blending:
         <br><br>
-        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 30 pixels to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 levels of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask.
+        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 30 pixels from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 levels of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask.
         <br><br>
         <b>2. </b>  Set the mask to be 1 in the area inside of the warped left image. I would use the corners of the warped image to find the polygon containing the image. To avoid black lines, I would set the right hand corners of the polygon (where the intersection with the other image is) to be [30, 30] pixels inside the warped image from the actual corner. With this method, I used 3 levels of Laplacian Stack for the two images to blend and 4 levels of Gaussian Stack for the mask. When blending, I will use the mask in 1 layer further down in the mask Gaussian stack in order to get smoother blending. 
         <br><br>
