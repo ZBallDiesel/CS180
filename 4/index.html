@@ -90,6 +90,7 @@
         Now, we have our homography matrix. 
         <br><br>
         Equipped with our homography matrix, we can now transform each point in the domain of one image to the corresponding place in the other image such that the images align through the equation H @ [x, y, 1] = [wx', wy', w], where H is the homography matrix. 
+        Since we ultimately want x', y', we divide by w to find x',y'. It is often the case that some of x', y' will be negative. Thus, I add the minimum value over i of xi', yi' to each point, ensuring that all xi', yi' >= 0. Thus, now all x', y' define positions within an image. Thus, I find the size of the resulting image and interpolate the values at each x', y' to get the original image from the perspective of another image, which will be useful when we make the mosaics.
     </p>
 
 
