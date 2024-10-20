@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Project 3</title>
+    <title>Project 4</title>
     <style>
         body {
             font-family: Times New Roman, Arial, sans-serif;
@@ -42,6 +42,44 @@
     <a href = "../index.html"> My CS180 Personal Project Home Page </a>
     <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Introduction</h3>
+    <p>
+        This project, like previous projects, explores image warping. However, this time we are doing so for the purpose of creating image mosiacs. The key to accomplish this to take photos from the same Center of Projection (where the camera lens is located in the same place) with varying angles of imagery. Thus, these photos will be related by a perspective transformation, also known as a homography. This implies that we can warp the images into a mutual shape such that the images align and the resulting image has a wider field of view. Accomplishing said transformation and warping the images together into a mosiac is the goal of this project. 
+    </p>
+
+    <h3>Taking the Images</h3>
+    <p>
+        The most important trait of images used in this process is that they have the same center of projection. I am personally using various sets of images of nature scenes captued around the Berkeley hills. Below are the images I will be using.
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/photoseq1/0.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/photoseq1/1.jpg">
+        </figure>
+    </div>
+    <div class = "row">
+        <figure>
+            <img src = "./media/photoseq2/0.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/photoseq2/1.jpg">
+        </figure>
+    </div>
+    <div class = "row">
+        <figure>
+            <img src = "./media/photoseq3/0.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/photoseq3/1.jpg">
+        </figure>
+    </div>
+
+    <h3>Recovering Homographies</h3>
+    <p>
+        When we will later warp images into mosaics, we need a homography to align the images. A homography is a perspective transformation that tells how to map the domain of one image such that the image will now align with another image taken from the same center of projection. Mathematically, a homography can be represented as a 3x3 matrix the maps coordinates [x, y, 1] in one image to [wx', wy', w] in another image, where x', y' are the coordinates in the warped image. To accomplish this, we can define coorespondances between the images that we will use to solve for the homography matrix. To do so, I used this tool provided by course staff: <a href = "https://cal-cs180.github.io/fa23/hw/proj3/tool.html"> Click Here to Find the Tool. </a>
+    </p>
 
 
 </body>
