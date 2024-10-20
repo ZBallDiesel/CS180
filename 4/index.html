@@ -147,7 +147,7 @@
 
     <h3>Image Mosaics</h3>
     <p>
-        Now for prime time. I am now using the machinery I have built up to manufacture image mosaics. Currently, both of my mosiacs use 2 images. I warp the left image to the perspective of the right image, and leave the right image unchanged. I use where the corners of the left image are mapped to calculate the overall shape of the output image. My image mosaic codes call my image warping code. Likewise, I also adjust the transformed coordinates such that all of the warped image's coordinates are non-negative, thus allowing it to fit into the resulting image. 
+        Now for prime time. I am now using the machinery I have built up to manufacture image mosaics. Currently, all of my mosiacs use 2 images. I warp the left image to the perspective of the right image, and leave the right image unchanged. I use where the corners of the left image are mapped to calculate the overall shape of the output image. My image mosaic codes call my image warping code. Likewise, I also adjust the transformed coordinates such that all of the warped image's coordinates are non-negative, thus allowing it to fit into the resulting image. 
         <br><br>
         The most difficult part of image mosiacs and of project 4a is to determine how to blend the images together to eliminate edge artifacts. I tried many methods, such as plain overwriting (for a benchmark), alpha channel blending using the distance from the center of the image, and blending with Laplacian stacks with various parameters and masks. I found Laplacian blending to be the most effective. I found two different masks that were effective, often with one of the masks being superiour for certain mosaics. Thus, I would choose the mask with the superior performance on a particular mosaic. Ultimately, here are my two different systems for blending:
         <br><br>
@@ -162,7 +162,57 @@
         My approach to creating the Laplacian and Gaussian Stacks is the same approach I used in Project 2. 
         <a href = "../2/index.html">Click here to see my description from Project 2</a>
     </p>
+    <h5>Let's Take a Look at My Mosaics</h5>
+    <p>
+        The left two images are images I will be using to create the mosaic, and the right image will be of the mosaic itself.
+    </p>
 
+    <div class = "row">
+      <figure>
+            <img src = "./media/photoseq1/0.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/photoseq1/1.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/mosaic1LapB.jpg">
+            <figcaption>Mosaic Created with Blending Method 1</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+      <figure>
+            <img src = "./media/photoseq2/0.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/photoseq2/1.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/mosiac2c.jpg">
+            <figcaption>Mosaic Created with Blending Method 2</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+      <figure>
+            <img src = "./media/photoseq3/0.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/photoseq3/1.jpg">
+        </figure>
+        <figure>
+            <img src = "./media/mosaic3b.jpg">
+            <figcaption>Mosaic Created with Blending Method 1</figcaption>
+        </figure>
+    </div>
+    
+    <h4>Credits: </h4>
+    <p>
+        I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from  https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
+        <br>
+        
+        <b>I would like to emphasize that all of the code for image processing is of my own creation.</b>
+    </p>
 
 </body>
 </html>
