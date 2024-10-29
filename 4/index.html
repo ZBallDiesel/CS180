@@ -181,7 +181,7 @@
         <br><br>
         The most difficult part of image mosiacs and of project 4a is to determine how to blend the images together to eliminate edge artifacts. I tried many methods, such as plain overwriting (for a benchmark), alpha channel blending using the distance from the center of the image, and blending with Laplacian stacks with various parameters and masks. I found Laplacian blending to be the most effective. I found two different masks that were effective, often with one of the masks being superiour for certain mosaics. Thus, I would choose the mask with the superior performance on a particular mosaic. Ultimately, here are my two different systems for blending:
         <br><br>
-        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 10 to 30 pixels (depending on the image) from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 levels of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask. Generally, this method was more succesful. 
+        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 10 to 30 pixels (depending on the image) from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 or 4 levels (hyper parameter) of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask. Generally, this method was more succesful. 
         <br><br>
         <b>2. </b>  Set the mask to be 1 in the area inside of the warped left image. I would use the corners of the warped image to find the polygon containing the image. To avoid black lines, I would set the right hand corners of the polygon (where the intersection with the other image is) to be [30, 30] pixels inside the warped image from the actual corner. With this method, I used 3 levels of Laplacian Stack for the two images to blend and 4 levels of Gaussian Stack for the mask. When blending, I will use the mask in 1 layer further down in the mask Gaussian stack in order to get smoother blending. 
         <br><br>
@@ -345,7 +345,7 @@
     <h5>Choice of Blurring Sigma</h5>
 
     <p>
-        We must decide what sigma to use when blurring the corner surrounding region to get an 8x8 descriptor. Advice on picking this sigma is noticeably absent from the paper. Hence, I returned to my Signals and Systems days and performed a Fourier Analysis to determine what sigma value to use. In the below mathematics, I choose the value of sigma such that virtually all frequency content above the Nyquist frequency for the downsampling will be eliminated. For this calcuation, I use the fact that virtually all of the measure of a Gaussian lies within +- 3 standard devations of the mean. Since convolution in the spatial domain is equivalent to multiplication in the frequency domain, we can choose the sigma parameter of the Gaussian such that +- 3 std in the frequency domain equals the Nyquist frequency of the downsampling. I use the Fourier Analysis formula for a gaussian as given in Wolfram Mathematica. Ultimately, I find that the sigma value of the Gaussian blur in the spatial domain should be 15/2/(pi ^ 2). This value worked well for me in practice. 
+        We must decide what sigma to use when blurring the corner surrounding region to get an 8x8 descriptor. Advice on picking this sigma is noticeably absent from the paper. Hence, I returned to my Signals and Systems days and performed a Fourier Analysis to determine what sigma value to use. In the below mathematics, I choose the value of sigma such that virtually all frequency content above the Nyquist frequency for the downsampling will be eliminated. For this calcuation, I use the fact that virtually all of the measure of a Gaussian lies within +- 3 standard devations of the mean. Since convolution in the spatial domain is equivalent to multiplication in the frequency domain, we can choose the sigma parameter of the Gaussian such that +- 3 std in the frequency domain equals the Nyquist frequency of the downsampling. I use the Fourier Analysis formula for a gaussian as given in Wolfram MathWorld Ultimately, I find that the sigma value of the Gaussian blur in the spatial domain should be 15/2/(pi ^ 2). This value worked well for me in practice. 
     </p>
 
  <div class = "row">
@@ -433,14 +433,61 @@
         Due to the strength of my previous matching algorithm, we can see that only a few points are eliminated by RANSAC. It appears that all kept points have strong correspondance with each other. Ultimately, 19 points were kept, which is a healthy number for fitting the final homography.
     </p>
 
+    <h3>Image Stitching Results (Mosaics)</h3>
+
+    <p>
+        With this background material out of the way, now we can produce image mosaics automatically. I combined all of the previous functionality into one function so that we can now create image mosiacs with one function call with a pair of images and some optional hyperparameters! How cool is that! 
+    <br>
+       Let's take a look at the results. I'll use the same images I created image mosiacs for manually, so that we can can judge how well the automatic stitching performed. 
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/mosaic1LapB.jpg">
+            <figcaption>Manual</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/autoMos1.jpg">
+            <figcaption>Automatic</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/mosaic2d.jpg">
+            <figcaption>Manual</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/autoMos2.jpg">
+            <figcaption>Automatic</figcaption>
+        </figure>
+    </div>
+    <div class = "row">
+        <figure>
+            <img src = "./media/mosaic3b.jpg">
+            <figcaption>Manual</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/autoMos3.jpg">
+            <figcaption>Automatic</figcaption>
+        </figure>
+    </div>
+
+    <h5>Interpretation</h5>
+
+    <p>
+        In my opinion, these automatically stitched mosaics look very nice and comparible to the manual made mosaics. In all three cases, I can tell not tell a difference in the alignment of each image pair. However, the difference in the perspective of the left image in the third mosiac between the manual and automatic mosaics is perplexing. In the third mosaic, the viewer can see how the shape the left image is warped into is different between the auto and manual mosiacs. However, the image pair appears to be well aligned in both images. I can not tell where the image seam is in either mosaic, indicating a high quality of alignment between the images. 
+    </p>
+
     
 
      <h4>Credits: </h4>
     <p>
         I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from  https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
         <br>
-        When solving for the equation of the homography matrix, I was influenced by materials provided by course staff. 
+        When solving for the equation of the homography matrix, I was influenced by materials provided by course staff--in particular, the site of Alec Li. I derived the equations myself; however, I viewed Alec Li's page to see examples of image mosaics given the recommendation by course staff. There, I observed his solution for the homography system of equations, which may have subconicously affected my approach to solving the system myself.  
         <br>
+        I used the formula for the Fourier Transform of a Gaussian as given on Wolfram MathWorld <a href = "https://mathworld.wolfram.com/FourierTransformGaussian.html">here</a>.  
         
         <b>I would like to emphasize that all of the code for image processing is of my own creation.</b>
     </p>
