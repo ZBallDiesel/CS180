@@ -367,8 +367,39 @@
         </figure>
     </div>
 
-    
+    <h3> Matching Feature Descriptors </h3>
 
+    <p>
+        Once we calculate the feature desciptors for each image, we need to determine which descriptors describe corresponding points in the images. My approach for this section is based on the method described in Section 5 of the Brown et al. research paper. This technique leverages nearest neighbour matching. The algorithm works as follows: <br>
+
+        1. For the first image, perform the following steps: <br>
+            1a. For each feature descriptor, find the nearest neighbour and second nearest neighbour feature descriptor in the other image, where distance is defined as the Sum of Squared Differences like in the dist2 starter code provided. If the ratio of the distance to the nearest neighbour and the distance to the second nearest neighbour is below a cutoff (I use the hyper paramter value of 0.25 -- rationale is below), identify the points as a potential match. 
+        <br>
+        2. For the second image, perform similar steps:
+        <br>
+            2a. Likewise: For each feature descriptor, find the nearest neighbour and second nearest neighbour feature descriptor in the other image, where distance is defined as the Sum of Squared Differences like in the dist2 starter code provided. If the ratio of the distance to the nearest neighbour and the distance to the second nearest neighbour is below a cutoff (I use the hyper paramter value of 0.25 -- rationale is below), identify the points as a potential match.
+        <br>
+        3. Keep all matches that are identified as matches in both steps 1a and 2a. I found that imposing the mutual match requirement greatly improved feature matching. 
+        <br><br>
+        As mentioned above, this algorithm also requires choosing a hyper-parameter. This hyper-parameter controls the maximum allowable ratio of nearest neighbour distance to second nearest neighbour distane for a pair of points to be considered a match. Figure 6b in the Brown paper shows a real-world case study on the probability densities of true and false matches. The points we label as matches are likely to be used to determine the homography for image warping (if the points pass RANSAC). Since we fit the homography using least squares--a technique highly susceptible to corruption from outliers--having any incorrect matches can be very dangerous. Even a single incorrect match can cause a poor homography to be found. Additionally, since we typically start with hundreds of potential matches, it is acceptable if we eliminate some correct matches. Thus, I chose a hyper parameter value of 0.25, since 0.25 allows almost no incorrect matches while allowing a healthy amount of correct matches. Using the hyper parameter value of 0.25 has been successful for me. 
+
+        <br><br>
+        The intuition for this algorithm (known as Lowe's trick or the Soviet Grandmother Wisdom) is that the 1-NN may be a match while the 2-NN is not a match. If the point is a match, the distance to the 1-NN should be significantly less than the distance to the 2-NN. By the contrapositive statement, we can eliminate incorrect matches. 
+    </p>
+
+
+    <h5>Results of Feature Matching</h5>
+
+    <p>
+        Below are the results of applying feature matching on our demo images.
+    </p>
+
+       <div class = "row">
+        <figure>
+            <img src = "./media/matchesPreRANSAC.png">
+            <figcaption>Extracted Features from top 100 ANMS points. </figcaption>
+        </figure>
+    </div>
 
      <h4>Credits: </h4>
     <p>
