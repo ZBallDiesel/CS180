@@ -300,6 +300,36 @@
             <figcaption>ANMS Optimization Problem</figcaption>
         </figure>
     </div>
+ <p>
+     Below are the results of ANMS filtering the Harris points for different values of N
+ </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/ANMS100.png">
+            <figcaption>Top 100 ANMS Points</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/ANMS250.png">
+            <figcaption>Top 250 ANMS Points</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/ANMS500.png">
+            <figcaption>Top 500 ANMS Points</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/anms100numbered.png">
+            <figcaption>Top 100 ANMS Points Numbered by Decreasing Radius (Lower Number == More Significant)</figcaption>
+        </figure>
+    </div>
+
+    <h5>Interpretation</h5>
+    <p>
+        As we can see, ANMS does a very nice job of indentifying important points well spaced throughout the image. Occasionally, there are some points very close to each other. One may wonder how it is possible to have points close to eachother remain after ANMS. It is because these points have very similar corner intensities, so neither point satifises the optimization constraint for the other point. Thus, the minimally distant point from each point is some point further away, allowing both points to have sufficient radius to be in the top N ANMS point radii. 
+    </p>    
 
     
 
