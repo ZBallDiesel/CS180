@@ -401,6 +401,40 @@
         </figure>
     </div>
 
+
+    <h5>Interpretation</h5>
+
+    <p>
+        All of the matches appear to be quite good to me. 
+    </p>
+
+    <h3>RANSAC</h3>
+
+    <p>
+        As mentioned above, having any incorrect matches can be very dangerous to fitting a correct homography. Thus, we will also use RANSAC to elimate any remaining incorrect matches after the previous Feature Matching step. To implement RANSAC, we randomly draw sets of 4 corners (without replacement) from the matches, fit the resulting homography, and take note of how many points are accuractely mapped by the homography within some tolerance (another hyperparameter to tune! I'll call it epsilon). We repeat this process a large number of times. I found 300 iterations sufficient to reliably find high quality homogrpahies; however, it is not uncommon to use more iterations. If we have drawn all points but still need to perform more iterations, I reshuffle the lists of corners and contintue the loop of drawing four corners without replacement. The points that are accurately mapped by the fitted homogrpahy at each step are known as "inliers". We ultimately keep the largest set of inliers as our matches. We will fit the homography to these points. 
+        <br><br>
+        I tried several different values of the epsilon hyperparameter. I intially began by using small values such as 0.05 and 0.1; however, this tolerance would not find any inliers other than the four points used to fit the homography. I learned that I need to be more tolerant of small errors by RANSAC. I found that a epsilon value of 4 would allow for many matching points to be found while still removing outliers. 
+    </p>
+
+    <h5>Results of RANSAC</h5>
+
+    <p>
+        Below are the results of applying RANSAC to the point set shown above. 
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/ransacMatches.png">
+            <figcaption>RANSAC Filtered Features </figcaption>
+        </figure>
+    </div>
+    <h5>Interpretation</h5>
+    <p>
+        Due to the strength of my previous matching algorithm, we can see that only a few points are eliminated by RANSAC. It appears that all kept points have strong correspondance with each other. Ultimately, 19 points were kept, which is a healthy number for fitting the final homography.
+    </p>
+
+    
+
      <h4>Credits: </h4>
     <p>
         I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from  https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
