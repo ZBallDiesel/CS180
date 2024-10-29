@@ -281,7 +281,28 @@
         </figure>
 
     </div>
+
+    <p>
+        As we can see, the number of Harris points is huge and includes many irrelevant details. In the current form, these points will not be useful to create image mosiacs. This leads us to the next topic
+    </p>
+
+    <h3>Adaptive Non-Maximal Supression </h3>
+
+    <p>
+        Adaptive Non-Maximal Supression (ANMS) is heuristic algorithm that locates the most important image points. ANMS filters out Harris points based on the distance another significant point. ANMS works by determining, for each point, the minimum radius from that point to another point that is significantly greater in strength. Significantly greater in strength means that f(x) &lt c_robust * f(y) , where f(.) maps a harris point to its corner strength, x is the corner is question, y is a distinct corner from x, and c_robust is a hyper parameter to be chosen. As recommended in the paper, I use a value of c_robust = 0.9, which worked well for me. To be precise, the exact formulation of the minimization problem is given below. Note that the absolute value should be replaced by the L2 norm. 
+        <br><br>
+        One interpretation is that ANMS assigns radii to points based on how locally significant the point is. A larger radii means that the point is significant for a larger area. The aim of ANMS is to filter the number of correspondance points and find the most useful corners. Thus, we take the N points with the greatest radii value found by ANMS, where N is a hyper parameter. For image stitching, I generally found N = 100 to provide plentiful correspondances. However, one image pair required a greater N value, so I used N = 500 with that image pair. Taking the points with the largest radii means that we are keeping the most significant points.
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/optEq.png">
+            <figcaption>ANMS Optimization Problem</figcaption>
+        </figure>
+    </div>
+
     
+
 
 
 
