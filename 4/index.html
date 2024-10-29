@@ -332,8 +332,42 @@
     </p>    
 
     
+<h3>Feature Description Extraction</h3>
 
+    <p>
+        Now, we aim to match features between different images in order to obtain correspondances. Thus, we need some way to summarize each corner that is invariant to various insignificant changes in the images, such as gain, intensity, and scale. To do this, we use the method described in section 4 of the research paper. We will summarize the 40x40 pixel area around each corner as an 8x8 image as efficiency then apply normalization. For each corner we will repeat the following steps: <br>
+        1. Extract the 40x40 pixel region surrounding the corner such that the corner is in the middle. <br>
+        2. Apply a Gaussian Blur to prevent aliasing when downsampling. Below, I calculate the proper sigma in greater detail. <br>
+        3. Take each 5th pixel in a rectangular pattern in order to get a 8x8 feature desciptor. Due to previous blurring, this descriptor is nice and blurred to accomadate for different image scales. <br>
+        4. Finally, normalize the descriptor such that the descriptor has mean 0 and standard devation 1. Thus accomadates matching between images different gains or itensities during the photography process. 
+    </p>
 
+    <h5>Choice of Blurring Sigma</h5>
+
+    <p>
+        We must decide what sigma to use when blurring the corner surrounding region to get an 8x8 descriptor. Advice on picking this sigma is noticeably absent from the paper. Hence, I returned to my Signals and Systems days and performed a Fourier Analysis to determine what sigma value to use. In the below mathematics, I choose the value of sigma such that virtually all frequency content above the Nyquist frequency for the downsampling will be eliminated. For this calcuation, I use the fact that virtually all of the measure of a Gaussian lies within +- 3 standard devations of the mean. Since convolution in the spatial domain is equivalent to multiplication in the frequency domain, we can choose the sigma parameter of the Gaussian such that +- 3 std in the frequency domain equals the Nyquist frequency of the downsampling. I use the Fourier Analysis formula for a gaussian as given in Wolfram Mathematica. Ultimately, I find that the sigma value of the Gaussian blur in the spatial domain should be 15/2/(pi ^ 2). This value worked well for me in practice. 
+    </p>
+
+ <div class = "row">
+        <figure>
+            <img src = "./media/fourierAnalysis.jpg">
+            <figcaption>Finding Sigma via Fourier Analysis</figcaption>
+        </figure>
+    </div>
+    
+<h5>Results</h5>
+    <p>
+        Below are the results of finding the feature descriptor for each corner in the ANMS Top 100 corners. Note that many of the values have been clipped at 0, 1 by Matplotlib so the real descriptors will be less uniform in value than how they are presented. 
+    </p>
+
+     <div class = "row">
+        <figure>
+            <img src = "./media/extractedFeatures.png">
+            <figcaption>Extracted Features from top 100 ANMS points. </figcaption>
+        </figure>
+    </div>
+
+    
 
 
      <h4>Credits: </h4>
