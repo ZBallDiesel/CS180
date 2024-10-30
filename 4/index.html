@@ -181,7 +181,7 @@
         <br><br>
         The most difficult part of image mosiacs and of project 4a is to determine how to blend the images together to eliminate edge artifacts. I tried many methods, such as plain overwriting (for a benchmark), alpha channel blending using the distance from the center of the image, and blending with Laplacian stacks with various parameters and masks. I found Laplacian blending to be the most effective. I found two different masks that were effective, often with one of the masks being superiour for certain mosaics. Thus, I would choose the mask with the superior performance on a particular mosaic. Ultimately, here are my two different systems for blending:
         <br><br>
-        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 10 to 30 pixels (depending on the image) from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 levels of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask. Generally, this method was more succesful. 
+        <b>1. </b>  Set the mask to be 1 in the area inside the unwarped right image such that there is about 10 to 30 pixels (depending on the image) from the edge of the mask's 1 values to the side of the unwarped image. This offset is important to avoid black lines at the intersections of the two images. I then used 3 or 4 levels (hyper parameter) of Laplacian Stack for the two images to blend and 3 levels of Gaussian Stack for the mask. Generally, this method was more succesful. 
         <br><br>
         <b>2. </b>  Set the mask to be 1 in the area inside of the warped left image. I would use the corners of the warped image to find the polygon containing the image. To avoid black lines, I would set the right hand corners of the polygon (where the intersection with the other image is) to be [30, 30] pixels inside the warped image from the actual corner. With this method, I used 3 levels of Laplacian Stack for the two images to blend and 4 levels of Gaussian Stack for the mask. When blending, I will use the mask in 1 layer further down in the mask Gaussian stack in order to get smoother blending. 
         <br><br>
@@ -256,15 +256,256 @@
         </figure>
     </div>
     
-    <h4>Credits: </h4>
+   
+
+    <h1>Part B</h1>
+
+    <p>
+        In part B, we are extending the ideas we developed in part a to include the ability to automatically determine features and match images, reducing the amount of human labor needed in the process. With the exception of RANSAC, I am implementing image matching as described in the <a href = "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf">Brown et al. paper</a> on the subject. I also implement RANSAC myself, which I learned in lecture. I'll walk readers through the process of automatically determining image feature matches.
+    </p>
+
+    <h3>Harris Points</h3>
+
+    <p>
+        Our journey begins with the Harris Interest Point Detector. The Harris method analyzes how much small areas of images change in certain directions in an attempt to find corners. The concept is that only corners points will produce differences when compared with moving the sliding window in any direction. For examples, points on lines will not produce differences in one direction (the direction moving along the line). While not all the points Harris finds are what a human might consider a corner, many are still relevant points of interest for matching purposes. I am using the Harris code provided by course staff. This code finds the pixel that creates the maximum Harris score such that each point is seperated by at least 1 pixel from another point (ie the maximum over each 3x3 window). Below are examples of the points the Harris algorithm finds. 
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/photoseq1/0.jpg">
+            <figcaption>Original Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/harrisOn0.png">
+            <figcaption>Image With Harris Points</figcaption>
+        </figure>
+
+    </div>
+
+    <p>
+        As we can see, the number of Harris points is huge and includes many irrelevant details. In the current form, these points will not be useful to create image mosiacs. This leads us to the next topic
+    </p>
+
+    <h3>Adaptive Non-Maximal Supression </h3>
+
+    <p>
+        Adaptive Non-Maximal Supression (ANMS) is heuristic algorithm that locates the most important image points. ANMS filters out Harris points based on the distance another significant point. ANMS works by determining, for each point, the minimum radius from that point to another point that is significantly greater in strength. Significantly greater in strength means that f(x) &lt c_robust * f(y) , where f(.) maps a harris point to its corner strength, x is the corner is question, y is a distinct corner from x, and c_robust is a hyper parameter to be chosen. As recommended in the paper, I use a value of c_robust = 0.9, which worked well for me. To be precise, the exact formulation of the minimization problem is given below. Note that the absolute value should be replaced by the L2 norm. 
+        <br><br>
+        One interpretation is that ANMS assigns radii to points based on how locally significant the point is. A larger radii means that the point is significant for a larger area. The aim of ANMS is to filter the number of correspondance points and find the most useful corners. Thus, we take the N points with the greatest radii value found by ANMS, where N is a hyper parameter. For image stitching, I generally found N = 100 to provide plentiful correspondances. However, one image pair required a greater N value, so I used N = 500 with that image pair. Taking the points with the largest radii means that we are keeping the most significant points.
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/optEq.png">
+            <figcaption>ANMS Optimization Problem</figcaption>
+        </figure>
+    </div>
+ <p>
+     Below are the results of ANMS filtering the Harris points for different values of N
+ </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/ANMS100.png">
+            <figcaption>Top 100 ANMS Points</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/ANMS250.png">
+            <figcaption>Top 250 ANMS Points</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/ANMS500.png">
+            <figcaption>Top 500 ANMS Points</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/anms100numbered.png">
+            <figcaption>Top 100 ANMS Points Numbered by Decreasing Radius (Lower Number == More Significant)</figcaption>
+        </figure>
+    </div>
+
+    <h5>Interpretation</h5>
+    <p>
+        As we can see, ANMS does a very nice job of indentifying important points well spaced throughout the image. Occasionally, there are some points very close to each other. One may wonder how it is possible to have points close to eachother remain after ANMS. It is because these points have very similar corner intensities, so neither point satifises the optimization constraint for the other point. Thus, the minimally distant point from each point is some point further away, allowing both points to have sufficient radius to be in the top N ANMS point radii. 
+    </p>    
+
+    
+<h3>Feature Description Extraction</h3>
+
+    <p>
+        Now, we aim to match features between different images in order to obtain correspondances. Thus, we need some way to summarize each corner that is invariant to various insignificant changes in the images, such as gain, intensity, and scale. To do this, we use the method described in section 4 of the research paper. We will summarize the 40x40 pixel area around each corner as an 8x8 image as efficiency then apply normalization. For each corner we will repeat the following steps: <br>
+        1. Extract the 40x40 pixel region surrounding the corner such that the corner is in the middle. <br>
+        2. Apply a Gaussian Blur to prevent aliasing when downsampling. Below, I calculate the proper sigma in greater detail. <br>
+        3. Take each 5th pixel in a rectangular pattern in order to get a 8x8 feature desciptor. Due to previous blurring, this descriptor is nice and blurred to accomadate for different image scales. <br>
+        4. Finally, normalize the descriptor such that the descriptor has mean 0 and standard devation 1. Thus accomadates matching between images different gains or itensities during the photography process. 
+    </p>
+
+    <h5>Choice of Blurring Sigma</h5>
+
+    <p>
+        We must decide what sigma to use when blurring the corner surrounding region to get an 8x8 descriptor. Advice on picking this sigma is noticeably absent from the paper. Hence, I returned to my Signals and Systems days and performed a Fourier Analysis to determine what sigma value to use. In the below mathematics, I choose the value of sigma such that virtually all frequency content above the Nyquist frequency for the downsampling will be eliminated. For this calcuation, I use the fact that virtually all of the measure of a Gaussian lies within +- 3 standard devations of the mean. Since convolution in the spatial domain is equivalent to multiplication in the frequency domain, we can choose the sigma parameter of the Gaussian such that +- 3 std in the frequency domain equals the Nyquist frequency of the downsampling. I use the Fourier Analysis formula for a gaussian as given in Wolfram MathWorld Ultimately, I find that the sigma value of the Gaussian blur in the spatial domain should be 15/2/(pi ^ 2). This value worked well for me in practice. 
+    </p>
+
+ <div class = "row">
+        <figure>
+            <img src = "./media/fourierAnalysis.jpg">
+            <figcaption>Finding Sigma via Fourier Analysis</figcaption>
+        </figure>
+    </div>
+    
+<h5>Results</h5>
+    <p>
+        Below are the results of finding the feature descriptor for each corner in the ANMS Top 100 corners. Note that many of the values have been clipped at 0, 1 by Matplotlib so the real descriptors will be less uniform in value than how they are presented. 
+    </p>
+
+     <div class = "row">
+        <figure>
+            <img src = "./media/extractedFeatures.png">
+            <figcaption>Extracted Features from top 100 ANMS points. </figcaption>
+        </figure>
+    </div>
+
+    <h3> Matching Feature Descriptors </h3>
+
+    <p>
+        Once we calculate the feature desciptors for each image, we need to determine which descriptors describe corresponding points in the images. My approach for this section is based on the method described in Section 5 of the Brown et al. research paper. This technique leverages nearest neighbour matching. The algorithm works as follows: <br>
+
+        1. For the first image, perform the following steps: <br>
+            1a. For each feature descriptor, find the nearest neighbour and second nearest neighbour feature descriptor in the other image, where distance is defined as the Sum of Squared Differences like in the dist2 starter code provided. If the ratio of the distance to the nearest neighbour and the distance to the second nearest neighbour is below a cutoff (I use the hyper paramter value of 0.25 -- rationale is below), identify the points as a potential match. 
+        <br>
+        2. For the second image, perform similar steps:
+        <br>
+            2a. Likewise: For each feature descriptor, find the nearest neighbour and second nearest neighbour feature descriptor in the other image, where distance is defined as the Sum of Squared Differences like in the dist2 starter code provided. If the ratio of the distance to the nearest neighbour and the distance to the second nearest neighbour is below a cutoff (I use the hyper paramter value of 0.25 -- rationale is below), identify the points as a potential match.
+        <br>
+        3. Keep all matches that are identified as matches in both steps 1a and 2a. I found that imposing the mutual match requirement greatly improved feature matching. 
+        <br><br>
+        As mentioned above, this algorithm also requires choosing a hyper-parameter. This hyper-parameter controls the maximum allowable ratio of nearest neighbour distance to second nearest neighbour distane for a pair of points to be considered a match. Figure 6b in the Brown paper shows a real-world case study on the probability densities of true and false matches. The points we label as matches are likely to be used to determine the homography for image warping (if the points pass RANSAC). Since we fit the homography using least squares--a technique highly susceptible to corruption from outliers--having any incorrect matches can be very dangerous. Even a single incorrect match can cause a poor homography to be found. Additionally, since we typically start with hundreds of potential matches, it is acceptable if we eliminate some correct matches. Thus, I chose a hyper parameter value of 0.25, since 0.25 allows almost no incorrect matches while allowing a healthy amount of correct matches. Using the hyper parameter value of 0.25 has been successful for me. 
+
+        <br><br>
+        The intuition for this algorithm (known as Lowe's trick or the Soviet Grandmother Wisdom) is that the 1-NN may be a match while the 2-NN is not a match. If the point is a match, the distance to the 1-NN should be significantly less than the distance to the 2-NN. By the contrapositive statement, we can eliminate incorrect matches. 
+    </p>
+
+
+    <h5>Results of Feature Matching</h5>
+
+    <p>
+        Below are the results of applying feature matching on our demo images.
+    </p>
+
+       <div class = "row">
+        <figure>
+            <img src = "./media/matchesPreRANSAC.png">
+            <figcaption>Extracted Features from top 100 ANMS points. </figcaption>
+        </figure>
+    </div>
+
+
+    <h5>Interpretation</h5>
+
+    <p>
+        All of the matches appear to be quite good to me. 
+    </p>
+
+    <h3>RANSAC</h3>
+
+    <p>
+        As mentioned above, having any incorrect matches can be very dangerous to fitting a correct homography. Thus, we will also use RANSAC to elimate any remaining incorrect matches after the previous Feature Matching step. To implement RANSAC, we randomly draw sets of 4 corners (without replacement) from the matches, fit the resulting homography, and take note of how many points are accuractely mapped by the homography within some tolerance (another hyperparameter to tune! I'll call it epsilon). We repeat this process a large number of times. I found 300 iterations sufficient to reliably find high quality homogrpahies; however, it is not uncommon to use more iterations. If we have drawn all points but still need to perform more iterations, I reshuffle the lists of corners and contintue the loop of drawing four corners without replacement. The points that are accurately mapped by the fitted homogrpahy at each step are known as "inliers". We ultimately keep the largest set of inliers as our matches. We will fit the homography to these points. 
+        <br><br>
+        I tried several different values of the epsilon hyperparameter. I intially began by using small values such as 0.05 and 0.1; however, this tolerance would not find any inliers other than the four points used to fit the homography. I learned that I need to be more tolerant of small errors by RANSAC. I found that a epsilon value of 4 would allow for many matching points to be found while still removing outliers. 
+    </p>
+
+    <h5>Results of RANSAC</h5>
+
+    <p>
+        Below are the results of applying RANSAC to the point set shown above. 
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/ransacMatches.png">
+            <figcaption>RANSAC Filtered Features </figcaption>
+        </figure>
+    </div>
+    <h5>Interpretation</h5>
+    <p>
+        Due to the strength of my previous matching algorithm, we can see that only a few points are eliminated by RANSAC. It appears that all kept points have strong correspondance with each other. Ultimately, 19 points were kept, which is a healthy number for fitting the final homography.
+    </p>
+
+    <h5>Additional Examples</h5>
+    <p>
+        Since my matched points above were already so well matched, the RANSAC algorithm did not get the oppurtunity to prune much. Thus, I generated more RANSAC comparisons below with a pair of images that were somewhat more difficult to align. We can see that the pre-RANSAC image has a few poor matches. For example, there is a match between two points in the sky that are incorrect matches. We can see that these incorrect matches are filtered out by RANSAC.
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/trickyPreRANSAC.png">
+            <figcaption>Matches Before RANSAC Filtering</figcaption>
+        </figure>
+         <figure>
+            <img src = "./media/trickyPostRANSAC.png">
+            <figcaption>Matches After RANSAC Filtering</figcaption>
+        </figure>
+    </div>
+
+    <h3>Image Stitching Results (Mosaics)</h3>
+
+    <p>
+        With this background material out of the way, now we can produce image mosaics automatically. I combined all of the previous functionality into one function so that we can now create image mosiacs with one function call with a pair of images and some optional hyperparameters! How cool is that! 
+    <br>
+       Let's take a look at the results. I'll use the same images I created image mosiacs for manually, so that we can can judge how well the automatic stitching performed. 
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/mosaic1LapB.jpg">
+            <figcaption>Manual</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/autoMos1.jpg">
+            <figcaption>Automatic</figcaption>
+        </figure>
+    </div>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/mosaic2d.jpg">
+            <figcaption>Manual</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/autoMos2.jpg">
+            <figcaption>Automatic</figcaption>
+        </figure>
+    </div>
+    <div class = "row">
+        <figure>
+            <img src = "./media/mosaic3b.jpg">
+            <figcaption>Manual</figcaption>
+        </figure>
+        <figure>
+            <img src = "./media/autoMos3.jpg">
+            <figcaption>Automatic</figcaption>
+        </figure>
+    </div>
+
+    <h5>Interpretation</h5>
+
+    <p>
+        In my opinion, these automatically stitched mosaics look very nice and comparible to the manual made mosaics. In all three cases, I can tell not tell a difference in the alignment of each image pair. However, the difference in the perspective of the left image in the third mosiac between the manual and automatic mosaics is perplexing. In the third mosaic, the viewer can see how the shape the left image is warped into is different between the auto and manual mosiacs. However, the image pair appears to be well aligned in both images. I can not tell where the image seam is in either mosaic, indicating a high quality of alignment between the images. 
+    </p>
+
+    
+
+     <h4>Credits: </h4>
     <p>
         I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from  https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
         <br>
-        When solving for the equation of the homography matrix, I was influenced by materials provided by course staff. 
+        When solving for the equation of the homography matrix, I was influenced by materials provided by course staff--in particular, the site of Alec Li. I derived the equations myself; however, I viewed Alec Li's page to see examples of image mosaics given the recommendation by course staff. There, I observed his solution for the homography system of equations, which may have subconicously affected my approach to solving the system myself.  
         <br>
+        I used the formula for the Fourier Transform of a Gaussian as given on Wolfram MathWorld <a href = "https://mathworld.wolfram.com/FourierTransformGaussian.html">here</a>.  
         
         <b>I would like to emphasize that all of the code for image processing is of my own creation.</b>
     </p>
-
 </body>
 </html>
