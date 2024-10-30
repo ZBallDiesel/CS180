@@ -433,6 +433,22 @@
         Due to the strength of my previous matching algorithm, we can see that only a few points are eliminated by RANSAC. It appears that all kept points have strong correspondance with each other. Ultimately, 19 points were kept, which is a healthy number for fitting the final homography.
     </p>
 
+    <h5>Additional Examples</h5>
+    <p>
+        Since my matched points above were already so well matched, the RANSAC algorithm did not get the oppurtunity to prune much. Thus, I generated more RANSAC comparisons below with a pair of images that were somewhat more difficult to align. We can see that the pre-RANSAC image has a few poor matches. For example, there is a match between two points in the sky that are incorrect matches. We can see that these incorrect matches are filtered out by RANSAC.
+    </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "./media/trickyPreRANSAC.png">
+            <figcaption>Matches Before RANSAC Filtering</figcaption>
+        </figure>
+         <figure>
+            <img src = "./media/trickyPostRANSAC.png">
+            <figcaption>Matches After RANSAC Filtering</figcaption>
+        </figure>
+    </div>
+
     <h3>Image Stitching Results (Mosaics)</h3>
 
     <p>
