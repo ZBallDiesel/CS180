@@ -215,7 +215,51 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <p>
           In all cases, the Unet does a generally good job a denoising, certainly better than the Gaussian Blur filter does. We can see that the difference between the denoised output and the original image increases as the level of noise added increases. Since the Unet has to generate more of the image content as the amount of noise increases, this outcome makes sense. Also, the denoised image gets somewhat blurry as the input noise level increases, which is a drawback of one step denoising. 
       </p>
+<h4>Part 1.4: Iterative Denoising</h4>
+      <p>
+          To improve the denoising for highly noised images, we are going to use iterative (multi-step) denoising. DeepFloyd was trained to be used with up to 1000 steps. However, it is not necessary to denoise one step at a time. Instead, we will denoise 30 steps at a time. This allows for us to denoise a noised image noised to at most 990 steps. We can control the starting timestep for denoising with the i_start parameter. 
+          <br><br>
+          We use iterative denoising to denoise the noisy image of the campanile, which we will compare with our other methods. Below we can see the results of iterative denoising after each 5th loop of denoising, the final clean image after iterative denoising as well as the one step denoised image and the Gaussian filtered image for comparison. Due to ambiguity in the website prompt, I will show the results for denoising from both 690 steps (i_start = 10) and from 990 steps (i_start = 0).
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_4start10.jpg">
+            <figcaption>Iterative Denoising after each 5th loop of denoising (after timesteps 690, 540, 390, 240, 90, 0).<br>
+            The right most image is the clean image from iterative denoising</figcaption>
+        </figure>
+          <figure>
+              <img src = "media/1_4oneStep.jpg">
+              <figcaption>One Step denoising from t = 690</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/1_4blurFil.jpg">
+              <figcaption>Gaussian Filtered Denoised Image from t = 690</figcaption>
+          </figure>
+      </div>
 
 
+            <div class = "row">
+        <figure>
+            <img src = "media/1_4start990.jpg">
+            <figcaption>Iterative Denoising after each 5th loop of denoising starting at t = 990 (after timesteps 990, 840, 690, 540, 390, 240, 90, 0).<br>
+            The right most image is the clean image from iterative denoising</figcaption>
+        </figure>
+          <figure>
+              <img src = "media/1_4oneStep990.jpg">
+              <figcaption>One Step denoising from t = 990</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/1_4blurFil990.jpg">
+              <figcaption>Gaussian Filtered Denoised Image from t = 990</figcaption>
+          </figure>
+      </div>
+
+      <h5>Interpretation</h5>
+      <p>
+          Add if I have time.
+      </p>
+
+      
   </body>
 </html>
