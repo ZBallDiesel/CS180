@@ -99,7 +99,18 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
           Now, we will try a more sophisticated method to denoise the images. We will use the Claude Diffusion model from HuggingFace that has been trained for these alpha values. Claude uses text embedding; we will use the prompt "a high quality photo" as instructions to denoise the images. We will be using one step denoising where we call the UNet at the t value used to noise the images to estimate the x_0 clean image. Let's see how the UNet does. 
       </p>
 
-      
+      <div class  = "row">
+        <figure>
+            <img src = "media/1_3results.jpg">
+            <figcaption>UNet One Step Denoising Results 
+                Columns are as follows: Original Image, Noisy Image, Noise Estimate, DeNoised Image
+            The rows are t = 250, 500, 750 descending</figcaption>
+        </figure>
+      </div>
+<h5>Interpretation</h5>
+      <p>
+          
+      </p>
 
 
   </body>
