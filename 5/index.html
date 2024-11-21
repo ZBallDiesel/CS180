@@ -141,7 +141,16 @@
 <h5>Interpretation</h5>
 
       <p>
-          Here we try a variety of combinations of 5, 20, 50 steps in stages 1 and 2. In both stages, I notice a large increase in quality moving from 5 to 20 steps and little quality increase moving from 20 to 50 steps. I also noticed that each stage seems to perform a different task. I infer that stage 1 is reposible for generating the "thoughtful" information content - ie the general content of the image and stage 2 performs upsampling that increases the image size while keeping the visual content of the image highly similar to the output of stage 1. In particular, we can see that increases in stage 1 number of steps increases the accuracy and detail in the image's visual content while the number of steps in stage 2 controls the pixel quality and sharpness of its output. For example, inspect the images that result when there are 20 steps in stage 1 and 5 steps in stage 2. These images have stage 1 output that are consistent to the prompt and are feature high qaulity details while the stage 2 output has odd pixels details with poor image quality. Conversely, consider the images that result with 5 steps in stage 1 and 20 steps in stage 2. The visual content of these images is lacking, supporting the 
+          Here we try a variety of combinations of 5, 20, 50 steps in stages 1 and 2. In both stages, I notice a large increase in quality moving from 5 to 20 steps and little quality increase moving from 20 to 50 steps. I also noticed that each stage seems to perform a different task. I infer that stage 1 is reposible for generating the "thoughtful" information content - ie the general content of the image and stage 2 performs upsampling that increases the image size while keeping the visual content of the image highly similar to the output of stage 1. In particular, we can see that increases in stage 1 number of steps increases the accuracy and detail in the image's visual content while the number of steps in stage 2 controls the pixel quality and sharpness of its output. 
+          <br><br>
+          For example, inspect the images that result when there are 20 steps in stage 1 and 5 steps in stage 2. These images have stage 1 output that are consistent to the prompt and are feature high qaulity details while the stage 2 output has odd pixels details with poor image quality.
+          <br><br>
+          Conversely, consider the images that result with 5 steps in stage 1 and 20 steps in stage 2. The visual content of these images is lacking, supporting the idea that stage 1 creates the visual content. In these images, the mountain village is lacking realism and details in the mountains, the rocket ship is simplistic, and the man in a hat is a rather nonsense image that contains many small hats. However, the stage 2 output with 20 steps is perfectly high quality while retaining the lack of realism in image content from stage 1, which supports the hypothesis that stage 2 determines the upsampled image quality without much effect on visual content. 
+      </p>
+
+      <h5>Seeding</h5>
+      <p>
+          Throughout this projec, I am using the seed 831 with the exception of a few later prompts where I experiment with seed 699 to generate different output. These locations will be noted. 
       </p>
       
 <h4>Part 1.1: Implementing the Forward Process </h4>
