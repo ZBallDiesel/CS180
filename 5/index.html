@@ -320,6 +320,78 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <p>
           We can see that these images are much more realistic and higher quality than the non-CFG images.
       </p>
+
+      <h3>Part 1.7: Image to Image Translation</h3>
+      <p>
+          In this section, we will use the CFG techniques we developed to allow the diffusion model to make small edits to images. To accomplish this, we take a clean image, noise it lightly, and have the model denoise it. The result is an image that is similar to the original image, but with some changes as the diffusion model sees fit. We will guide the denoising with the prompt "a high quality image", which provides the model with lots of freedom to edit the image as it sees fit. We will run the algorithm with varying levels of noising, starting at i_start = 1, 3, 5, 7, 10, 20. These values correspond to starting t values of t = 960, 900, 840, 780, 690, 390. I'll apply this algorithm to the test image, as well as two images of my choosing. 
+      </p>
+
+      <div class = "row">
+         <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Starting Clean Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/1_7_0ims.jpg">
+            <figcaption>Translation of Campanile Image at Decreasing i_start values</figcaption>
+        </figure>
+       <figure>
+            <img src = "media/1_7_0imsUp.jpg">
+            <figcaption>Translation of Campanile Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+     <div class = "row">
+         <figure>
+            <img src = "media/wbp.jpg">
+            <figcaption>Starting Clean Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/1-7-0-wbp-ims.jpg">
+            <figcaption>Translation of Whistler Bike Park Image at Decreasing i_start values</figcaption>
+        </figure>
+       <figure>
+            <img src = "media/1-7-0-wbp-ims-Up.jpg">
+            <figcaption>Translation of Whistler Bike Park Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+       <div class = "row">
+         <figure>
+            <img src = "media/NAF.jpg">
+            <figcaption>Starting Clean Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/1-7-0-naf-ims.jpg">
+            <figcaption>Translation of North Arm Farm Image at Decreasing i_start values</figcaption>
+        </figure>
+       <figure>
+            <img src = "media/1-7-0-naf-ims-Up.jpg">
+            <figcaption>Translation of North Arm Farm Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          As expected, more noised input images result in translated images less similar to the original image. Utlimately, this algorithm can result in some interesting output images. Additionally, the second-to-right translated image of the North Arm Farm image provides insight into the workings of the diffusion model and its training dataset. Those familiar with the area or Instagram may notice that the translated image is nearly identical to the view of Moraine Lake in Banff, Alberta from a location that is extremely popular with tourists and influencers. I took the original image myself in Pemberton, BC, which is 300 miles from Moraine Lake and in a different mountain range. Despite these differences, the model decided to denoise the image to one of (essentially) Moraine Lake. This is the first time I have been able to identify a diffusion model output that is actually just a recreation of some real place. I hypothesize that there are so many images of this view of Moraine Lake on the internet--which become part of the Diffusion model training data--due to the horde of influencers that travel there that the model has a great perpensity to recreate this one exact solution when given an input image remotely similar. 
+          <br><br>
+          For comparison, I will show a side-by-side comparison of this diffusion model output with a real image of Moraine Lake. 
+          Notice the high number of corresponding features.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/moraineLake1.jpg">
+            <figcaption>Real Image of Moraine Lake</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/moraineLake2.jpg">
+            <figcaption>Real Image of Moraine Lake</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/1-7-0-naf-imUp10.jpg">
+            <figcaption>Diffusion model Translation of North Arm Farm Image</figcaption>
+        </figure>
+      </div>
       
   </body>
 </html>
