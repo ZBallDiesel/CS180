@@ -200,7 +200,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
 
       <h4>Part 1.3: One Step Denoising</h4>
       <p>
-          Now, we will try a more sophisticated method to denoise the images. We will use the Claude Diffusion model from HuggingFace that has been trained for these alpha values. Claude uses text embedding; we will use the prompt "a high quality photo" as instructions to denoise the images. We will be using one step denoising where we call the UNet at the t value used to noise the images to estimate the x_0 clean image. Let's see how the UNet does. 
+          Now, we will try a more sophisticated method to denoise the images. We will use the DeepFloyd Diffusion model from Stability AI that has been trained for these alpha values. DeepFloyd uses text embedding; we will use the prompt "a high quality photo" as instructions to denoise the images. We will be using one step denoising where we call the UNet at the t value used to noise the images to estimate the x_0 clean image. Let's see how the UNet does. 
       </p>
 
       <div class  = "row">
@@ -213,7 +213,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       </div>
 <h5>Interpretation</h5>
       <p>
-          
+          In all cases, the Unet does a generally good job a denoising, certainly better than the Gaussian Blur filter does. We can see that the difference between the denoised output and the original image increases as the level of noise added increases. Since the Unet has to generate more of the image content as the amount of noise increases, this outcome makes sense. Also, the denoised image gets somewhat blurry as the input noise level increases, which is a drawback of one step denoising. 
       </p>
 
 
