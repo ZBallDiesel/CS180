@@ -45,10 +45,105 @@
     <h3>Introduction</h3>
 
         <p>
-            This project works with diffusions models to generate various interesting images with various techniques such as CFG, Anagram generation, and Hybrid images. In part a, we use the Claude Diffusion model from HuggingFace. In part b, we train my own diffusion model to generate MINST digits. 
+            This project works with diffusions models to generate various interesting images with various techniques such as CFG, Anagram generation, and Hybrid images. In part a, we use the DeffFloyd Diffusion model from Stability AI. In part b, we train my own diffusion model to generate MINST digits. 
         </p>
 
     <h2>Part A</h2>
+
+
+      <h4>Part 0</h4>
+      <p>
+          In this section, we are getting familiar with the output of DeepFloyd IF. The model utilizes two stages: the first stage generates 64x64 pixel images and the second stage upsamples the images to 256x256 pixels. For our experimentation, we are using the following three prompts: <br><br>[
+    'an oil painting of a snowy mountain village',
+    'a man wearing a hat',
+    "a rocket ship",
+]. <br><br>
+          Each stage has a parameter num_steps that controls the number of iterations the diffusion model uses during the denoising process. Using more steps will generate higher quality images but will be computationally more intensive. I will experiment with the output of each stage for a range of step sizes. Below is the output.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/im20Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 20 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im20StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im5Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 5 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im5StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 5 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im50Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 50 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im50StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 50 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im20Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 20 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im20StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+ <div class = "row">
+        <figure>
+            <img src = "media/im20_5Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 20 Steps in Stage 1 and 5 Steps in Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im20_5StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im5_20Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 5 Steps in Stage 1 and 20 Steps in Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im5_20StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 5 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+<h5>Interpretation</h5>
+
+      <p>
+          Here we try a variety of combinations of 5, 20, 50 steps in stages 1 and 2. In both stages, I notice a large increase in quality moving from 5 to 20 steps and little quality increase moving from 20 to 50 steps. I also noticed that each stage seems to perform a different task. I infer that stage 1 is reposible for generating the "thoughtful" information content - ie the general content of the image and stage 2 performs upsampling that increases the image size while keeping the visual content of the image highly similar to the output of stage 1. In particular, we can see that increases in stage 1 number of steps increases the accuracy and detail in the image's visual content while the number of steps in stage 2 controls the pixel quality and sharpness of its output. For example, inspect the images that result when there are 20 steps in stage 1 and 5 steps in stage 2. These images have stage 1 output that are consistent to the prompt and are feature high qaulity details while the stage 2 output has odd pixels details with poor image quality. Conversely, consider the images that result with 5 steps in stage 1 and 20 steps in stage 2. The visual content of these images is lacking, supporting the 
+      </p>
+      
 <h4>Part 1.1: Implementing the Forward Process </h4>
 <p>
     In this section we are noising clean image such that the diffusion model can be trained to denoise them. In this section and following sections, we will be using a photo of the campanile as an clean example image to experiment with. 
