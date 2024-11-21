@@ -215,7 +215,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <p>
           In all cases, the Unet does a generally good job a denoising, certainly better than the Gaussian Blur filter does. We can see that the difference between the denoised output and the original image increases as the level of noise added increases. Since the Unet has to generate more of the image content as the amount of noise increases, this outcome makes sense. Also, the denoised image gets somewhat blurry as the input noise level increases, which is a drawback of one step denoising. 
       </p>
-<h4>Part 1.4: Iterative Denoising</h4>
+<h3>Part 1.4: Iterative Denoising</h3>
       <p>
           To improve the denoising for highly noised images, we are going to use iterative (multi-step) denoising. DeepFloyd was trained to be used with up to 1000 steps. However, it is not necessary to denoise one step at a time. Instead, we will denoise 30 steps at a time. This allows for us to denoise a noised image noised to at most 990 steps. We can control the starting timestep for denoising with the i_start parameter. 
           <br><br>
@@ -259,6 +259,41 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <p>
           Add if I have time.
       </p>
+
+      <h3>Part 1.5: Iterative Denoising</h3>
+        <p>
+            In the last section, we saw how diffusion models can be used to denoise noisy images. However, what will happen if the input image is pure noise? This thought underlies the main use of Diffusion models. Here, we will use this technique to generate new images based on a text prompt. Again, we will use the prompt "a high quality photo" to guide the Diffusion model's image generation. I'll show the results of this strategy in original form and after upsampling and for seeds 831 and 699. 
+        </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5ims.jpg">
+            <figcaption>Sampled images with seed = 831 and No Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5oupsampled.jpg">
+            <figcaption>Sampled images with seed = 831 and Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5imsOtherSeed.jpg">
+            <figcaption>Sampled images with seed = 699 and No Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5upsampled.jpg">
+            <figcaption>Sampled images with seed = 699 and Upsampling</figcaption>
+        </figure>
+      </div>
+
+      
 
       
   </body>
