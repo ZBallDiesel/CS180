@@ -54,16 +54,32 @@
     In this section we are noising clean image such that the diffusion model can be trained to denoise them. In this section and following sections, we will be using a photo of the campanile as an clean example image to experiment with. 
 
 The campanile will be x_0, the clean image at time 0. At time t, the noised image will be solved for according to
-
+</p>
 <div class = "row">
 
     <figure>
-
+        <img src = "media/equation.jpg">
     </figure>
 </div>
-. 
 
-</p>      
+      <p>
+          Let's see the output of noising. Below are the images we are working with. On the left, is the clean orignial campanile image. To its right, we have the campanile noised at steps 250, 500, and 750. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Original Clean Image</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/forwardNoised.jpg">
+              <figcaption>Noised Images at t = 250, 500, 750</figcaption>
+          </figure>
+      </div>
+      
+
+    
 
 
   </body>
