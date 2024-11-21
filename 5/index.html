@@ -293,8 +293,33 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
         </figure>
       </div>
 
-      
+      <h3>Part 1.6: Classifier Free Guidance (CFG)</h3>
 
+      <p>
+          While the above images were decent, some lacked realism or were non-sensical. In this section, we will use a technique called Classifier Free Guidance (CFG) to generate more realistic images. With this techinque, one generates two noise estimates: One will be for the desired (aka conditional) prompt and another for the null prompt "". In this section, we will still use "a high quality photo" as the conditional prompt. The final noise estimate will be calculated as <br>
+          noise = noise_unconditional + gamma * (noise_conditional - noise_unconditional) <br><br>
+          for some paramter gamma. In this section, we will use gamma = 7. During each step, we will iteratively denoise the image according to this noise estimate. 
+          <br><br>
+          Below are the images generated with CFG upsampled to 256x256 using seeds 831 and 699. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_6oupsampled.jpg">
+            <figcaption>Sampled images using CFG and Seed = 831</figcaption>
+        </figure>
+      </div>
+
+     <div class = "row">
+        <figure>
+            <img src = "media/1_6upsampled.jpg">
+            <figcaption>Sampled images using CFG and Seed = 699</figcaption>
+        </figure>
+    </div>
+
+      <p>
+          We can see that these images are much more realistic and higher quality than the non-CFG images.
+      </p>
       
   </body>
 </html>
