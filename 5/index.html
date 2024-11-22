@@ -669,6 +669,74 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
         </figure>
 
       </div>
+
+
+      <h2>Part B</h2>
+
+        <p>
+            Now we will train our own diffusion model to generate images based on the MNIST dataset. 
+        </p>
+
+      <h3>Part 1: Training a UNet Denoiser</h3>
+
+      <p>
+          We will begin by training a UNet to denoise MNIST digits.  To do so, we will generate z = x + sigma*eps, where x is the clean MNIST digit, 0 <= sigma <= 1, eps ~ N(0, I), and z is the noised MNIST digit. In this section, we are training the UNet to predict the clean digit itself. During training, x is thus the target and z is the UNet input. The loss is the MSE over image pixels. Further information on the UNet architecture is available <a href = "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj5/partb.html">here</a>.
+              <br><br>
+              To train the network, we are using sigma = 0.5, hidden dimension D = 128, optimized by Adam with step size 0.0001. 
+              <br>
+              Let's see how the model does. 
+      </p>
+
+              <h5>Part 1.2.1: Training</h5>
+              <p>
+                  Let's inspect the training process. The plot below shows examples of noised digits for different sigma values. Each row is a different example from the MNIST dataset, and each column corresponds with a sigma = 0, 0.2, 0.4, 0.5, 0.6, 0.8, 1 increasing left to right. The loss plot is also pictured below.
+              </p>
+
+            <div class = "row">
+                <figure>
+                    <img src = "media/B121imsNoisedns.jpg">
+                    <figcaption>Noised Images for sigma = 0, 0.2, 0.4, 0.5, 0.6, 0.8, 1 </figcaption>
+
+                </figure>
+            </div>
+              
+              <div class = "row">
+                <figure>
+                    <img src = "media/B121LossLogScale.png">
+                    <figcaption>Training Loss over 5 Epochs</figcaption>
+                </figure>
+
+              </div>
+              <p>
+                  We can see that the loss converged to a small amount consistent with the staff solution. 
+              </p>
+             
+              <p>
+                  Below are examples of the UNet's performance after 1 and 5 training epochs. The left column is the original image, the middle column is the noised image with sigma = 0.5, and the right column is the denoised UNet output. Note that the colors are duller due to image processing during the download process rather than from the UNet. 
+              </p>
+              <div class = "row">
+                <figure>
+                    <img src = "media/after1epochIms.jpg">
+                    <figcaption>Test images Denoised after 1 training epoch<br>
+                    Left column is original image, <br> middle column is noised image, <br> right column is denoised image</figcaption>
+                </figure>
+                  <figure>
+                    <img src = "media/after5epochIms.jpg">
+                    <figcaption>Test images Denoised after 5 training epochs<br>
+                    Left column is original image, <br> middle column is noised image, <br> right column is denoised image</figcaption>
+                </figure>
+              </div>
+
+               <h5>Part 1.2.2: Out of Distribution Testing</h5>
+              <p>
+                  The Unet was trained with sigma = 0.5. What will happen if it is asked to denoise images noised by different sigma values? As it turns out, the Unet performs well with Out of Distribution noised images. Below we noise the same image with each sigma in [0, 0.2, 0.4, 0.5, 0.6, 0.8, 1] and witness the model's output. The top row is the noised image and the bottom row is the Unet output. Each column refers to an increased sigma value (noise level). 
+              </p>
+        <div class = "row">
+        <figure>
+            <img src = "media/B121imsOOB.jpg">
+            <figcaption>Out of Distribution Test Images</figcaption>
+        </figure>
+        </div>
       
   </body>
 </html>
