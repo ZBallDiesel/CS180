@@ -634,11 +634,55 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
     
       </div>
       
+      <h3>Part 1.9: Hybrid Images</h3>
       
-      
-      
+      <p>
+          We will now work to create hybrid images using diffusion. A hybrid image is an image that looks different at different viewing distances. In other words, the image will appear to be of different objects when viewed up close and when viewed from far away. We can achieve this by manipulating the frequencies of the image. Viewers will notice primarily the low frequencies from long distances and the high frequencies from short distances. We can thus craft the image's high and low frequencies separately during diffusion iterations to drive the output towards different prompts in the high and low frequencies. To do so, we will have 2 prompts, one for each frequency range. First, we will generate the CFG noise estimates for each prompt. Then we will high pass and low pass filter the respective prompt noise estimates. The sum of the filtered noise estimates will be the noise estimate that we use. 
+          <br><br>
+          Below is the output following the prompt "a lithograph of a skull" from far away and "a lithograph of waterfalls" from close up. Look at the image from different distances to discern the effect.
+      </p>
 
-    
+      <div class = "row">
+        <figure>
+            <img src = "media/19skullWaterfalls.jpg">
+            <figcaption>Skull from Far Away and Waterfalls from Close Up</figcaption>
+        </figure>
+
+      </div>
+<p>
+    Next I'll show two outputs following the prompt "a pencil" from far away and "a rocket ship" from close up.
+</p>
+     <div class = "row">
+        <figure>
+            <img src = "media/19pencilRocket.jpg">
+            <figcaption>Pencil from Far Away and Rocket from Close Up</figcaption>
+        </figure>
+         <figure>
+            <img src = "media/19pencilRocket2.jpg">
+            <figcaption>Pencil from Far Away and Rocket from Close Up</figcaption>
+        </figure>
+
+      </div>
+
+      <p>
+          Next I'll show three outputs following the prompt "a lithograph of a skull" from far away and "a photo of a hipster barista" from close up.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/19hipsterSkull6.jpg">
+            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+        </figure>
+         <figure>
+            <img src = "media/19hipsterSkull4.jpg">
+            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/19hipsterSkull3.jpg">
+            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+        </figure>
+
+      </div>
       
   </body>
 </html>
