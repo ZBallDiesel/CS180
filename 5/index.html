@@ -787,7 +787,50 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
                 </figure>
               </div>
 
+              <h3>Part 2.4: Adding Class-Conditioning</h3>
+              <p>
+                  We can see above that the class-unconditioned Unet provides decent results that lack in realism. Much of the issue is that the output appears to be "in-between" different digit values. This makes sense because the Unet does not have direction of what outcome is desired. In this section, we will add class-conditioning to the Unet. When training, we will provide the class of the image, so the network can learn what shapes correspond to certain digits. <br>
+                  When training, we can provide the desired output class to guide the output to a more certain and realistic outcome. 
+                  <br><br>
+                  To achieve this result, we will add 2 more FCBlocks to the network that multiply various layers throughout the network based on one-hot encoding class vectors. We will train the network with dropout on class-conditioning with probability 0.1 to ensure the network still works for unconditional output. This allows us to use CFG to improve the generated images. 
+                  <br><br>
+                  The rest of the optimization steps are the same as in time-conditioned Unet training. Below let's take a look at the training loss over the 20 epochs. As you can see, the loss converges to a small amount consistent with the staff solution.
+              </p>
+
+              <div class = "row">
+                <figure>
+                    <img src = "media/B25Loss.png">
+                    <figcaption>Training Loss over 20 Epochs</figcaption>
+                </figure>
+               </div>
+
+              <h4>Part 2.5: Sampled from Class-Conditioned Unet</h4>
+              <p>
+                  Let's observe the results of the Class-conditioned Unet after 5 and 20 training epochs. 
+              </p>
+
+               <div class = "row">
+                <figure>
+                    <img src = "media/B25after5.jpg">
+                    <figcaption>Unet Samples after 5 training epochs</figcaption>
+                </figure>
+                  <figure>
+                    <img src = "media/B25after20.jpg">
+                    <figcaption>Unet Samples after 20 training epochs</figcaption>
+                </figure>
+              </div>
+              <h5>Interpretation</h5>
+              <p>
+                  As we can see, the class conditioned Unet generates consistently high quality output that matches the desired class. For reference, the Unet was prompted to generate the digits 0-9 left to right in each row. The Unet acheives this goal very nicely. 
+              </p>
+
+              <h3>Final Thoughts</h3>
+              <p>
+                  This project has been exciting and a great learning experience. Diffusion models are fascinating, and this project has allowed me to get a better idea of their inner workings. I still find it crazy that denoising noise can lead to realistic interesting output images. The articles linked in the project prompt have been interesting reads. For example, I am learning about Runge-Kutta methods in another class, so it was very interesting to learn about the connections of diffusion models to Stochastic Differential Equations solved with Runge-Kutta methods. 
+              </p>
+
               
+
               
   </body>
 </html>
