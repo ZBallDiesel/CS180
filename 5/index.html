@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 5</title>
+    <style>
+        body {
+            font-family: Times New Roman, Arial, sans-serif;
+            margin: 20px;
+        }
+
+        <!-- Following code for CSS style is adapted from W3 Schools. https://www.w3schools.com/howto/howto_css_images_side_by_side.asp
+        and Stack Overflow
+        https://stackoverflow.com/questions/61637178/how-to-center-multiple-figure-elements-in-one-row-->
+        * {
+      box-sizing: border-box;
+    }
+    
+    .column {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+    
+    
+    .row {
+      padding-bottom: 50px;
+      display: flex;
+        text-align: center;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    img {
+        width: 100%;
+        height: auto
+        
+    }
+    </style>
+</head>
+
+  <body>
+    <h1>Welcome to My CS180 Project 5!</h1>
+    <a href = "../index.html"> My CS180 Personal Project Home Page </a>
+    <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
+    <h3>Introduction</h3>
+
+        <p>
+            This project works with diffusions models to generate various interesting images with various techniques such as CFG, Anagram generation, and Hybrid images. In part a, we use the DeffFloyd Diffusion model from Stability AI. In part b, we train my own diffusion model to generate MINST digits. 
+        </p>
+
+    <h2>Part A</h2>
+
+
+      <h4>Part 0</h4>
+      <p>
+          In this section, we are getting familiar with the output of DeepFloyd IF. The model utilizes two stages: the first stage generates 64x64 pixel images and the second stage upsamples the images to 256x256 pixels. For our experimentation, we are using the following three prompts: <br><br>[
+    'an oil painting of a snowy mountain village',
+    'a man wearing a hat',
+    "a rocket ship",
+]. <br><br>
+          Each stage has a parameter num_steps that controls the number of iterations the diffusion model uses during the denoising process. Using more steps will generate higher quality images but will be computationally more intensive. I will experiment with the output of each stage for a range of step sizes. Below is the output.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/im20Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 20 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im20StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im5Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 5 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im5StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 5 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im50Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 50 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im50StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 50 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im20Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 20 Steps in both Stage 1 and Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im20StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+ <div class = "row">
+        <figure>
+            <img src = "media/im20_5Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 20 Steps in Stage 1 and 5 Steps in Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im20_5StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/im5_20Step.jpg">
+            <figcaption>Generated Output of Stage 2 with 5 Steps in Stage 1 and 20 Steps in Stage 2</figcaption>
+        </figure>
+
+          <figure>
+            <img src = "media/im5_20StepSmall.jpg">
+            <figcaption>Generated Output of Stage 1 with 5 Steps in Stage 1 </figcaption>
+        </figure>
+
+      </div>
+
+<h5>Interpretation</h5>
+
+      <p>
+          Here we try a variety of combinations of 5, 20, 50 steps in stages 1 and 2. In both stages, I notice a large increase in quality moving from 5 to 20 steps and little quality increase moving from 20 to 50 steps. I also noticed that each stage seems to perform a different task. I infer that stage 1 is reposible for generating the "thoughtful" information content - ie the general content of the image and stage 2 performs upsampling that increases the image size while keeping the visual content of the image highly similar to the output of stage 1. In particular, we can see that increases in stage 1 number of steps increases the accuracy and detail in the image's visual content while the number of steps in stage 2 controls the pixel quality and sharpness of its output. 
+          <br><br>
+          For example, inspect the images that result when there are 20 steps in stage 1 and 5 steps in stage 2. These images have stage 1 output that are consistent to the prompt and are feature high qaulity details while the stage 2 output has odd pixels details with poor image quality.
+          <br><br>
+          Conversely, consider the images that result with 5 steps in stage 1 and 20 steps in stage 2. The visual content of these images is lacking, supporting the idea that stage 1 creates the visual content. In these images, the mountain village is lacking realism and details in the mountains, the rocket ship is simplistic, and the man in a hat is a rather nonsense image that contains many small hats. However, the stage 2 output with 20 steps is perfectly high quality while retaining the lack of realism in image content from stage 1, which supports the hypothesis that stage 2 determines the upsampled image quality without much effect on visual content. 
+      </p>
+
+      <h5>Seeding</h5>
+      <p>
+          Throughout this projec, I am using the seed 831 with the exception of a few later prompts where I experiment with seed 699 to generate different output. These locations will be noted. 
+      </p>
+      
+<h4>Part 1.1: Implementing the Forward Process </h4>
+<p>
+    In this section we are noising clean image such that the diffusion model can be trained to denoise them. In this section and following sections, we will be using a photo of the campanile as an clean example image to experiment with. 
+
+The campanile will be x_0, the clean image at time 0. At time t, the noised image will be solved for according to
+</p>
+<div class = "row">
+
+    <figure>
+        <img src = "media/equation.jpg">
+    </figure>
+</div>
+
+      <p>
+          Let's see the output of noising. Below are the images we are working with. On the left, is the clean orignial campanile image. To its right, we have the campanile noised at steps 250, 500, and 750. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Original Clean Image</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/forwardNoised.jpg">
+              <figcaption>Noised Images at t = 250, 500, 750</figcaption>
+          </figure>
+      </div>
+      
+<h4>Part 1.2: Attempting Classical Denoising</h4>
+    <p>
+        We know various methods for denoising Gaussian Noise. One such method that we know is Guassian Blurring the noisy images. Lets see how Guassian Blurring handles this noise. 
+    </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/classicDenoised15.jpg">
+            <figcaption>Noisy images at t = 250, 500, 750 Denoised with Guassian Blur</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          As we can see, Guassian Blurring is unable to denoise the images satisfactorily. In fact, Gaussian Blurring will deliver poor denoising in this situation for any parameter values.
+      </p>
+
+      <h4>Part 1.3: One Step Denoising</h4>
+      <p>
+          Now, we will try a more sophisticated method to denoise the images. We will use the DeepFloyd Diffusion model from Stability AI that has been trained for these alpha values. DeepFloyd uses text embedding; we will use the prompt "a high quality photo" as instructions to denoise the images. We will be using one step denoising where we call the UNet at the t value used to noise the images to estimate the x_0 clean image. Let's see how the UNet does. 
+      </p>
+
+      <div class  = "row">
+        <figure>
+            <img src = "media/1_3results.jpg">
+            <figcaption>UNet One Step Denoising Results 
+                Columns are as follows: Original Image, Noisy Image, Noise Estimate, DeNoised Image
+            The rows are t = 250, 500, 750 descending</figcaption>
+        </figure>
+      </div>
+<h5>Interpretation</h5>
+      <p>
+          In all cases, the Unet does a generally good job a denoising, certainly better than the Gaussian Blur filter does. We can see that the difference between the denoised output and the original image increases as the level of noise added increases. Since the Unet has to generate more of the image content as the amount of noise increases, this outcome makes sense. Also, the denoised image gets somewhat blurry as the input noise level increases, which is a drawback of one step denoising. 
+      </p>
+<h3>Part 1.4: Iterative Denoising</h3>
+      <p>
+          To improve the denoising for highly noised images, we are going to use iterative (multi-step) denoising. DeepFloyd was trained to be used with up to 1000 steps. However, it is not necessary to denoise one step at a time. Instead, we will denoise 30 steps at a time. This allows for us to denoise a noised image noised to at most 990 steps. We can control the starting timestep for denoising with the i_start parameter. 
+          <br><br>
+          We use iterative denoising to denoise the noisy image of the campanile, which we will compare with our other methods. Below we can see the results of iterative denoising after each 5th loop of denoising, the final clean image after iterative denoising as well as the one step denoised image and the Gaussian filtered image for comparison. Due to ambiguity in the website prompt, I will show the results for denoising from both 690 steps (i_start = 10) and from 990 steps (i_start = 0).
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_4start10.jpg">
+            <figcaption>Iterative Denoising after each 5th loop of denoising (after timesteps 690, 540, 390, 240, 90, 0).<br>
+            The right most image is the clean image from iterative denoising</figcaption>
+        </figure>
+          <figure>
+              <img src = "media/1_4oneStep.jpg">
+              <figcaption>One Step denoising from t = 690</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/1_4blurFil.jpg">
+              <figcaption>Gaussian Filtered Denoised Image from t = 690</figcaption>
+          </figure>
+      </div>
+
+
+            <div class = "row">
+        <figure>
+            <img src = "media/1_4start990.jpg">
+            <figcaption>Iterative Denoising after each 5th loop of denoising starting at t = 990 (after timesteps 990, 840, 690, 540, 390, 240, 90, 0).<br>
+            The right most image is the clean image from iterative denoising</figcaption>
+        </figure>
+          <figure>
+              <img src = "media/1_4oneStep990.jpg">
+              <figcaption>One Step denoising from t = 990</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/1_4blurFil990.jpg">
+              <figcaption>Gaussian Filtered Denoised Image from t = 990</figcaption>
+          </figure>
+      </div>
+
+      <h5>Interpretation</h5>
+      <p>
+          Add if I have time.
+      </p>
+
+      <h3>Part 1.5: Iterative Denoising</h3>
+        <p>
+            In the last section, we saw how diffusion models can be used to denoise noisy images. However, what will happen if the input image is pure noise? This thought underlies the main use of Diffusion models. Here, we will use this technique to generate new images based on a text prompt. Again, we will use the prompt "a high quality photo" to guide the Diffusion model's image generation. I'll show the results of this strategy in original form and after upsampling and for seeds 831 and 699. 
+        </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5ims.jpg">
+            <figcaption>Sampled images with seed = 831 and No Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5oupsampled.jpg">
+            <figcaption>Sampled images with seed = 831 and Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5imsOtherSeed.jpg">
+            <figcaption>Sampled images with seed = 699 and No Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_5upsampled.jpg">
+            <figcaption>Sampled images with seed = 699 and Upsampling</figcaption>
+        </figure>
+      </div>
+
+      <h3>Part 1.6: Classifier Free Guidance (CFG)</h3>
+
+      <p>
+          While the above images were decent, some lacked realism or were non-sensical. In this section, we will use a technique called Classifier Free Guidance (CFG) to generate more realistic images. With this techinque, one generates two noise estimates: One will be for the desired (aka conditional) prompt and another for the null prompt "". In this section, we will still use "a high quality photo" as the conditional prompt. The final noise estimate will be calculated as <br>
+          noise = noise_unconditional + gamma * (noise_conditional - noise_unconditional) <br><br>
+          for some paramter gamma. In this section, we will use gamma = 7. During each step, we will iteratively denoise the image according to this noise estimate. 
+          <br><br>
+          Below are the images generated with CFG upsampled to 256x256 using seeds 831 and 699. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/1_6oupsampled.jpg">
+            <figcaption>Sampled images using CFG and Seed = 831</figcaption>
+        </figure>
+      </div>
+
+     <div class = "row">
+        <figure>
+            <img src = "media/1_6upsampled.jpg">
+            <figcaption>Sampled images using CFG and Seed = 699</figcaption>
+        </figure>
+    </div>
+
+      <p>
+          We can see that these images are much more realistic and higher quality than the non-CFG images.
+      </p>
+
+      <h3>Part 1.7: Image to Image Translation</h3>
+      <p>
+          In this section, we will use the CFG techniques we developed to allow the diffusion model to make small edits to images. To accomplish this, we take a clean image, noise it lightly, and have the model denoise it. The result is an image that is similar to the original image, but with some changes as the diffusion model sees fit. We will guide the denoising with the prompt "a high quality image", which provides the model with lots of freedom to edit the image as it sees fit. We will run the algorithm with varying levels of noising, starting at i_start = 1, 3, 5, 7, 10, 20. These values correspond to starting t values of t = 960, 900, 840, 780, 690, 390. I'll apply this algorithm to the test image, as well as two images of my choosing. 
+      </p>
+
+      <div class = "row">
+         <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Starting Clean Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/1_7_0ims.jpg">
+            <figcaption>Translation of Campanile Image at Decreasing i_start values</figcaption>
+        </figure>
+       <figure>
+            <img src = "media/1_7_0imsUp.jpg">
+            <figcaption>Translation of Campanile Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+     <div class = "row">
+         <figure>
+            <img src = "media/wbp.jpg">
+            <figcaption>Starting Clean Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/1-7-0-wbp-ims.jpg">
+            <figcaption>Translation of Whistler Bike Park Image at Decreasing i_start values</figcaption>
+        </figure>
+       <figure>
+            <img src = "media/1-7-0-wbp-ims-Up.jpg">
+            <figcaption>Translation of Whistler Bike Park Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+       <div class = "row">
+         <figure>
+            <img src = "media/NAF.jpg">
+            <figcaption>Starting Clean Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/1-7-0-naf-ims.jpg">
+            <figcaption>Translation of North Arm Farm Image at Decreasing i_start values</figcaption>
+        </figure>
+       <figure>
+            <img src = "media/1-7-0-naf-ims-Up.jpg">
+            <figcaption>Translation of North Arm Farm Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          As expected, more noised input images result in translated images less similar to the original image. Utlimately, this algorithm can result in some interesting output images. Additionally, the second-to-right translated image of the North Arm Farm image provides insight into the workings of the diffusion model and its training dataset. Those familiar with the area or Instagram may notice that the translated image is nearly identical to the view of Moraine Lake in Banff, Alberta from a location that is extremely popular with tourists and influencers. I took the original image myself in Pemberton, BC, which is 300 miles from Moraine Lake and in a different mountain range. Despite these differences, the model decided to denoise the image to one of (essentially) Moraine Lake. This is the first time I have been able to identify a diffusion model output that is actually just a recreation of some real place. I hypothesize that there are so many images of this view of Moraine Lake on the internet--which become part of the Diffusion model training data--due to the horde of influencers that travel there that the model has a great perpensity to recreate this one exact solution when given an input image remotely similar. 
+          <br><br>
+          For comparison, I will show a side-by-side comparison of this diffusion model output with a real image of Moraine Lake. 
+          Notice the high number of corresponding features.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/moraineLake1.jpg">
+            <figcaption>Real Image of Moraine Lake</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/moraineLake2.jpg">
+            <figcaption>Real Image of Moraine Lake</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/1-7-0-naf-imUp10.jpg">
+            <figcaption>Diffusion model Translation of North Arm Farm Image</figcaption>
+        </figure>
+      </div>
+
+      <h4>Part 1.7.1: Editing Hand-Drawn and Web Images</h4>
+
+        <p>
+            We can apply this same technique to images we draw by hand or source from the web. I'll show the output of this method using 2 images drawn by hand and one sourced from the internet. 
+        </p>
+      <div class = "row">
+        <figure>
+            <img src = "media/web_im.png">
+            <figcaption>Web Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/171ims.jpg">
+            <figcaption>Edit of Web Image at Decreasing i_start values</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/171Upims.jpg">
+            <figcaption>Edit of Web Image at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+       <div class = "row">
+        <figure>
+            <img src = "media/171drawnIm1.jpg">
+            <figcaption>My Drawing</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/171d1ims.jpg">
+            <figcaption>Edit of My Drawing at Decreasing i_start values</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/171d1Upims.jpg">
+            <figcaption>Edit of My Drawing at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+       <div class = "row">
+        <figure>
+            <img src = "media/171drawnIm2.jpg">
+            <figcaption>My Drawing</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/171d2ims.jpg">
+            <figcaption>Edit of My Drawing at Decreasing i_start values</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/171d2Upims.jpg">
+            <figcaption>Edit of My Drawing at Decreasing i_start values (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+    <h4>Part 1.7.2: Inpainting</h4>
+      <p>
+          We can extend the methods we used above to only apply edits to certain parts of an image. To accomplish this, we will define a mask where the diffusion model can only edit areas where the mask == 1. Areas that have mask == 0 will not be edited. We will enforce this condition at each step, so the model will have to adjust its changes so that they make sense in context with the rest of the model. We will perform this with the campanile and 2 images of my choosing. Note that upsampling will allow the model to change the entirety of image. I am using seed 831. 
+      </p>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Input Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172camp.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172campUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+      
+       <div class = "row">
+        <figure>
+            <img src = "media/wbp.jpg">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/172maskWbp.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172paintWbp.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172paintWbpUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/web_im.png">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/172maskWeb2.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172webPaint2.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172webPaint2Up.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <h4>Part 1.7.3: Text-Conditional Image-to-image Translation</h4>
+
+      <p>
+          For this section, we will perform a similar routine as in 1.7.3 with the addition of using a different text prompt to guide the changes we desire. I will use a different prompt with each of the test image, and 2 of my own images. 
+          <br><br>
+          First, we will look at the campanile with the prompt "a man with a hat".
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Input Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173campHatMan.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173campHatManUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          Next, I will edit the web image with the prompt "a photo of a dog".
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/web_im.png">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/173webMask4.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173web.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173webUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          Finally, I will edit an image of our own lecture hall in Li Ka Shing Center 245. However, at the lectuerer stand is a generation with the prompt "a photo of a hipster barista" in the place than Professor Efros!
+      </p>
+     <div class = "row">
+        <figure>
+            <img src = "media/LKS.png">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/173maskLKS.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173LKS.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173LKSUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <h3>Part 1.8: Visual Anagrams</h3>
+
+      <p>
+          Now we will use our expertise in working with Diffusion to generate a visual anagrams. Visual anagrams are an image that will appear as different coherent images when viewed normally and upside-down. To do this, we will need two different prompts--one for the desired outcome at each image orientation. At each iteration, we obtain the noise estimate for the rightside-up prompt on the image and the noise estimate for the upside-down prompt on the flipped upside-down image. 
+          <br>
+          We then perform CFG on both individually, flip the upside-down noise estimate, and average the two to get our noise estimate. 
+          <br><br>
+          First, let's look at a result of producing an anagram with the rightways-up prompt "an oil painting of people around a campfire" and the upside down prompt "an old painting of an old man".
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/18fire4.jpg">
+            <figcaption>People Around a Campfire</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18oldMan.jpg">
+              <figcaption>Flipped image of an Old Man</figcaption>
+          </figure>
+    
+      </div>
+
+      <p>
+          Next, we will use the rightways-up prompt "a photo of a hipster barista" and the upside down prompt "a photo of a dog". I will include two different generations of the anagram.
+      </p>
+  <div class = "row">
+        <figure>
+            <img src = "media/18barista4.jpg">
+            <figcaption>A Hipster Barista</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18dog4.jpg">
+              <figcaption>A Dog</figcaption>
+          </figure>
+    
+      </div>
+       <div class = "row">
+        <figure>
+            <img src = "media/18barista6.jpg">
+            <figcaption>A Hipster Barista</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18dog6.jpg">
+              <figcaption>A Dog</figcaption>
+          </figure>
+    
+      </div>
+
+      <p>
+          Next, we will use the rightways-up prompt "an oil painting of a snowy mountain village" and the upside down prompt "a photo of the amalfi cost". Note that the prompt is "amalfi cost" rather than "amalfi coast" due to a typo in the starter code. Remarkably, the prompt embeddings are robust to these errors, so the images still come out well.  
+      </p>
+    <div class = "row">
+        <figure>
+            <img src = "media/18snowyVillage3.jpg">
+            <figcaption>A Snowy Mountain Village</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18amalfi3.jpg">
+              <figcaption>The Amalfi Coast</figcaption>
+          </figure>
+    
+      </div>
+      
+      <h3>Part 1.9: Hybrid Images</h3>
+      
+      <p>
+          We will now work to create hybrid images using diffusion. A hybrid image is an image that looks different at different viewing distances. In other words, the image will appear to be of different objects when viewed up close and when viewed from far away. We can achieve this by manipulating the frequencies of the image. Viewers will notice primarily the low frequencies from long distances and the high frequencies from short distances. We can thus craft the image's high and low frequencies separately during diffusion iterations to drive the output towards different prompts in the high and low frequencies. To do so, we will have 2 prompts, one for each frequency range. First, we will generate the CFG noise estimates for each prompt. Then we will high pass and low pass filter the respective prompt noise estimates. The sum of the filtered noise estimates will be the noise estimate that we use. 
+          <br><br>
+          Below is the output following the prompt "a lithograph of a skull" from far away and "a lithograph of waterfalls" from close up. Look at the image from different distances to discern the effect.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/19skullWaterfalls.jpg">
+            <figcaption>Skull from Far Away and Waterfalls from Close Up</figcaption>
+        </figure>
+
+      </div>
+<p>
+    Next I'll show two outputs following the prompt "a pencil" from far away and "a rocket ship" from close up.
+</p>
+     <div class = "row">
+        <figure>
+            <img src = "media/19pencilRocket.jpg">
+            <figcaption>Pencil from Far Away and Rocket from Close Up</figcaption>
+        </figure>
+         <figure>
+            <img src = "media/19pencilRocket2.jpg">
+            <figcaption>Pencil from Far Away and Rocket from Close Up</figcaption>
+        </figure>
+
+      </div>
+
+      <p>
+          Next I'll show three outputs following the prompt "a lithograph of a skull" from far away and "a photo of a hipster barista" from close up.
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/19hipsterSkull6.jpg">
+            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+        </figure>
+         <figure>
+            <img src = "media/19hipsterSkull4.jpg">
+            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/19hipsterSkull3.jpg">
+            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+        </figure>
+
+      </div>
+      
+  </body>
+</html>
