@@ -498,6 +498,79 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Inpainted Image (Upsampled)</figcaption>
         </figure>
       </div>
+
+      <h4>Part 1.7.3: Text-Conditional Image-to-image Translation</h4>
+
+      <p>
+          For this section, we will perform a similar routine as in 1.7.3 with the addition of using a different text prompt to guide the changes we desire. I will use a different prompt with each of the test image, and 2 of my own images. 
+          <br><br>
+          First, we will look at the campanile with the prompt "a man with a hat".
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Input Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173campHatMan.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173campHatManUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          Next, I will edit the web image with the prompt "a photo of a dog".
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/web_im.png">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/173webMask4.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173web.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173webUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          Finally, I will edit an image of our own lecture hall in Li Ka Shing Center 245. However, at the lectuerer stand is a generation with the prompt "a photo of a hipster barista" in the place than Professor Efros!
+      </p>
+     <div class = "row">
+        <figure>
+            <img src = "media/LKS.png">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/173maskLKS.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173LKS.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/173LKSUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      
+      
+
+    
       
   </body>
 </html>
