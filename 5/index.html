@@ -567,6 +567,74 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
         </figure>
       </div>
 
+      <h3>Part 1.8: Visual Anagrams</h3>
+
+      <p>
+          Now we will use our expertise in working with Diffusion to generate a visual anagrams. Visual anagrams are an image that will appear as different coherent images when viewed normally and upside-down. To do this, we will need two different prompts--one for the desired outcome at each image orientation. At each iteration, we obtain the noise estimate for the rightside-up prompt on the image and the noise estimate for the upside-down prompt on the flipped upside-down image. 
+          <br>
+          We then perform CFG on both individually, flip the upside-down noise estimate, and average the two to get our noise estimate. 
+          <br><br>
+          First, let's look at a result of producing an anagram with the rightways-up prompt "an oil painting of people around a campfire" and the upside down prompt "an old painting of an old man".
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/18fire4.jpg">
+            <figcaption>People Around a Campfire</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18oldMan.jpg">
+              <figcaption>Flipped image of an Old Man</figcaption>
+          </figure>
+    
+      </div>
+
+      <p>
+          Next, we will use the rightways-up prompt "a photo of a hipster barista" and the upside down prompt "a photo of a dog". I will include two different generations of the anagram.
+      </p>
+  <div class = "row">
+        <figure>
+            <img src = "media/18barista4.jpg">
+            <figcaption>A Hipster Barista</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18dog4.jpg">
+              <figcaption>A Dog</figcaption>
+          </figure>
+    
+      </div>
+       <div class = "row">
+        <figure>
+            <img src = "media/18barista6.jpg">
+            <figcaption>A Hipster Barista</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18dog6.jpg">
+              <figcaption>A Dog</figcaption>
+          </figure>
+    
+      </div>
+
+      <p>
+          Next, we will use the rightways-up prompt "an oil painting of a snowy mountain village" and the upside down prompt "a photo of the amalfi cost". Note that the prompt is "amalfi cost" rather than "amalfi coast" due to a typo in the starter code. Remarkably, the prompt embeddings are robust to these errors, so the images still come out well.  
+      </p>
+    <div class = "row">
+        <figure>
+            <img src = "media/18snowyVillage3.jpg">
+            <figcaption>A Snowy Mountain Village</figcaption>
+        </figure>
+
+          <figure>
+              <img src = "media/18amalfi3.jpg">
+              <figcaption>The Amalfi Coast</figcaption>
+          </figure>
+    
+      </div>
+      
+      
       
       
 
