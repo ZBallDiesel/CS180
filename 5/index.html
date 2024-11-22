@@ -737,6 +737,57 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Out of Distribution Test Images</figcaption>
         </figure>
         </div>
-      
+
+              <h3>Part 2</h3>
+              <p>
+                  Now we have a simple Unet denoiser working, so let's turn to more advanced applications. Here I will implement a diffusion model for MNIST digits with time conditioning and, later, class conditioning. My work in Part B is guided by the <a href="https://arxiv.org/abs/2006.11239">DDPM</a> paper. Now, the goal of our model is to transform an input of pure noise into a realistic MNIST output using iterative denoising (aka diffusion). Thus, we will know have the model predict the added noise rather than the output image. We will apply iterative denoising according to the same equation given above:
+              </p>
+    <div class = "row">
+
+        <figure>
+            <img src = "media/equation.png">
+        </figure>
+    </div>
+
+              <p>
+                  This model will use T = 300 denoising steps with variance schedule linearly spaced between B_0 = 0.0001 and B_T = 0.02.
+              </p>
+
+              <h4>Part 2.1: Time Conditioning</h4>
+              <p>
+                  First we will add time conditioning to the Unet. This is simple addition implemented by the addition of two FCBlocks as described <a href = "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj5/partb.html">here</a>. 
+              </p>
+
+              <h5>Part 2.2: Training the Unet</h5>
+
+            <p>
+                With our new architecture, we must train the Unet. We are using MSE loss over the pixel values and hidden dimension D = 64. We will train the model over 20 epochs with an Adam optimizer with learning rate 0.001 and an exponential learning rate schedular with parameter gamma = 0.1^0.05. We can see the training loss below, where the model converges well to a loss similar to the staff solution.
+            </p>
+
+               <div class = "row">
+                <figure>
+                    <img src = "media/B22LossLogScale.png">
+                    <figcaption>Training Loss over 20 Epochs</figcaption>
+                </figure>
+               </div>
+
+              <h5>Sampling from the Unet</h5>
+              <p>
+                  We can observe the results of the time-conditioned Unet after 5 and 20 epochs of training. 
+              </p>
+
+              <div class = "row">
+                <figure>
+                    <img src = "media/B23after5.jpg">
+                    <figcaption>Unet Samples after 5 training epochs</figcaption>
+                </figure>
+                  <figure>
+                    <img src = "media/B23after20.jpg">
+                    <figcaption>Unet Samples after 20 training epochs</figcaption>
+                </figure>
+              </div>
+
+              
+              
   </body>
 </html>
