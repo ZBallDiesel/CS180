@@ -669,6 +669,172 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
         </figure>
 
       </div>
-      
+
+
+      <h2>Part B</h2>
+
+        <p>
+            Now we will train our own diffusion model to generate images based on the MNIST dataset. 
+        </p>
+
+      <h3>Part 1: Training a UNet Denoiser</h3>
+
+      <p>
+          We will begin by training a UNet to denoise MNIST digits.  To do so, we will generate z = x + sigma*eps, where x is the clean MNIST digit, 0 <= sigma <= 1, eps ~ N(0, I), and z is the noised MNIST digit. In this section, we are training the UNet to predict the clean digit itself. During training, x is thus the target and z is the UNet input. The loss is the MSE over image pixels. Further information on the UNet architecture is available <a href = "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj5/partb.html">here</a>.
+              <br><br>
+              To train the network, we are using sigma = 0.5, hidden dimension D = 128, optimized by Adam with step size 0.0001. 
+              <br>
+              Let's see how the model does. 
+      </p>
+
+              <h5>Part 1.2.1: Training</h5>
+              <p>
+                  Let's inspect the training process. The plot below shows examples of noised digits for different sigma values. Each row is a different example from the MNIST dataset, and each column corresponds with a sigma = 0, 0.2, 0.4, 0.5, 0.6, 0.8, 1 increasing left to right. The loss plot is also pictured below.
+              </p>
+
+            <div class = "row">
+                <figure>
+                    <img src = "media/B121imsNoisedns.jpg">
+                    <figcaption>Noised Images for sigma = 0, 0.2, 0.4, 0.5, 0.6, 0.8, 1 </figcaption>
+
+                </figure>
+            </div>
+              
+              <div class = "row">
+                <figure>
+                    <img src = "media/B121LossLogScale.png">
+                    <figcaption>Training Loss over 5 Epochs</figcaption>
+                </figure>
+
+              </div>
+              <p>
+                  We can see that the loss converged to a small amount consistent with the staff solution. 
+              </p>
+             
+              <p>
+                  Below are examples of the UNet's performance after 1 and 5 training epochs. The left column is the original image, the middle column is the noised image with sigma = 0.5, and the right column is the denoised UNet output. Note that the colors are duller due to image processing during the download process rather than from the UNet. 
+              </p>
+              <div class = "row">
+                <figure>
+                    <img src = "media/after1epochIms.jpg">
+                    <figcaption>Test images Denoised after 1 training epoch<br>
+                    Left column is original image, <br> middle column is noised image, <br> right column is denoised image</figcaption>
+                </figure>
+                  <figure>
+                    <img src = "media/after5epochIms.jpg">
+                    <figcaption>Test images Denoised after 5 training epochs<br>
+                    Left column is original image, <br> middle column is noised image, <br> right column is denoised image</figcaption>
+                </figure>
+              </div>
+
+               <h5>Part 1.2.2: Out of Distribution Testing</h5>
+              <p>
+                  The Unet was trained with sigma = 0.5. What will happen if it is asked to denoise images noised by different sigma values? As it turns out, the Unet performs well with Out of Distribution noised images. Below we noise the same image with each sigma in [0, 0.2, 0.4, 0.5, 0.6, 0.8, 1] and witness the model's output. The top row is the noised image and the bottom row is the Unet output. Each column refers to an increased sigma value (noise level). 
+              </p>
+        <div class = "row">
+        <figure>
+            <img src = "media/B121imsOOB.jpg">
+            <figcaption>Out of Distribution Test Images</figcaption>
+        </figure>
+        </div>
+
+              <h3>Part 2</h3>
+              <p>
+                  Now we have a simple Unet denoiser working, so let's turn to more advanced applications. Here I will implement a diffusion model for MNIST digits with time conditioning and, later, class conditioning. My work in Part B is guided by the <a href="https://arxiv.org/abs/2006.11239">DDPM</a> paper. Now, the goal of our model is to transform an input of pure noise into a realistic MNIST output using iterative denoising (aka diffusion). Thus, we will know have the model predict the added noise rather than the output image. We will apply iterative denoising according to the same equation given above:
+              </p>
+    <div class = "row">
+
+        <figure>
+            <img src = "media/equation.png">
+        </figure>
+    </div>
+
+              <p>
+                  This model will use T = 300 denoising steps with variance schedule linearly spaced between B_0 = 0.0001 and B_T = 0.02.
+              </p>
+
+              <h4>Part 2.1: Time Conditioning</h4>
+              <p>
+                  First we will add time conditioning to the Unet. This is simple addition implemented by the addition of two FCBlocks as described <a href = "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj5/partb.html">here</a>. 
+              </p>
+
+              <h5>Part 2.2: Training the Unet</h5>
+
+            <p>
+                With our new architecture, we must train the Unet. We are using MSE loss over the pixel values and hidden dimension D = 64. We will train the model over 20 epochs with an Adam optimizer with learning rate 0.001 and an exponential learning rate schedular with parameter gamma = 0.1^0.05. We can see the training loss below, where the model converges well to a loss similar to the staff solution.
+            </p>
+
+               <div class = "row">
+                <figure>
+                    <img src = "media/B22LossLogScale.png">
+                    <figcaption>Training Loss over 20 Epochs</figcaption>
+                </figure>
+               </div>
+
+              <h5>Sampling from the Unet</h5>
+              <p>
+                  We can observe the results of the time-conditioned Unet after 5 and 20 epochs of training. 
+              </p>
+
+              <div class = "row">
+                <figure>
+                    <img src = "media/B23after5.jpg">
+                    <figcaption>Unet Samples after 5 training epochs</figcaption>
+                </figure>
+                  <figure>
+                    <img src = "media/B23after20.jpg">
+                    <figcaption>Unet Samples after 20 training epochs</figcaption>
+                </figure>
+              </div>
+
+              <h3>Part 2.4: Adding Class-Conditioning</h3>
+              <p>
+                  We can see above that the class-unconditioned Unet provides decent results that lack in realism. Much of the issue is that the output appears to be "in-between" different digit values. This makes sense because the Unet does not have direction of what outcome is desired. In this section, we will add class-conditioning to the Unet. When training, we will provide the class of the image, so the network can learn what shapes correspond to certain digits. <br>
+                  When training, we can provide the desired output class to guide the output to a more certain and realistic outcome. 
+                  <br><br>
+                  To achieve this result, we will add 2 more FCBlocks to the network that multiply various layers throughout the network based on one-hot encoding class vectors. We will train the network with dropout on class-conditioning with probability 0.1 to ensure the network still works for unconditional output. This allows us to use CFG to improve the generated images. 
+                  <br><br>
+                  The rest of the optimization steps are the same as in time-conditioned Unet training. Below let's take a look at the training loss over the 20 epochs. As you can see, the loss converges to a small amount consistent with the staff solution.
+              </p>
+
+              <div class = "row">
+                <figure>
+                    <img src = "media/B25Loss.png">
+                    <figcaption>Training Loss over 20 Epochs</figcaption>
+                </figure>
+               </div>
+
+              <h4>Part 2.5: Sampled from Class-Conditioned Unet</h4>
+              <p>
+                  Let's observe the results of the Class-conditioned Unet after 5 and 20 training epochs. 
+              </p>
+
+               <div class = "row">
+                <figure>
+                    <img src = "media/B25after5.jpg">
+                    <figcaption>Unet Samples after 5 training epochs</figcaption>
+                </figure>
+                  <figure>
+                    <img src = "media/B25after20.jpg">
+                    <figcaption>Unet Samples after 20 training epochs</figcaption>
+                </figure>
+              </div>
+              <h5>Interpretation</h5>
+              <p>
+                  As we can see, the class conditioned Unet generates consistently high quality output that matches the desired class. For reference, the Unet was prompted to generate the digits 0-9 left to right in each row. The Unet acheives this goal very nicely. 
+              </p>
+
+              <h3>Final Thoughts</h3>
+              <p>
+                  This project has been exciting and a great learning experience. Diffusion models are fascinating, and this project has allowed me to get a better idea of their inner workings. I still find it crazy that denoising noise can lead to realistic interesting output images. The articles linked in the project prompt have been interesting reads. For example, I am learning about Runge-Kutta methods in another class, so it was very interesting to learn about the connections of diffusion models to Stochastic Differential Equations solved with Runge-Kutta methods. 
+              </p>
+
+              <h4>Credits: </h4>
+    <p>
+        I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from  https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
+        
+    </p>
+
+              
   </body>
 </html>
