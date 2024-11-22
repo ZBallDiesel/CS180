@@ -93,25 +93,11 @@
             <figcaption>Generated Output of Stage 2 with 50 Steps in both Stage 1 and Stage 2</figcaption>
         </figure>
 
-          <figure>
-            <img src = "media/im50StepSmall.jpg">
-            <figcaption>Generated Output of Stage 1 with 50 Steps in Stage 1 </figcaption>
-        </figure>
+          
 
       </div>
 
-       <div class = "row">
-        <figure>
-            <img src = "media/im20Step.jpg">
-            <figcaption>Generated Output of Stage 2 with 20 Steps in both Stage 1 and Stage 2</figcaption>
-        </figure>
-
-          <figure>
-            <img src = "media/im20StepSmall.jpg">
-            <figcaption>Generated Output of Stage 1 with 20 Steps in Stage 1 </figcaption>
-        </figure>
-
-      </div>
+       
  <div class = "row">
         <figure>
             <img src = "media/im20_5Step.jpg">
@@ -141,7 +127,7 @@
 <h5>Interpretation</h5>
 
       <p>
-          Here we try a variety of combinations of 5, 20, 50 steps in stages 1 and 2. In both stages, I notice a large increase in quality moving from 5 to 20 steps and little quality increase moving from 20 to 50 steps. I also noticed that each stage seems to perform a different task. I infer that stage 1 is reposible for generating the "thoughtful" information content - ie the general content of the image and stage 2 performs upsampling that increases the image size while keeping the visual content of the image highly similar to the output of stage 1. In particular, we can see that increases in stage 1 number of steps increases the accuracy and detail in the image's visual content while the number of steps in stage 2 controls the pixel quality and sharpness of its output. 
+          Here we try a variety of combinations of 5, 20, 50 steps in stages 1 and 2. In both stages, I notice a large increase in quality moving from 5 to 20 steps and little quality increase moving from 20 to 50 steps. I also noticed that each stage seems to perform a different task. I infer that stage 1 is responsible for generating the "thoughtful" information content - ie the general content of the image and stage 2 performs upsampling that increases the image size while keeping the visual content of the image highly similar to the output of stage 1. In particular, we can see that increases in stage 1 number of steps increases the accuracy and detail in the image's visual content while the number of steps in stage 2 controls the pixel quality and sharpness of its output. 
           <br><br>
           For example, inspect the images that result when there are 20 steps in stage 1 and 5 steps in stage 2. These images have stage 1 output that are consistent to the prompt and are feature high qaulity details while the stage 2 output has odd pixels details with poor image quality.
           <br><br>
@@ -162,7 +148,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
 <div class = "row">
 
     <figure>
-        <img src = "media/equation.jpg">
+        <img src = "media/equation.png">
     </figure>
 </div>
 
@@ -206,8 +192,8 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <div class  = "row">
         <figure>
             <img src = "media/1_3results.jpg">
-            <figcaption>UNet One Step Denoising Results 
-                Columns are as follows: Original Image, Noisy Image, Noise Estimate, DeNoised Image
+            <figcaption>UNet One Step Denoising Results <br>
+                Columns are as follows: Original Image, Noisy Image, Noise Estimate, DeNoised Image <br>
             The rows are t = 250, 500, 750 descending</figcaption>
         </figure>
       </div>
@@ -372,7 +358,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       </div>
 
       <p>
-          As expected, more noised input images result in translated images less similar to the original image. Utlimately, this algorithm can result in some interesting output images. Additionally, the second-to-right translated image of the North Arm Farm image provides insight into the workings of the diffusion model and its training dataset. Those familiar with the area or Instagram may notice that the translated image is nearly identical to the view of Moraine Lake in Banff, Alberta from a location that is extremely popular with tourists and influencers. I took the original image myself in Pemberton, BC, which is 300 miles from Moraine Lake and in a different mountain range. Despite these differences, the model decided to denoise the image to one of (essentially) Moraine Lake. This is the first time I have been able to identify a diffusion model output that is actually just a recreation of some real place. I hypothesize that there are so many images of this view of Moraine Lake on the internet--which become part of the Diffusion model training data--due to the horde of influencers that travel there that the model has a great perpensity to recreate this one exact solution when given an input image remotely similar. 
+          As expected, more noised input images result in translated images less similar to the original image. Utlimately, this algorithm can result in some interesting output images. Additionally, the second-to-right translated image of the North Arm Farm image provides insight into the workings of the diffusion model and its training dataset. Those familiar with the area or Instagram may notice that the translated image is nearly identical to the view of Moraine Lake in Banff, Alberta from a location that is extremely popular with tourists and influencers. I took the original image myself in Pemberton, BC, which is 300 miles from Moraine Lake and is in a different mountain range. Despite these differences, the model decided to denoise the image to one of (essentially) Moraine Lake. This is the first time I have been able to identify a diffusion model output that is actually just a recreation of some real place. I hypothesize that there are so many images of this view of Moraine Lake on the internet--which become part of the Diffusion model training data--due to the horde of influencers that travel there. As a result, the model has a great perpensity to recreate this one exact solution when given an input image remotely similar. 
           <br><br>
           For comparison, I will show a side-by-side comparison of this diffusion model output with a real image of Moraine Lake. 
           Notice the high number of corresponding features.
@@ -467,7 +453,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Input Image</figcaption>
         </figure>
         <figure>
-            <img src = "media/172maskWbp.jpg">
+            <img src = "media/172maskWbp.jpg" border = "1">
             <figcaption>Mask</figcaption>
         </figure>
           <figure>
@@ -486,7 +472,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Input Image</figcaption>
         </figure>
         <figure>
-            <img src = "media/172maskWeb2.jpg">
+            <img src = "media/172maskWeb2.jpg" border = "1">
             <figcaption>Mask</figcaption>
         </figure>
           <figure>
@@ -532,7 +518,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Input Image</figcaption>
         </figure>
         <figure>
-            <img src = "media/173webMask4.jpg">
+            <img src = "media/173webMask4.jpg" border = "1">
             <figcaption>Mask</figcaption>
         </figure>
           <figure>
@@ -554,7 +540,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Input Image</figcaption>
         </figure>
         <figure>
-            <img src = "media/173maskLKS.jpg">
+            <img src = "media/173maskLKS.jpg" border = "1">
             <figcaption>Mask</figcaption>
         </figure>
           <figure>
@@ -585,7 +571,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
 
           <figure>
               <img src = "media/18oldMan.jpg">
-              <figcaption>Flipped image of an Old Man</figcaption>
+              <figcaption>Flipped Image of an Old Man</figcaption>
           </figure>
     
       </div>
@@ -601,7 +587,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
 
           <figure>
               <img src = "media/18dog4.jpg">
-              <figcaption>A Dog</figcaption>
+              <figcaption>A Dog Photo</figcaption>
           </figure>
     
       </div>
@@ -613,7 +599,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
 
           <figure>
               <img src = "media/18dog6.jpg">
-              <figcaption>A Dog</figcaption>
+              <figcaption>A Dog Photo</figcaption>
           </figure>
     
       </div>
@@ -624,12 +610,12 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
     <div class = "row">
         <figure>
             <img src = "media/18snowyVillage3.jpg">
-            <figcaption>A Snowy Mountain Village</figcaption>
+            <figcaption>Snowy Village</figcaption>
         </figure>
 
           <figure>
               <img src = "media/18amalfi3.jpg">
-              <figcaption>The Amalfi Coast</figcaption>
+              <figcaption> Amalfi Coast</figcaption>
           </figure>
     
       </div>
@@ -645,7 +631,7 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <div class = "row">
         <figure>
             <img src = "media/19skullWaterfalls.jpg">
-            <figcaption>Skull from Far Away and Waterfalls from Close Up</figcaption>
+            <figcaption>Skull/Waterfalls</figcaption>
         </figure>
 
       </div>
@@ -655,11 +641,11 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
      <div class = "row">
         <figure>
             <img src = "media/19pencilRocket.jpg">
-            <figcaption>Pencil from Far Away and Rocket from Close Up</figcaption>
+            <figcaption>Pencil/Rocket Ship</figcaption>
         </figure>
          <figure>
             <img src = "media/19pencilRocket2.jpg">
-            <figcaption>Pencil from Far Away and Rocket from Close Up</figcaption>
+            <figcaption>Pencil/Rocket Ship</figcaption>
         </figure>
 
       </div>
@@ -671,15 +657,15 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
       <div class = "row">
         <figure>
             <img src = "media/19hipsterSkull6.jpg">
-            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+            <figcaption>Skull/Hipster Barista </figcaption>
         </figure>
          <figure>
             <img src = "media/19hipsterSkull4.jpg">
-            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+            <figcaption>Skull/Hipster Barista</figcaption>
         </figure>
           <figure>
             <img src = "media/19hipsterSkull3.jpg">
-            <figcaption>Skull from Far Away and Hipster Barista from Close Up</figcaption>
+            <figcaption>Skull/Hipster Barista</figcaption>
         </figure>
 
       </div>
