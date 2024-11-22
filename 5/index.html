@@ -440,6 +440,64 @@ The campanile will be x_0, the clean image at time 0. At time t, the noised imag
             <figcaption>Edit of My Drawing at Decreasing i_start values (Upsampled)</figcaption>
         </figure>
       </div>
+
+    <h4>Part 1.7.2: Inpainting</h4>
+      <p>
+          We can extend the methods we used above to only apply edits to certain parts of an image. To accomplish this, we will define a mask where the diffusion model can only edit areas where the mask == 1. Areas that have mask == 0 will not be edited. We will enforce this condition at each step, so the model will have to adjust its changes so that they make sense in context with the rest of the model. We will perform this with the campanile and 2 images of my choosing. Note that upsampling will allow the model to change the entirety of image. I am using seed 831. 
+      </p>
+
+       <div class = "row">
+        <figure>
+            <img src = "media/campanile.jpg">
+            <figcaption>Input Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172camp.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172campUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+      
+       <div class = "row">
+        <figure>
+            <img src = "media/wbp.jpg">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/172maskWbp.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172paintWbp.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172paintWbpUp.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/web_im.png">
+            <figcaption>Input Image</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/172maskWeb2.jpg">
+            <figcaption>Mask</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172webPaint2.jpg">
+            <figcaption>Inpainted Image</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/172webPaint2Up.jpg">
+            <figcaption>Inpainted Image (Upsampled)</figcaption>
+        </figure>
+      </div>
       
   </body>
 </html>
