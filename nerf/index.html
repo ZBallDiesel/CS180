@@ -43,7 +43,43 @@
     <a href = "../index.html"> My CS180 Personal Project Home Page </a>
     <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Introduction</h3>
+      <p>
+          In this project, I will build a Neural Radiance Field (NeRF) from scratch using PyTorch. A NeRF is a Machine Learning model that learns a scene--commonly of some object--using a variety of photos taken from various perspectives. Learning from these photos, NeRF allows us to simulate viewing the object from any perspective. For background information, consider reading the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>.
+      </p>
 
+      <h3>Part 1</h3>
+      <p>
+          In part 1, we will start with a simpler objective: learn a single photograph. While this alone is a rather silly task (we already know the photo after all), it is useful warm up for our later implmentation of a full NeRF. 
+          <br>
+          In this part, the model will learn to map pixel locations {u, v} to RGB values in the photo {r, g, b}. We will train the model for a particular photo. 
+      </p>
+
+      <h4>The Network</h4>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/mlp_img.jpg">
+            <figcaption>Network for Part 1</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/sinPE.png">
+            <figcaption>Sinusodial Positional Encoding</figcaption>
+        </figure>
+      </div>
+      
+      <p>
+          To accomplish part a, we will use a simple MLP model, as shown above, with sinusodial positional encoding As found in the original paper, NeRF without sinusodial positonal encoding will struggle to learn high frequency image components due to neural networks' preference to learn low frequency functions. Sinusodial positional encoding assists the network to learn high frequency components of the image, since it encode different frequencies in the pixel locations--information the network will use to learn higher frequency image changes. A higher L value will let the network learn higher frequencies and thus create sharper images. It is recommended to use L = 10; I will try using L = 5 and L = 10. We apply sinPE to the x and y coordinates separately. 
+          <br><br>
+          We will use the pixel locations and rgb values normalized to the interval [0, 1] for training and inference. After we use sinPE on the input coordinates, we will run the information through a fairly basic Multiple Layer Percpetron neural network with 4 linear layers and layer sizes shown above. Note that the final stage uses a sigmoid activation function in order to output rgb values in [0, 1] as desired. 
+          <br>
+          <br>
+          We will train the model on batches of 10000 randomly selected pixels for 1000 to 3000 iterations. I found that the model is close to fully converged after 1000 iterations, with little change occuring between 1000 and 3000 iterations. We will optimize the model using MSE loss and Adam optimization alogorithm. I tried step sizes of 0.01 and 0.001. 
+          <br><br>
+          In addition to training loss, another relevant metric of model performance is Peak Signal to Noise ratio (PSNR). With images normalized to [0, 1], there exists the relationship PSNR = 10 * log10(1/MSE). 
+      </p>
 
   </body>
 </html>
