@@ -44,12 +44,12 @@
     <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
     <h3>Introduction</h3>
       <p>
-          In this project, I will build a Neural Radiance Field (NeRF) from scratch using PyTorch. A NeRF is a Machine Learning model that learns a scene--commonly of some object--using a variety of photos taken from various perspectives. Learning from these photos, NeRF allows us to simulate viewing the object from any perspective. For background information, consider reading the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>.
+          In this project, I will build a Neural Radiance Field (NeRF) from scratch using PyTorch. A NeRF is a Machine Learning model that learns a scene--typically of some object--using a variety of photos taken from various perspectives. Learning from these photos, NeRF allows us to simulate viewing the object from any perspective. For background information, consider reading the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>.
       </p>
 
       <h3>Part 1</h3>
       <p>
-          In part 1, we will start with a simpler objective: learn a single photograph. While this alone is a rather silly task (we already know the photo after all), it is useful warm up for our later implmentation of a full NeRF. 
+          In part 1, we will start with a simpler objective: learn a single photograph. While this alone is a rather silly task (we already know the photo after all), it is a useful warm up for the later implmentation of a full NeRF. 
           <br>
           In this part, the model will learn to map pixel locations {u, v} to RGB values in the photo {r, g, b}. We will train the model for a particular photo. 
       </p>
@@ -66,14 +66,14 @@
       <div class = "row">
         <figure>
             <img src = "media/sinPE.png">
-            <figcaption>Sinusodial Positional Encoding</figcaption>
+            <figcaption>Sinusoidal Positional Encoding</figcaption>
         </figure>
       </div>
       
       <p>
-          To accomplish part a, we will use a simple MLP model, as shown above, with sinusodial positional encoding As found in the original paper, NeRF without sinusodial positonal encoding will struggle to learn high frequency image components due to neural networks' preference to learn low frequency functions. Sinusodial positional encoding assists the network to learn high frequency components of the image, since it encode different frequencies in the pixel locations--information the network will use to learn higher frequency image changes. A higher L value will let the network learn higher frequencies and thus create sharper images. It is recommended to use L = 10; I will try using L = 5 and L = 10. We apply sinPE to the x and y coordinates separately. 
+          To accomplish part a, we will use a simple MLP model, as shown above, with sinusoidal positional encoding. As found in the original paper, NeRF without sinusoidal positonal encoding will struggle to learn high frequency image components due to neural networks' preference to learn low frequency functions. Sinusoidal positional encoding assists the network to learn high frequency components of the image, since it encodes different frequencies in the pixel locations--information the network will use to learn higher frequency image changes. A higher L value will let the network learn higher frequencies and thus create sharper images. It is recommended to use L = 10; I will try using L = 5 and L = 10. I apply sinPE to the x and y coordinates separately. 
           <br><br>
-          We will use the pixel locations and rgb values normalized to the interval [0, 1] for training and inference. After we use sinPE on the input coordinates, we will run the information through a fairly basic Multiple Layer Percpetron neural network with 4 linear layers and layer sizes shown above. Note that the final stage uses a sigmoid activation function in order to output rgb values in [0, 1] as desired. 
+          We will use the pixel locations and rgb values normalized to the interval [0, 1] for training and inference. After we use sinPE on the input coordinates, we will run the information through a fairly basic Multiple Layer Perceptron neural network with 4 linear layers and layer sizes shown above. Note that the final stage uses a sigmoid activation function in order to output rgb values in [0, 1] as desired. 
           <br>
           <br>
           We will train the model on batches of 10000 randomly selected pixels for 1000 to 3000 iterations. I found that the model is close to fully converged after 1000 iterations, with little change occuring between 1000 and 3000 iterations. We will optimize the model using MSE loss and Adam optimization alogorithm. I tried learning rates of 0.01 and 0.001. 
@@ -116,7 +116,7 @@
       </div>
 
       <p>
-          As we can see, the model does a nice job of learning the fox image. It does contain the imperfections of the grid-like background and lack of detail on the fox's whiskers (which are very high frequency). 
+          As we can see, the model does a nice job of learning the fox image. It does contain the imperfections of grid-like aliasing in the background and a lack of detail on the fox's whiskers (which are very high frequency). 
           <br><br>
           Next, let's see what happens with hyperparameters L = 5 and lr = 0.01. (Decreasing L compared to the images above).
       </p>
@@ -151,10 +151,10 @@
       </div>
 
      <p>
-         The images learned with L = 5 are clearly worse than with L = 10. When compared to the images learned with L = 10, the images learned with L = 5 have blurry backgrounds, blurry fur patches, and are missing the fox's whiskers. As all of these issues follow from a lack of high frequency image components, it makes sense that these issues were created by a lower value of L. 
+         The images learned with L = 5 are clearly worse than with L = 10. When compared to the images learned with L = 10, the images learned with L = 5 have blurry backgrounds, blurry fur patches, and are missing the fox's whiskers. As all of these issues follow from a lack of high frequency image components, it makes sense that these issues were created by a lower L value. 
 
          <br><br>
-         For the next hyperparameter combination to try, we know that L = 10 is a better value than L = 5. I have also noticed that the model converges very quickly. Perhaps it could be better to use a lower learning rate. Thus, lets try training the model with L = 10 and learning rate = 0.001 (instead of 0.01). 
+         For the next hyperparameter combination to try, we know that L = 10 is a better value than L = 5. In previous training, I have also noticed that the model converges very quickly. Thus, it could perhaps be better to use a lower learning rate. Thus, lets try training the model with L = 10 and learning rate = 0.001 (instead of 0.01). 
      </p>
 
       <div class = "row">
@@ -164,7 +164,7 @@
         </figure>
         <figure>
             <img src = "media/Unknown-12.png">
-            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+            <figcaption>Learned Image of Fox (lr = 0.001)</figcaption>
         </figure>
       </div>
  
@@ -215,7 +215,7 @@
 
       <h5>Another Image</h5>
       <p>
-          Here, I will train this network on a different image, the great reoccurding North Arm Farm image from Pemberton, BC. I will use the hyperparameters L = 10 and lr = 0.01. The results are below.
+          Now I will train the network on a different image, the great North Arm Farm image from Pemberton, BC that recurs throughout my projects. I will use the hyperparameters L = 10 and lr = 0.01. The results are below.
       </p>
 
       
@@ -232,7 +232,7 @@
 
       <div class = "row">
           <figure>
-              <img src = "media/p1NAFright.jpg">
+              <img src = "media/p1NAFRight.jpg">
               <figcaption>Learned Image of NAF Every 250 Iterations (0 , 250, ... , 1000)</figcaption>
           </figure>
       </div>
@@ -254,21 +254,21 @@
       <h4>Overview</h4>
 
       <p>
-          While the previous part yielded a neat result, the next section will be truly epic and has potential for useful applications. In this section, we will fit a full NeRF model based on the Lego scene in the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>. This task will be significantly more complicated, but will allow us to view the Lego from any perspective and ultimately create a 3d rendering of the Lego scene. 
+          While the previous part yielded a neat result, the next section will be truly epic and has the potential for useful applications. In this section, we will fit a full NeRF model based on the Lego scene in the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>. This task will be significantly more complicated than the last, but will allow us to view the Lego from any perspective and ultimately create a 3d rendering of the Lego scene. 
           <br><br>
           By using a dataset with calibrated cameras and known camera locations, we can train the NeRF based on the view of the Lego from various known perspectives. In this dataset, we have 100 training images, 10 validation images, and 60 test images. All images are from unique cameras in unique locations. 
       </p>
 
-      <h5>Part 2.1: Tranformaing Cameras into Rays</h5>
+      <h4>Part 2.1: Tranformaing Cameras into Rays</h4>
 
       <p>
           In this section, we develop the mathematical infrastructure necessary to generate rays from pixel and camera locations. Rays are integral to the operation of NeRF. 
           <br><br>
-          We begin by implementing a straight-forward batched matrix-vector multiplication function to transform coordinate spaces using various matrices. For example, we often use a camera to world (c2w) matrix, which gives the correspondance between points from in the camera coordinate system to the world coordinate system. The tranform function will append the input coordinates, apply the batch transformation for specified mappings such as c2w matrices, and return the new 3-dimensional coordinates.
+          We begin by implementing a straight-forward batched matrix-vector multiplication function to transform coordinate spaces using various matrices. For example, we often use a camera to world (c2w) matrix, which gives the correspondance between points from the camera coordinate system to the world coordinate system. The tranform function will append the bias term to the input coordinates, apply the batch transformation for specified mappings such as c2w matrices, and return the new 3-dimensional coordinates.
           <br><br>
-          It is important to know the calibration of the cameras. With that knowledge, we can determine the K matrix using the focal length and image size that, along with a distance parameter s, maps pixel coordinate to camera coordinates. pixel_to_camera applies this batched transformation using specified K and s values. This requires solving a system K @ camera_coords = s * pixels_augmented. Since K is only 3x3, I chose to invert K and use batched matrix-vector multiplication. K will always be invertible since det(K) = f_x * f_y > 0 due to the nature of cameras. 
+          It is important to know the calibration of the cameras. With that knowledge, we can determine the K matrix using the focal length and image size that, along with a distance parameter s, maps pixel coordinates to camera coordinates. pixel_to_camera applies this batched transformation using specified K and s values. This requires solving a system K @ camera_coords = s * pixels_augmented. Since K is only 3x3, I chose to invert K and use batched matrix-vector multiplication. K will always be invertible since det(K) = f_x * f_y > 0, since f_x, f_y > 0 due to the nature of cameras. These calculations are performed in pixel_to_camera().
           <br><br>
-        To complete our goal of determining image rays from pixel coordinates, we need a function to combine these previous function and calculate the resulting rays. Each perspective of an object can be described by an origin ray and a direction ray. The origin ray specifies the location of the camera in 3d world space, and the direction ray describes the direction the pixel is looking in. Based on the pixel locations, K matrix, and c2w matrix, pixel_to_ray will calculate a origin ray and normalized direction ray that describe the perspective of the pixel's view. The ray_o vector is defined by entries in the w2c matrix. With some block matrix algebra, we can see that this value is actually given as a vector entry in the c2w matrix. Since the c2w matrix is an argument to the function, this avoids unnecessary calculations. Math shown below. 
+        To complete our goal of determining image rays from pixel coordinates, we need a function to combine these previous functions and calculate the resulting rays. Each perspective of an object can be described by an origin ray and a direction ray. The origin ray specifies the location of the camera in 3d world space, and the direction ray describes the direction the pixel is looking in. Based on the pixel locations, K matrix, and c2w matrix, pixel_to_ray() will calculate the origin ray and normalized direction ray that describe the perspective of the pixel's view. The ray_o vector is defined by entries in the w2c matrix. With some block matrix algebra, we can see that this value is actually given as a vector entry in the c2w matrix. Since the c2w matrix is an argument to the function, we can use a r_o = a 3x1 chunk to c2w to avoid unnecessary calculations. Math shown below. 
          
           <br><br>
           These batched operations can be implemented using torch.matmul and various squeeze/unsqueeze manuevers. 
@@ -281,14 +281,14 @@
           </figure>
       </div>
 
-      <h5>Part 2.2: Sampling</h5>
+      <h4>Part 2.2: Sampling</h4>
       <p>
-          In this section, we define utility functions and a dataloader that are useful for NeRFs. The dataloader will take in a collection of images, c2w matrices, and K matrix. It is able to randomly sample N rays (with corresponding pixels) for use at each training iteration. We will typically use N = 10000 when training. I implement this by calculating all uv values, and rays in all training images upon initializing the dataset. During sampling, I select N rays and pixels at random. 
+          In this section, we define utility functions and a dataloader that are useful for NeRFs. The dataloader will take in a collection of images, c2w matrices, and K matrix. It is able to randomly sample N rays (with corresponding pixels) for use at each training iteration. We will typically use N = 10000 when training. I implement this by calculating all uv values and rays in all training images upon initializing the dataset. During sampling, I select N rays and pixels at random. 
           <br><br>
-          Since we want to incorporate depth information into the model, we will sample along the rays along various depths to get information for the NeRF to operate. We use implement this functionality in the the sample_along_rays function. It will return world coordinates at various equally spaced intervals along each ray. During training, we will add a small amount of noise to each interval length to prevent over-fitting. This can be implmented using torch.linspace and broadcasting. 
+          Since we want to incorporate depth information into the model, we will sample along the rays along various depths to get information for the NeRF to operate. We use implement this functionality in the sample_along_rays function. It will return world coordinates at various equally spaced intervals along each ray. During training, we will add a small amount of noise to each interval length to prevent over-fitting. This is implmented using torch.linspace and broadcasting. 
       </p>
 
-      <h5>Putting It Together: 2.3</h5>
+      <h4>Part 2.3: Putting It Together</h4>
 
       <p>
           With all of these functions, I will do some visualizations to check for bugs using the nifty Viser package and Viser Studio.
@@ -310,9 +310,9 @@
 
       <h4>Part 2.4: Creating the MLP</h4>
       <p>
-          In this section, we will build the MLP that underlies the NeRF process. Since this task is much more complicated than in part 1, we use a much deeper and more complex MLP. For full architecture, see the image below. This MLP will take in world coordinates (batched over each ray and samples along the ray) corresponding to the viewing location and batched direction rays corresponding to the direction we are looking in. With this information, the MLP will output rgb values for what can be seen and a density value that describes the transparency for each sample. 
+          In this section, we will build the MLP that underlies the NeRF process. Since this task is much more complicated than the task in part 1, we use a much deeper and more complex MLP. For full architectural details, see the image below. This MLP will take in world coordinates (batched over each ray and samples along the ray) corresponding to the viewing location and batched direction rays corresponding to the direction we are looking in. With this information, the MLP will output rgb values for what can be seen and a density value that describes the transparency for each sample. 
           <br><br>
-          This MLP also uses Sinusodial Positional Encoding on both the world coordinates and the directional rays. I use L = 10 for the world coordinates and L = 4 for the directional rays. After the encoding, the MLP uses a large number of linear layers with ReLU activation. As can be seen, the original encodings are concatened to the learned representations at various places throughout the learning process, which helps the model from "forgetting" about the input. As before, we use a sigmoid activation function on the last rgb output layer to enfore rgb values in [0, 1]. On the density output, the ReLU activation enforces the output to be positive. 
+          This MLP also uses Sinusodial Positional Encoding on both the world coordinates and the directional rays. I use L = 10 for the world coordinates and L = 4 for the directional rays. After the encoding, the MLP uses a large number of linear layers with ReLU activation. As can be seen, the original encodings are concatened to the learned representations at various places throughout the learning process, which helps the model from "forgetting" the input. As before, we use a sigmoid activation function on the last rgb output layer to map rgb values into [0, 1]. On the density output, the ReLU activation forces the output to be positive. 
       </p>
 
         <div class  = "row">
@@ -387,7 +387,9 @@
             <img src = "media/2nerfTrSample10000.jpg">
             <figcaption>NeRF output every 250 iterations (0, 250, ..., 10000)
             <br>
-            Note that most of the bottom row is empty</figcaption>
+            Note that most of the bottom row is empty
+            <br>
+            Successive Samples are shown in Row Major order</figcaption>
         </figure>
       </div>
 
@@ -406,9 +408,9 @@
       <h3>Bells and Whistles</h3>
       <h4>Depth Map</h4>
       <p>
-          The NeRF model we have already trained contains more capabilities than witnessed above. In the inference process, the model generates a density prediction for each sample along each ray. From these densities, we can recover an estimate of the depth along the scene. 
+          The NeRF model we have already trained contains more capabilities than just those witnessed above. In the inference process, the model generates a density prediction for each sample along each ray. From these densities, we can recover an estimate of the depth along the scene. 
           <br>
-          To do so, we will use only the density prediction from the MLP along with a modified volume rendering function. I implemented this in the functions depth_mapper and volrend_depth. depth_mapper() performs inference, and only differs from NeRF.sample() by calling volrend_depth rather than volrend. In volrend_depth, we do not use the rgb predicitons from the MLP. In the place of the rgb predictions, we use torch.linspace(1, 0, self.n_samples). This works since T_i * (1 - exp(sigma_i * delta_i) gives the probability that the ray terminates at sample i. Thus, the term forms a probability distribution over all i. Since we want the mapped depth to be bright (i.e. have high pixel values) in areas where the depth is low (i.e. where the ray terminates at a low i value) and darker as the ray terminates at further values (i.e. where the terminating i is large), we see that the weighting term (the linspace) here should be negatively correlated with i. Thus, the decreasing linear weighting given above fits the bill. It would be interesting to try a different depth map--perhaps one based on some characteristic of the derivation of the volume rendering distribution. If I had more time, I would like to try this. However, torch.linspace(1, 0, self.n_samples) provided satisfactory results. 
+          To do so, we will use only the density prediction from the MLP along with a modified volume rendering function. I implemented this in the functions depth_mapper and volrend_depth. depth_mapper() performs inference, and only differs from NeRF.sample() by calling volrend_depth rather than volrend. In volrend_depth, we do not use the rgb predicitons from the MLP. In the place of the rgb predictions, we use torch.linspace(1, 0, self.n_samples). This works since T_i * (1 - exp(sigma_i * delta_i) gives the probability that the ray terminates at sample i. Thus, the term forms a probability distribution over all i. Since we want the mapped depth to be bright (i.e. have high pixel values) in areas where the depth is low (i.e. where the ray terminates at a low i value) and darker as the ray terminates at further values (i.e. where the terminating i is large), we see that the weighting term (the linspace) here should be negatively correlated with i. Thus, the decreasing linear weighting given above fits the bill. It would be interesting to try a different depth map--perhaps one based on some characteristic of the derivation of the volume rendering distribution. If I had more time, I would like to try other rendering distributions. However, torch.linspace(1, 0, self.n_samples) provided satisfactory results. 
       </p>
 
       <h5>Result</h5>
