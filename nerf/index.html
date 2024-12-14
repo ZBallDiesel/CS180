@@ -369,7 +369,9 @@
           </figure>
           <figure>
               <img src = "media/nerfPsnr10000.png">
-              <figcaption>NeRF PSNR</figcaption>
+              <figcaption>NeRF PSNR
+                  <br>
+                Dashed Orange line denotes 23 dB PSNR </figcaption>
           </figure>
       </div>
 
@@ -386,6 +388,39 @@
             <figcaption>NeRF output every 250 iterations (0, 250, ..., 10000)
             <br>
             Note that most of the bottom row is empty</figcaption>
+        </figure>
+      </div>
+
+      <h5>Testing GIFs</h5>
+      <p>
+          This output is arguably the coolest part of this project. In this section, we used the trained NeRF to generate a GIF based on the cameras in the testing set. The test set cameras form a ring around the lego at an elevation somewhat above the object. We use the model's inference on each camera location to generate a sequence of images moving 360 degrees around the object. This sequence of images forms the GIF. The GIF was generated after training the model over 10000 iterations. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/spinning_legoMid10000.gif">
+            <figcaption>GIF Made from Lego Test set</figcaption>
+        </figure>
+      </div>
+
+      <h3>Bells and Whistles</h3>
+      <h4>Depth Map</h4>
+      <p>
+          The NeRF model we have already trained contains more capabilities than witnessed above. In the inference process, the model generates a density prediction for each sample along each ray. From these densities, we can recover an estimate of the depth along the scene. 
+          <br>
+          To do so, we will use only the density prediction from the MLP along with a modified volume rendering function. I implemented this in the functions depth_mapper and volrend_depth. depth_mapper() performs inference, and only differs from NeRF.sample() by calling volrend_depth rather than volrend. In volrend_depth, we do not use the rgb predicitons from the MLP. In the place of the rgb predictions, we use torch.linspace(1, 0, self.n_samples). This works since T_i * (1 - exp(sigma_i * delta_i) gives the probability that the ray terminates at sample i. Thus, the term forms a probability distribution over all i. Since we want the mapped depth to be bright (i.e. have high pixel values) in areas where the depth is low (i.e. where the ray terminates at a low i value) and darker as the ray terminates at further values (i.e. where the terminating i is large), we see that the weighting term (the linspace) here should be negatively correlated with i. Thus, the decreasing linear weighting given above fits the bill. It would be interesting to try a different depth map--perhaps one based on some characteristic of the derivation of the volume rendering distribution. If I had more time, I would like to try this. However, torch.linspace(1, 0, self.n_samples) provided satisfactory results. 
+      </p>
+
+      <h5>Result</h5>
+
+      <p>
+          Based on the same testing dataset used to make the GIF above, I use a similar method to create the GIF below showing a depth map of the scene. It also uses the NeRF model trained over 10000 iterations. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/depth_lego10000.gif">
+            <figcaption>Depth Map GIF Made from Lego Test set</figcaption>
         </figure>
       </div>
       
