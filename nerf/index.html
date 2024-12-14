@@ -266,19 +266,26 @@
           <br><br>
           We begin by implementing a straight-forward batched matrix-vector multiplication function to transform coordinate spaces using various matrices. For example, we often use a camera to world (c2w) matrix, which gives the correspondance between points from in the camera coordinate system to the world coordinate system. The tranform function will append the input coordinates, apply the batch transformation for specified mappings such as c2w matrices, and return the new 3-dimensional coordinates.
           <br><br>
-          It is important to know the calibration of the cameras. With that knowledge, we can determine the K matrix using the focal length and image size that, along with a distance parameter s, maps pixel coordinate to camera coordinates. pixel_to_camera applies this batched transformation using specified K and s values. 
+          It is important to know the calibration of the cameras. With that knowledge, we can determine the K matrix using the focal length and image size that, along with a distance parameter s, maps pixel coordinate to camera coordinates. pixel_to_camera applies this batched transformation using specified K and s values. This requires solving a system K @ camera_coords = s * pixels_augmented. Since K is only 3x3, I chose to invert K and use batched matrix-vector multiplication. K will always be invertible since det(K) = f_x * f_y > 0 due to the nature of cameras. 
           <br><br>
-        To complete our goal of determining image rays from pixel coordinates, we need a function to combine these previous function and calculate the resulting rays. Each perspective of an object can be described by an origin ray and a direction ray. The origin ray specifies the location of the camera in 3d world space, and the direction ray describes the direction the pixel is looking in. Based on the pixel locations, K matrix, and c2w matrix, pixel_to_ray will calculate a origin ray and normalized direction ray that describe the perspective of the pixel's view. 
+        To complete our goal of determining image rays from pixel coordinates, we need a function to combine these previous function and calculate the resulting rays. Each perspective of an object can be described by an origin ray and a direction ray. The origin ray specifies the location of the camera in 3d world space, and the direction ray describes the direction the pixel is looking in. Based on the pixel locations, K matrix, and c2w matrix, pixel_to_ray will calculate a origin ray and normalized direction ray that describe the perspective of the pixel's view. The ray_o vector is defined by entries in the w2c matrix. With some block matrix algebra, we can see that this value is actually given as a vector entry in the c2w matrix. Since the c2w matrix is an argument to the function, this avoids unnecessary calculations. Math shown below. 
          
-          
+          <br><br>
+          These batched operations can be implemented using torch.matmul and various squeeze/unsqueeze manuevers. 
     
       </p>
 
-      <h5>Sampling</h5>
+      <h5>Part 2.2: Sampling</h5>
       <p>
-          In this section, we define utility functions and a dataloader that are useful for NeRFs. The dataloader will take in a collection of images, c2w matrices, and K matrix. It is able to randomly sample N rays (with corresponding pixels) for use at each training iteration. We will typically use N = 10000 when training. 
+          In this section, we define utility functions and a dataloader that are useful for NeRFs. The dataloader will take in a collection of images, c2w matrices, and K matrix. It is able to randomly sample N rays (with corresponding pixels) for use at each training iteration. We will typically use N = 10000 when training. I implement this by calculating all uv values, and rays in all training images upon initializing the dataset. During sampling, I select N rays and pixels at random. 
           <br><br>
-          Since we want to incorporate depth information into the model, we will sample along the rays along various depths to get information for the NeRF to operate. We use implement this functionality in the the sample_along_rays function. It will return world coordinates at various equally spaced intervals along each ray. During training, we will add a small amount of noise to each interval length to prevent over-fitting. 
+          Since we want to incorporate depth information into the model, we will sample along the rays along various depths to get information for the NeRF to operate. We use implement this functionality in the the sample_along_rays function. It will return world coordinates at various equally spaced intervals along each ray. During training, we will add a small amount of noise to each interval length to prevent over-fitting. This can be implmented using torch.linspace and broadcasting. 
+      </p>
+
+      <h5>Putting It Together: 2.3</h5>
+
+      <p>
+          With all of these functions, I will do some visualizations to check for bugs using the nifty viser package.
       </p>
       
       
