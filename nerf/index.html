@@ -157,7 +157,16 @@
          For the next hyperparameter combination to try, we know that L = 10 is a better value than L = 5. I have also noticed that the model converges very quickly. Perhaps it could be better to use a lower learning rate. Thus, lets try training the model with L = 10 and learning rate = 0.001 (instead of 0.01). 
      </p>
 
-      
+      <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/Unknown-12.png">
+            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+        </figure>
+      </div>
  
         
       <div class = "row">
@@ -183,7 +192,64 @@
           <br><br>
           Below are all of the images generated under different hyperparameters to compare side by side. 
       </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/foxNormal.png">
+            <figcaption>Learned Image of Fox (L = 10)</figcaption>
+        </figure>
+           <figure>
+            <img src = "media/foxL5.png">
+            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-12.png">
+            <figcaption>Learned Image of Fox (lr = 0.001)</figcaption>
+        </figure>
+          
+      </div>
+
+      <h5>Another Image</h5>
+      <p>
+          Here, I will train this network on a different image, the great reoccurding North Arm Farm image from Pemberton, BC. I will use the hyperparameters L = 10 and lr = 0.01. The results are below.
+      </p>
+
       
+      <div class = "row">
+        <figure>
+            <img src = "media/NAFsmall.jpg">
+            <figcaption>Training Image of NAF</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/p1NAFout.jpg">
+            <figcaption>Learned Image of NAF</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+          <figure>
+              <img src = "media/p1NAFright.jpg">
+              <figcaption>Learned Image of NAF Every 250 Iterations (0 , 250, ... , 1000)</figcaption>
+          </figure>
+      </div>
+
+      
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-13.png">
+            <figcaption>Training Loss</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-14.png">
+            <figcaption>Training PSNR </figcaption>
+        </figure>
+      </div>
+
+      <h2>Part 2: Full NeRF</h2>
       
 
   </body>
