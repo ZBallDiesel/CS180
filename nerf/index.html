@@ -76,10 +76,80 @@
           We will use the pixel locations and rgb values normalized to the interval [0, 1] for training and inference. After we use sinPE on the input coordinates, we will run the information through a fairly basic Multiple Layer Percpetron neural network with 4 linear layers and layer sizes shown above. Note that the final stage uses a sigmoid activation function in order to output rgb values in [0, 1] as desired. 
           <br>
           <br>
-          We will train the model on batches of 10000 randomly selected pixels for 1000 to 3000 iterations. I found that the model is close to fully converged after 1000 iterations, with little change occuring between 1000 and 3000 iterations. We will optimize the model using MSE loss and Adam optimization alogorithm. I tried step sizes of 0.01 and 0.001. 
+          We will train the model on batches of 10000 randomly selected pixels for 1000 to 3000 iterations. I found that the model is close to fully converged after 1000 iterations, with little change occuring between 1000 and 3000 iterations. We will optimize the model using MSE loss and Adam optimization alogorithm. I tried learning rates of 0.01 and 0.001. 
           <br><br>
           In addition to training loss, another relevant metric of model performance is Peak Signal to Noise ratio (PSNR). With images normalized to [0, 1], there exists the relationship PSNR = 10 * log10(1/MSE). 
       </p>
+
+      <h5>Results</h5>
+      <p>
+          We will begin by training the model on an image of a fox with hyperparameters L = 10 and learning rate = 0.01. 
+      </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/foxNormal.png">
+            <figcaption>Learned Image of Fox</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/trainingIms2d.jpg">
+            <figcaption>Learned Image of Fox Every 250 Iterations (0 , 250, ... , 1000) </figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-3.png">
+            <figcaption>Training Loss</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-2.png">
+            <figcaption>Training PSNR</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          As we can see, the model does a nice job of learning the fox image. It does contain the imperfections of the grid-like background and lack of detail on the fox's whiskers (which are very high frequency). 
+          <br><br>
+          Next, let's see what happens with hyperparameters L = 5 and lr = 0.01. (Decreasing L compared to the images above).
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/foxL5.png">
+            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/trainingIms2d5first5.jpg">
+            <figcaption>Learned Image of Fox Every 250 Iterations (0 , 250, ... , 1000) </figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-8.png">
+            <figcaption>Training Loss (L = 5)</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-9.png">
+            <figcaption>Training PSNR (L = 5)</figcaption>
+        </figure>
+      </div>
+      
 
   </body>
 </html>
