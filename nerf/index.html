@@ -307,7 +307,20 @@
               <img src = "media/studio_from_left.png">
           </figure>
       </div>
-      
+
+      <h4>Part 2.4: Creating the MLP</h4>
+      <p>
+          In this section, we will build the MLP that underlies the NeRF process. Since this task is much more complicated than in part 1, we use a much deeper and more complex MLP. For full architecture, see the image below. This MLP will take in world coordinates (batched over each ray and samples along the ray) corresponding to the viewing location and batched direction rays corresponding to the direction we are looking in. With this information, the MLP will output rgb values for what can be seen and a density value that describes the transparency for each sample. 
+          <br><br>
+          This MLP also uses Sinusodial Positional Encoding on both the world coordinates and the directional rays. I use L = 10 for the world coordinates and L = 4 for the directional rays. After the encoding, the MLP uses a large number of linear layers with ReLU activation. As can be seen, the original encodings are concatened to the learned representations at various places throughout the learning process, which helps the model from "forgetting" about the input. As before, we use a sigmoid activation function on the last rgb output layer to enfore rgb values in [0, 1]. On the density output, the ReLU activation enforces the output to be positive. 
+      </p>
+
+        <div class  = "row">
+          <figure>
+              <img src = "media/mlp_nerf_large.png">
+              <figcaption>MLP Powering NeRF</figcaption>
+          </figure>
+      </div>
 
   </body>
 </html>
