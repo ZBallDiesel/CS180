@@ -322,5 +322,23 @@
           </figure>
       </div>
 
+      <h4>Part 2.5: Volume Rendering</h4>
+      <p>
+          Before we can use our NeRF, we must consider the training target. Our target is to get pixel values at the specified locations. Since our MLP outputs rgba values at various sampling depths, we need a volume renderer to create pixel values at each queried location. The ideal volume renderer works according to the integral below. However, we implement this using the quadrature approximation (also shown below) using the sampled points we generated earlier. Here, sigma is the predicted transparency values and c is the predicted rgb values. I implement the volume rendering in the volrend function, which takes in the output of the MLP and chosen step-size as arguments and outputs the rendered rgb values at each location. This is done using standard operations such as * , torch.sum, broadcasting, and unsqueezing. 
+          <br><br>
+          Since the output of volrend is used in our training loss function, we must be able to backpropagate thru the renderer. Luckily, the volume rendering equation is differentiable and PyTorch makes gradient tracking easy. 
+      </p>
+
+      <div class  = "row">
+          <figure>
+              <img src = "media/render_integral.png">
+              <figcaption>Volume Rendering Integral</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/render_quad.png">
+              <figcaption>Volume Rendering Quadrature</figcaption>
+          </figure>
+      </div>
+
   </body>
 </html>
