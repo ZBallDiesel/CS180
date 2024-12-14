@@ -149,6 +149,41 @@
             <figcaption>Training PSNR (L = 5)</figcaption>
         </figure>
       </div>
+
+     <p>
+         The images learned with L = 5 are clearly worse than with L = 10. When compared to the images learned with L = 10, the images learned with L = 5 have blurry backgrounds, blurry fur patches, and are missing the fox's whiskers. As all of these issues follow from a lack of high frequency image components, it makes sense that these issues were created by a lower value of L. 
+
+         <br><br>
+         For the next hyperparameter combination to try, we know that L = 10 is a better value than L = 5. I have also noticed that the model converges very quickly. Perhaps it could be better to use a lower learning rate. Thus, lets try training the model with L = 10 and learning rate = 0.001 (instead of 0.01). 
+     </p>
+
+      
+ 
+        
+      <div class = "row">
+        <figure>
+            <img src = "media/trainingIms2dlr.jpg">
+            <figcaption>Learned Image of Fox Every 250 Iterations (0 , 250, ... , 2000) </figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-10.png">
+            <figcaption>Training Loss</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-11.png">
+            <figcaption>Training PSNR </figcaption>
+        </figure>
+      </div>
+
+      <p>
+          Here we can see that the results are highly similar to when L = 10 and lr = 0.01, except that learning takes more iterations (as would be expected). Thus, I think that the original hyperparameters of L = 10 and lr = 0.01 are the best choice. 
+          <br><br>
+          Below are all of the images generated under different hyperparameters to compare side by side. 
+      </p>
+      
       
 
   </body>
