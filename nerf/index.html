@@ -275,6 +275,12 @@
     
       </p>
 
+      <div class  = "row">
+          <figure>
+              <img src = "media/nerfMath.jpg">
+          </figure>
+      </div>
+
       <h5>Part 2.2: Sampling</h5>
       <p>
           In this section, we define utility functions and a dataloader that are useful for NeRFs. The dataloader will take in a collection of images, c2w matrices, and K matrix. It is able to randomly sample N rays (with corresponding pixels) for use at each training iteration. We will typically use N = 10000 when training. I implement this by calculating all uv values, and rays in all training images upon initializing the dataset. During sampling, I select N rays and pixels at random. 
@@ -285,9 +291,22 @@
       <h5>Putting It Together: 2.3</h5>
 
       <p>
-          With all of these functions, I will do some visualizations to check for bugs using the nifty viser package.
+          With all of these functions, I will do some visualizations to check for bugs using the nifty Viser package and Viser Studio.
+          The below visualizations gives a scene of the scene we are recreating. The screnshot shows the 3d positions of each camera (including their image), the origin point for each camera, 100 sampled rays, and each sample along the rays (denoted with black squares). Below it we have another visualization that is very useful for debuggging. It shows a dense cluster of rays exiting from the upper left corner of one camera (when viewed from inside the dome of cameras). This ensures that the image dimensions are correct. 
       </p>
+
       
+       <div class  = "row">
+          <figure>
+              <img src = "media/studio_lines.png">
+          </figure>
+      </div>
+
+        <div class  = "row">
+          <figure>
+              <img src = "media/studio_from_left.png">
+          </figure>
+      </div>
       
 
   </body>
