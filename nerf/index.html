@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Project: NeRF</title>
+    <style>
+        body {
+            font-family: Times New Roman, Arial, sans-serif;
+            margin: 20px;
+        }
+
+        <!-- Following code for CSS style is adapted from W3 Schools. https://www.w3schools.com/howto/howto_css_images_side_by_side.asp
+        and Stack Overflow
+        https://stackoverflow.com/questions/61637178/how-to-center-multiple-figure-elements-in-one-row-->
+        * {
+      box-sizing: border-box;
+    }
+    
+    .column {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+    
+    
+    .row {
+      padding-bottom: 50px;
+      display: flex;
+        text-align: center;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    img {
+        width: 100%;
+        height: auto
+        
+    }
+    </style>
+</head>
+
+  <body>
+    <h1>Welcome to My CS180 Final Project on Neural Radiance Fields!</h1>
+    <a href = "../index.html"> My CS180 Personal Project Home Page </a>
+    <strong> <br> Name: Zach Turner <br> SID: 3036700008 </strong>
+    <h3>Introduction</h3>
+      <p>
+          In this project, I will build a Neural Radiance Field (NeRF) from scratch using PyTorch. A NeRF is a Machine Learning model that learns a scene--commonly of some object--using a variety of photos taken from various perspectives. Learning from these photos, NeRF allows us to simulate viewing the object from any perspective. For background information, consider reading the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>.
+      </p>
+
+      <h3>Part 1</h3>
+      <p>
+          In part 1, we will start with a simpler objective: learn a single photograph. While this alone is a rather silly task (we already know the photo after all), it is useful warm up for our later implmentation of a full NeRF. 
+          <br>
+          In this part, the model will learn to map pixel locations {u, v} to RGB values in the photo {r, g, b}. We will train the model for a particular photo. 
+      </p>
+
+      <h4>The Network</h4>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/mlp_img.jpg">
+            <figcaption>Network for Part 1</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/sinPE.png">
+            <figcaption>Sinusodial Positional Encoding</figcaption>
+        </figure>
+      </div>
+      
+      <p>
+          To accomplish part a, we will use a simple MLP model, as shown above, with sinusodial positional encoding As found in the original paper, NeRF without sinusodial positonal encoding will struggle to learn high frequency image components due to neural networks' preference to learn low frequency functions. Sinusodial positional encoding assists the network to learn high frequency components of the image, since it encode different frequencies in the pixel locations--information the network will use to learn higher frequency image changes. A higher L value will let the network learn higher frequencies and thus create sharper images. It is recommended to use L = 10; I will try using L = 5 and L = 10. We apply sinPE to the x and y coordinates separately. 
+          <br><br>
+          We will use the pixel locations and rgb values normalized to the interval [0, 1] for training and inference. After we use sinPE on the input coordinates, we will run the information through a fairly basic Multiple Layer Percpetron neural network with 4 linear layers and layer sizes shown above. Note that the final stage uses a sigmoid activation function in order to output rgb values in [0, 1] as desired. 
+          <br>
+          <br>
+          We will train the model on batches of 10000 randomly selected pixels for 1000 to 3000 iterations. I found that the model is close to fully converged after 1000 iterations, with little change occuring between 1000 and 3000 iterations. We will optimize the model using MSE loss and Adam optimization alogorithm. I tried learning rates of 0.01 and 0.001. 
+          <br><br>
+          In addition to training loss, another relevant metric of model performance is Peak Signal to Noise ratio (PSNR). With images normalized to [0, 1], there exists the relationship PSNR = 10 * log10(1/MSE). 
+      </p>
+
+      <h5>Results</h5>
+      <p>
+          We will begin by training the model on an image of a fox with hyperparameters L = 10 and learning rate = 0.01. 
+      </p>
+
+    <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/foxNormal.png">
+            <figcaption>Learned Image of Fox</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/trainingIms2d.jpg">
+            <figcaption>Learned Image of Fox Every 250 Iterations (0 , 250, ... , 1000) </figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-3.png">
+            <figcaption>Training Loss</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-2.png">
+            <figcaption>Training PSNR</figcaption>
+        </figure>
+      </div>
+
+      <p>
+          As we can see, the model does a nice job of learning the fox image. It does contain the imperfections of the grid-like background and lack of detail on the fox's whiskers (which are very high frequency). 
+          <br><br>
+          Next, let's see what happens with hyperparameters L = 5 and lr = 0.01. (Decreasing L compared to the images above).
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/foxL5.png">
+            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/trainingIms2d5first5.jpg">
+            <figcaption>Learned Image of Fox Every 250 Iterations (0 , 250, ... , 1000) </figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-8.png">
+            <figcaption>Training Loss (L = 5)</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-9.png">
+            <figcaption>Training PSNR (L = 5)</figcaption>
+        </figure>
+      </div>
+
+     <p>
+         The images learned with L = 5 are clearly worse than with L = 10. When compared to the images learned with L = 10, the images learned with L = 5 have blurry backgrounds, blurry fur patches, and are missing the fox's whiskers. As all of these issues follow from a lack of high frequency image components, it makes sense that these issues were created by a lower value of L. 
+
+         <br><br>
+         For the next hyperparameter combination to try, we know that L = 10 is a better value than L = 5. I have also noticed that the model converges very quickly. Perhaps it could be better to use a lower learning rate. Thus, lets try training the model with L = 10 and learning rate = 0.001 (instead of 0.01). 
+     </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/Unknown-12.png">
+            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+        </figure>
+      </div>
+ 
+        
+      <div class = "row">
+        <figure>
+            <img src = "media/trainingIms2dlr.jpg">
+            <figcaption>Learned Image of Fox Every 250 Iterations (0 , 250, ... , 2000) </figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/Unknown-10.png">
+            <figcaption>Training Loss</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-11.png">
+            <figcaption>Training PSNR </figcaption>
+        </figure>
+      </div>
+
+      <p>
+          Here we can see that the results are highly similar to when L = 10 and lr = 0.01, except that learning takes more iterations (as would be expected). Thus, I think that the original hyperparameters of L = 10 and lr = 0.01 are the best choice. 
+          <br><br>
+          Below are all of the images generated under different hyperparameters to compare side by side. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/fox.jpg">
+            <figcaption>Training Image of Fox</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/foxNormal.png">
+            <figcaption>Learned Image of Fox (L = 10)</figcaption>
+        </figure>
+           <figure>
+            <img src = "media/foxL5.png">
+            <figcaption>Learned Image of Fox (L = 5)</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/Unknown-12.png">
+            <figcaption>Learned Image of Fox (lr = 0.001)</figcaption>
+        </figure>
+          
+      </div>
+
+      <h5>Another Image</h5>
+      <p>
+          Here, I will train this network on a different image, the great reoccurding North Arm Farm image from Pemberton, BC. I will use the hyperparameters L = 10 and lr = 0.01. The results are below.
+      </p>
+
+      
+      <div class = "row">
+        <figure>
+            <img src = "media/NAFsmall.jpg">
+            <figcaption>Training Image of NAF</figcaption>
+        </figure>
+        <figure>
+            <img src = "media/p1NAFout.jpg">
+            <figcaption>Learned Image of NAF</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+          <figure>
+              <img src = "media/p1NAFright.jpg">
+              <figcaption>Learned Image of NAF Every 250 Iterations (0 , 250, ... , 1000)</figcaption>
+          </figure>
+      </div>
+
+      
+      <div class = "row">
+        <figure>
+            <img src = "media/trLossNAF.png">
+            <figcaption>Training Loss</figcaption>
+        </figure>
+          <figure>
+            <img src = "media/pnsrTrNAF.png">
+            <figcaption>Training PSNR </figcaption>
+        </figure>
+      </div>
+
+      <h2>Part 2: Full NeRF</h2>
+
+      <h4>Overview</h4>
+
+      <p>
+          While the previous part yielded a neat result, the next section will be truly epic and has potential for useful applications. In this section, we will fit a full NeRF model based on the Lego scene in the <a href = "https://www.matthewtancik.com/nerf">original NeRF paper</a>. This task will be significantly more complicated, but will allow us to view the Lego from any perspective and ultimately create a 3d rendering of the Lego scene. 
+          <br><br>
+          By using a dataset with calibrated cameras and known camera locations, we can train the NeRF based on the view of the Lego from various known perspectives. In this dataset, we have 100 training images, 10 validation images, and 60 test images. All images are from unique cameras in unique locations. 
+      </p>
+
+      <h5>Part 2.1: Tranformaing Cameras into Rays</h5>
+
+      <p>
+          In this section, we develop the mathematical infrastructure necessary to generate rays from pixel and camera locations. Rays are integral to the operation of NeRF. 
+          <br><br>
+          We begin by implementing a straight-forward batched matrix-vector multiplication function to transform coordinate spaces using various matrices. For example, we often use a camera to world (c2w) matrix, which gives the correspondance between points from in the camera coordinate system to the world coordinate system. The tranform function will append the input coordinates, apply the batch transformation for specified mappings such as c2w matrices, and return the new 3-dimensional coordinates.
+          <br><br>
+          It is important to know the calibration of the cameras. With that knowledge, we can determine the K matrix using the focal length and image size that, along with a distance parameter s, maps pixel coordinate to camera coordinates. pixel_to_camera applies this batched transformation using specified K and s values. This requires solving a system K @ camera_coords = s * pixels_augmented. Since K is only 3x3, I chose to invert K and use batched matrix-vector multiplication. K will always be invertible since det(K) = f_x * f_y > 0 due to the nature of cameras. 
+          <br><br>
+        To complete our goal of determining image rays from pixel coordinates, we need a function to combine these previous function and calculate the resulting rays. Each perspective of an object can be described by an origin ray and a direction ray. The origin ray specifies the location of the camera in 3d world space, and the direction ray describes the direction the pixel is looking in. Based on the pixel locations, K matrix, and c2w matrix, pixel_to_ray will calculate a origin ray and normalized direction ray that describe the perspective of the pixel's view. The ray_o vector is defined by entries in the w2c matrix. With some block matrix algebra, we can see that this value is actually given as a vector entry in the c2w matrix. Since the c2w matrix is an argument to the function, this avoids unnecessary calculations. Math shown below. 
+         
+          <br><br>
+          These batched operations can be implemented using torch.matmul and various squeeze/unsqueeze manuevers. 
+    
+      </p>
+
+      <div class  = "row">
+          <figure>
+              <img src = "media/nerfMath.jpg">
+          </figure>
+      </div>
+
+      <h5>Part 2.2: Sampling</h5>
+      <p>
+          In this section, we define utility functions and a dataloader that are useful for NeRFs. The dataloader will take in a collection of images, c2w matrices, and K matrix. It is able to randomly sample N rays (with corresponding pixels) for use at each training iteration. We will typically use N = 10000 when training. I implement this by calculating all uv values, and rays in all training images upon initializing the dataset. During sampling, I select N rays and pixels at random. 
+          <br><br>
+          Since we want to incorporate depth information into the model, we will sample along the rays along various depths to get information for the NeRF to operate. We use implement this functionality in the the sample_along_rays function. It will return world coordinates at various equally spaced intervals along each ray. During training, we will add a small amount of noise to each interval length to prevent over-fitting. This can be implmented using torch.linspace and broadcasting. 
+      </p>
+
+      <h5>Putting It Together: 2.3</h5>
+
+      <p>
+          With all of these functions, I will do some visualizations to check for bugs using the nifty Viser package and Viser Studio.
+          The below visualizations gives a scene of the scene we are recreating. The screnshot shows the 3d positions of each camera (including their image), the origin point for each camera, 100 sampled rays, and each sample along the rays (denoted with black squares). Below it we have another visualization that is very useful for debuggging. It shows a dense cluster of rays exiting from the upper left corner of one camera (when viewed from inside the dome of cameras). This ensures that the image dimensions are correct. 
+      </p>
+
+      
+       <div class  = "row">
+          <figure>
+              <img src = "media/studio_lines.png">
+          </figure>
+      </div>
+
+        <div class  = "row">
+          <figure>
+              <img src = "media/studio_from_left.png">
+          </figure>
+      </div>
+
+      <h4>Part 2.4: Creating the MLP</h4>
+      <p>
+          In this section, we will build the MLP that underlies the NeRF process. Since this task is much more complicated than in part 1, we use a much deeper and more complex MLP. For full architecture, see the image below. This MLP will take in world coordinates (batched over each ray and samples along the ray) corresponding to the viewing location and batched direction rays corresponding to the direction we are looking in. With this information, the MLP will output rgb values for what can be seen and a density value that describes the transparency for each sample. 
+          <br><br>
+          This MLP also uses Sinusodial Positional Encoding on both the world coordinates and the directional rays. I use L = 10 for the world coordinates and L = 4 for the directional rays. After the encoding, the MLP uses a large number of linear layers with ReLU activation. As can be seen, the original encodings are concatened to the learned representations at various places throughout the learning process, which helps the model from "forgetting" about the input. As before, we use a sigmoid activation function on the last rgb output layer to enfore rgb values in [0, 1]. On the density output, the ReLU activation enforces the output to be positive. 
+      </p>
+
+        <div class  = "row">
+          <figure>
+              <img src = "media/mlp_nerf_large.png">
+              <figcaption>MLP Powering NeRF</figcaption>
+          </figure>
+      </div>
+
+      <h4>Part 2.5: Volume Rendering</h4>
+      <p>
+          Before we can use our NeRF, we must consider the training target. Our target is to get pixel values at the specified locations. Since our MLP outputs rgba values at various sampling depths, we need a volume renderer to create pixel values at each queried location. The ideal volume renderer works according to the integral below. However, we implement this using the quadrature approximation (also shown below) using the sampled points we generated earlier. Here, sigma is the predicted transparency values and c is the predicted rgb values. I implement the volume rendering in the volrend function, which takes in the output of the MLP and chosen step-size as arguments and outputs the rendered rgb values at each location. This is done using standard operations such as * , torch.sum, torch.cumsum, torch.roll, broadcasting, and unsqueezing. 
+          <br><br>
+          Since the output of volrend is used in our training loss function, we must be able to backpropagate thru the renderer. Luckily, the volume rendering equation is differentiable and PyTorch makes gradient tracking easy. 
+      </p>
+
+      <div class  = "row">
+          <figure>
+              <img src = "media/render_integral.png">
+              <figcaption>Volume Rendering Integral</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/render_quad.png">
+              <figcaption>Volume Rendering Quadrature</figcaption>
+          </figure>
+      </div>
+
+
+      <h3>Training the NeRF</h3>
+
+      <p>
+          Now we are ready to train the NeRF. I'll explain the training pipeline since I was confused myself at the beginning of the project. 
+          <br>
+          During training, we have the pipeline:
+          <br>
+          Sample rays and pixels -> sample_along_rays -> MLP -> Volume Rendering -> Take Loss with true pixel values
+          <br>
+          During inference, we have:
+          <br>
+          Choose desired pixel locations and c2w -> Get rays with pixel_to_ray -> sample_along_rays -> MLP -> Volume Rendering -> Rearrange into image 
+          <br><br>
+          I trained the NeRF using 10,000 iterations with a batch size of 10,000 rays and an Adam optimizer with learning rate 0.0005. 
+      </p>
+
+      <h3>Results</h3>
+      <p>
+          The model acheived good performance on training and testing datasets. After around the 3000th iteration, the model consistently achieved a PNSR above 23 dB. My model acheived a maximum psnr of over 25.86 dB. Below, the loss and PSNR plots are shown, as well as the output over time for validation image 0. We can see that the output image continues to become more detailed and accurate as time increases. 
+      </p>
+
+      <div class  = "row">
+          <figure>
+              <img src = "media/nerfLoss10000.png">
+              <figcaption>NeRF Loss</figcaption>
+          </figure>
+          <figure>
+              <img src = "media/nerfPsnr10000.png">
+              <figcaption>NeRF PSNR
+                  <br>
+                Dashed Orange line denotes 23 dB PSNR </figcaption>
+          </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/max_pnsr2.png">
+            <figcaption>Maximum PSNR Acheived</figcaption>
+        </figure>
+      </div>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/2nerfTrSample10000.jpg">
+            <figcaption>NeRF output every 250 iterations (0, 250, ..., 10000)
+            <br>
+            Note that most of the bottom row is empty</figcaption>
+        </figure>
+      </div>
+
+      <h5>Testing GIFs</h5>
+      <p>
+          This output is arguably the coolest part of this project. In this section, we used the trained NeRF to generate a GIF based on the cameras in the testing set. The test set cameras form a ring around the lego at an elevation somewhat above the object. We use the model's inference on each camera location to generate a sequence of images moving 360 degrees around the object. This sequence of images forms the GIF. The GIF was generated after training the model over 10000 iterations. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/spinning_legoMid10000.gif">
+            <figcaption>GIF Made from Lego Test set</figcaption>
+        </figure>
+      </div>
+
+      <h3>Bells and Whistles</h3>
+      <h4>Depth Map</h4>
+      <p>
+          The NeRF model we have already trained contains more capabilities than witnessed above. In the inference process, the model generates a density prediction for each sample along each ray. From these densities, we can recover an estimate of the depth along the scene. 
+          <br>
+          To do so, we will use only the density prediction from the MLP along with a modified volume rendering function. I implemented this in the functions depth_mapper and volrend_depth. depth_mapper() performs inference, and only differs from NeRF.sample() by calling volrend_depth rather than volrend. In volrend_depth, we do not use the rgb predicitons from the MLP. In the place of the rgb predictions, we use torch.linspace(1, 0, self.n_samples). This works since T_i * (1 - exp(sigma_i * delta_i) gives the probability that the ray terminates at sample i. Thus, the term forms a probability distribution over all i. Since we want the mapped depth to be bright (i.e. have high pixel values) in areas where the depth is low (i.e. where the ray terminates at a low i value) and darker as the ray terminates at further values (i.e. where the terminating i is large), we see that the weighting term (the linspace) here should be negatively correlated with i. Thus, the decreasing linear weighting given above fits the bill. It would be interesting to try a different depth map--perhaps one based on some characteristic of the derivation of the volume rendering distribution. If I had more time, I would like to try this. However, torch.linspace(1, 0, self.n_samples) provided satisfactory results. 
+      </p>
+
+      <h5>Result</h5>
+
+      <p>
+          Based on the same testing dataset used to make the GIF above, I use a similar method to create the GIF below showing a depth map of the scene. It also uses the NeRF model trained over 10000 iterations. 
+      </p>
+
+      <div class = "row">
+        <figure>
+            <img src = "media/depth_lego10000.gif">
+            <figcaption>Depth Map GIF Made from Lego Test set</figcaption>
+        </figure>
+      </div>
+
+      <h3>Final Thoughts</h3>
+
+      <p>
+          This was the most challenging and engaging project I have worked on yet. Given the effort it took to create the model, it was very satisfying to view its successes. Watching training loss decrease is somewhat addictive.
+      </p>
+
+      <h4>Credits: </h4>
+    <p>
+        I consulted some external resoures when creating this website for instructions on how to write HTML and CSS code. Some of my webpage code is adapted from  https://www.w3schools.com/howto/howto_css_images_side_by_side.asp and https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag. 
+        
+    </p>
+  </body>
+</html>
